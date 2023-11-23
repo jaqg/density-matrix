@@ -1,0 +1,42 @@
+\graphicspath{{./figures/}}
+
+% ------
+\section{Introduction}
+% ------
+% NOTAS SACADAS DEL PERNAL
+Functionals of one-electron reduced density matrix (1-RDDM), $\gamma$, defined
+for an $N$-electron wavefunction, $\Psi$, as
+
+\begin{equation} \label{ec:self-adjointness-gamma}
+    \gamma \left( \mat{x}, \mat{x}\tdprime \right) =
+    N \idotsint
+    \Psi \left( \mat{x}, \mat{x_2}, \ldots,  \mat{x}_N \right)
+    \Psi^{*} \left( \mat{x}\tdprime, \mat{x_2}, \ldots,  \mat{x}_N \right)
+    \dd{ \mat{x}_2} \cdots \dd{ \mat{x}_N}
+    ,
+\end{equation}
+where $ \mat{x} = \left( \mat{r}, s \right)$ is a combined spatial and spin
+coordinate.
+
+As inmidiate advantage of using 1-RDDM instead of the electron density, $\rho$,
+is that the kinetic energy is an explicit functional of $\gamma$ but not of
+$\rho$.
+Then, there is no need to introduce a ficticious noninteracting system.
+Moreover, orbitals present in RDMFT are fractionally occupied, so functionals 
+of $\gamma$ seem to be better suited to account for static correlation.
+
+Self-adjointness of $\gamma$, as defined in \cref{ec:self-adjointness-gamma},
+allows for its spectral representation\mycite{lowdin1955quantum}
+\begin{equation}
+    \gamma \left( \mat{x}, \mat{x}\tdprime \right) =
+    \sum_{p} n_p 
+    \varphi_p \left( \mat{x} \right)
+    \varphi_p^{*} \left( \mat{x}\tdprime \right)
+    .
+\end{equation}
+
+The eigenvalues of 1-RDM are called natural occupation numbers,
+$\left\{ n_p \right\}$, and the eigenfunctions are known as natural
+spinorbitals, $\left\{ \varphi_p \right\}$.
+For convention, the indices $p,q,r,s$ are referred to natural spinorbitals
+and $a,b,c,d$ to arbitrary one-eletron functions.
