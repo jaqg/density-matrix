@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.8.1)  22 NOV 2023 21:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.12.1)  15 MAY 2024 22:34
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1509,7 +1509,7 @@ Package biblatex Info: ... and expl3
 (biblatex)             setting 'casechanger=expl3'.
  (/usr/share/texmf-dist/tex/latex/biblatex/blx-case-expl3.sty
 Package: blx-case-expl3 2023/03/05 v3.19 expl3 case changing code for biblatex
-))) (./front-page/info.tex)
+))) (./front-page/info.tex) (./configuration/mybraket.sty)
 
 Package biblatex Warning: 'babel/polyglossia' detected but 'csquotes' missing.
 (biblatex)                Loading 'csquotes' recommended.
@@ -1519,24 +1519,24 @@ Package biblatex Warning: 'babel/polyglossia' detected but 'csquotes' missing.
 (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1608,16 +1608,16 @@ Package caption Info: xtab package is loaded.
 Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
 
-Package chemgreek Info: Activating mapping `default' on line 48.
+Package chemgreek Info: Activating mapping `default' on line 50.
 
-Package hyperref Info: Link coloring ON on input line 48.
+Package hyperref Info: Link coloring ON on input line 50.
  (./main.out) (./main.out)
 \@outlinefile=\write6
 \openout6 = `main.out'.
 
 
 
-Package layouts Warning: Layout scale set to 0.5 on input line 48.
+Package layouts Warning: Layout scale set to 0.5 on input line 50.
 
 \c@lstlisting=\count638
 (/usr/share/texmf-dist/tex/latex/upquote/upquote.sty
@@ -1628,7 +1628,7 @@ Package biblatex Info: ... file 'nil.lbx' not found.
 
 
 Package biblatex Warning: Language 'nil' not supported.
-(biblatex)                Using dummy definitions on input line 48.
+(biblatex)                Using dummy definitions on input line 50.
 
 Package biblatex Info: Input encoding 'utf8' detected.
 Package biblatex Info: Automatic encoding selection.
@@ -1641,15 +1641,9 @@ Package biblatex Info: Data encoding 'utf8' specified.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
 (./main.bbl)
-Package biblatex Info: Reference section=0 on input line 48.
-Package biblatex Info: Reference segment=0 on input line 48.
- (./front-page/elaborated-titlepage.tex
-<./front-page/figures//escudo.pdf, id=11, 266.59398pt x 266.52776pt>
-File: ./front-page/figures//escudo.pdf Graphic file (type pdf)
-<use ./front-page/figures//escudo.pdf>
-Package pdftex.def Info: ./front-page/figures//escudo.pdf  used on input line 8.
-(pdftex.def)             Requested size: 145.11053pt x 145.0819pt.
- [1
+Package biblatex Info: Reference section=0 on input line 50.
+Package biblatex Info: Reference segment=0 on input line 50.
+ (./front-page/elaborated-titlepage.tex [1
 Non-PDF special ignored!
 <special> header=pstricks.pro
 Non-PDF special ignored!
@@ -1667,42 +1661,158 @@ Non-PDF special ignored!
 <special> ps:tx@Dict begin  gsave STV CP T /ps@refangle 0.  def grestore  e...
 Non-PDF special ignored!
 <special> ps:0.8 setlinewidth 0 setgray
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc} <./front-page/figures//escudo.pdf>]) (./text/text.tex
-LaTeX Font Info:    Trying to load font information for U+msa on input line 7.
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.48 \end{titlepage}
+                     [1]) (./text/text.tex
+LaTeX Font Info:    Trying to load font information for U+msa on input line 16.
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 7.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 16.
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (8.1125pt too wide) in paragraph at lines 7--9
-\T1/cmr/m/n/10.95 Functionals of one-electron reduced density matrix (1-RDDM), $\OML/cmm/m/it/10.95 ^^M$\T1/cmr/m/n/10.95 , defined for an $\OML/cmm/m/it/10.95 N$\T1/cmr/m/n/10.95 -electron wavefunction,
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.93 
+      [1] [2]
+Overfull \hbox (27.76848pt too wide) in paragraph at lines 275--278
+[]$\OML/cmm/m/it/10.95 n$\T1/cmr/bx/n/10.95 -electron noninteracting systems\T1/cmr/m/n/10.95 : the 1-RDM corresponding to a single determinant wavefunction
  []
 
-)
-pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.87 \clearpage
-                [1]
-pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.87 \clearpage
-                [1
 
-]
-Overfull \hbox (10.83307pt too wide) in paragraph at lines 88--88
+Overfull \hbox (11.91759pt too wide) in paragraph at lines 286--288
+[]\T1/cmr/m/n/10.95 In this case, a two-electron reduced density matrix (2-RDM), $\OT1/cmr/m/n/10.95 ^^@$\T1/cmr/m/n/10.95 , is defined for a general wavefunction,
+ []
+
+[3] [4] [5] [6] [7]
+
+LaTeX Warning: Reference ` ec:normalization-condition' on page 1 undefined on input line 703.
+
+[8] [9]
+Overfull \hbox (18.47433pt too wide) in paragraph at lines 874--877
+[]\T1/cmr/m/n/10.95 The one-electron density matrix in the spin-orbital representation was introduced in second quantization
+ []
+
+) [10]
+
+Package biblatex Warning: Bibliography string 'in' untranslated
+(biblatex)                at entry 'helgaker2000second' on input line 91.
+
+
+Package biblatex Warning: Bibliography string 'pages' untranslated
+(biblatex)                at entry 'helgaker2000second' on input line 91.
+
+
+Overfull \hbox (16.27701pt too wide) in paragraph at lines 91--91
 \T1/cmr/m/n/10.95 Density Matrices, Natural Spin-Orbitals, and Convergence Problems in the Method of Configurational
  []
 
-[2] (./main.aux)
+
+Overfull \hbox (16.27701pt too wide) in paragraph at lines 91--91
+\T1/cmr/m/n/10.95 Density Matrices, Natural Spin-Orbitals, and Convergence Problems in the Method of Configurational
+ []
+
+
+Overfull \hbox (0.50246pt too wide) in paragraph at lines 91--91
+[]\T1/cmr/m/n/10.95 Donnelly, RA; Parr, RG[][] Elementary Properties of an Energy Functional of the First-order Reduced
+ []
+
+
+Package biblatex Warning: Bibliography string 'in' untranslated
+(biblatex)                at entry 'levy1987correlation' on input line 91.
+
+
+Package biblatex Warning: Bibliography string 'byeditor' untranslated
+(biblatex)                at entry 'levy1987correlation' on input line 91.
+
+
+Package biblatex Warning: Bibliography string 'pages' untranslated
+(biblatex)                at entry 'levy1987correlation' on input line 91.
+
+
+Overfull \hbox (9.7589pt too wide) in paragraph at lines 91--91
+[]\T1/cmr/m/n/10.95 Valone, SM[][] Consequences of Extending 1-matrix Energy Functionals from Pure^^UState Representable
+ []
+
+
+Overfull \hbox (4.76381pt too wide) in paragraph at lines 91--91
+[]\T1/cmr/m/n/10.95 Valone, SM[][] A One-to-one Mapping between One-particle Densities and Some N-particle Ensembles[][].
+ []
+
+
+Overfull \hbox (3.10132pt too wide) in paragraph at lines 91--91
+[]\T1/cmr/m/n/10.95 Kutzelnigg, W[][] Die Lösung des quantenmechanischen Zwei-Elektronenproblems durch unmittelbare
+ []
+
+[11
+
+]
+
+./main.tex:91: LaTeX Error: Invalid UTF-8 byte sequence (Å\bibinitperiod).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.91 \printbibliography[title={References}]
+                                            % change from bibliography to re...
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+
+Overfull \hbox (10.50136pt too wide) in paragraph at lines 91--91
+[]\T1/cmr/m/n/10.95 BUIJSE, MA; BAERENDS, EJ[][] An Approximate Exchange-Correlation Hole Density as a Functional
+ []
+
+
+Overfull \hbox (19.15758pt too wide) in paragraph at lines 91--91
+[]\T1/cmr/m/n/10.95 Buijse, MA[][] Electron Correlation Fermi and Coulomb Holes Dynamical and Nondynamical Correlation[][],
+ []
+
+
+./main.tex:91: LaTeX Error: Invalid UTF-8 byte sequence (Å\bibinitperiod).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.91 \printbibliography[title={References}]
+                                            % change from bibliography to re...
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+
+Overfull \hbox (9.3347pt too wide) in paragraph at lines 91--91
+[]\T1/cmr/m/n/10.95 Mentel, M; family=Meer given=R., pu; Gritsenko, OV; Baerends, EJ[][] The Density Matrix Functional
+ []
+
+
+Overfull \hbox (10.70718pt too wide) in paragraph at lines 91--91
+\T1/cmr/m/n/10.95 Approach to Electron Correlation: Dynamic and Nondynamic Correlation along the Full Dissociation
+ []
+
+
+Overfull \hbox (42.74896pt too wide) in paragraph at lines 91--91
+[]\T1/cmr/m/n/10.95 Staroverov, VN; Scuseria, GE[][] Optimization of Density Matrix Functionals by the Hartree^^UFock^^UBogoliubov
+ []
+
+[12] (./main.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 9814C2D956916ADB9290ECA4E25C967A;103.
+(rerunfilecheck)             Checksum: 13575A3EF512F6B8580CD91C46550C6A;1677.
 
 Package biblatex Warning: Please (re)run BibTeX on the file(s):
 (biblatex)                main
@@ -1717,18 +1827,18 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 ### semi simple group (level 1) entered at line 13 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 48018 strings out of 476872
- 948623 string characters out of 5820379
- 1859388 words of memory out of 5000000
- 67567 multiletter control sequences out of 15000+600000
- 527638 words of font info for 70 fonts, out of 8000000 for 9000
+ 48351 strings out of 476872
+ 958205 string characters out of 5820378
+ 1868388 words of memory out of 5000000
+ 67774 multiletter control sequences out of 15000+600000
+ 530589 words of font info for 76 fonts, out of 8000000 for 9000
  725 hyphenation exceptions out of 8191
- 94i,7n,100p,1955b,39459s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb>
-Output written on main.pdf (4 pages, 264793 bytes).
+ 94i,9n,100p,2026b,39835s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb>
+Output written on main.pdf (14 pages, 388946 bytes).
 PDF statistics:
- 141 PDF objects out of 1000 (max. 8388607)
- 95 compressed objects within 1 object stream
- 8 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 451 PDF objects out of 1000 (max. 8388607)
+ 385 compressed objects within 4 object streams
+ 128 named destinations out of 1000 (max. 500000)
+ 77 words of extra memory for PDF output out of 10000 (max. 10000000)
 

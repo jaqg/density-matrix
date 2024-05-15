@@ -21,6 +21,8 @@
 \input{./configuration/bibliography_config}
 \input{./front-page/info}
 
+\usepackage{./configuration/mybraket}
+
 % =============================================================================
 %                             --- Other information ---
 % =============================================================================
@@ -73,7 +75,8 @@ pdfkeywords={\kkeywords}
 %
 % 5) A more elaborated titlepage
 %
-\input{front-page/elaborated-titlepage}\afterpage{\blankpage}
+% \input{front-page/elaborated-titlepage}\afterpage{\blankpage}
+\afterpage{\blankpage}\input{front-page/elaborated-titlepage}
 %
 % =============================================================================
 %                             --- Main text ---
