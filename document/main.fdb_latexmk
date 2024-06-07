@@ -1,15 +1,15 @@
 # Fdb version 4
-["bibtex main"] 1715805100 "main.aux" "main.bbl" "main" 1715805279 2
-  "./TFM.bib" 1715800117 42952 9f461c7b54456fb36707ac5b33e3076f ""
-  "./main-blx.bib" 1715805278 346 8a1f808130e9472c5c717face872344c ""
+["bibtex main"] 1715805100 "main.aux" "main.bbl" "main" 1717669188 2
+  "./TFM.bib" 1715810589 42952 9f461c7b54456fb36707ac5b33e3076f ""
+  "./main-blx.bib" 1717669188 346 8a1f808130e9472c5c717face872344c ""
   "/home/jose/Documents/latex/preamble/references.bib" 1646593657 1306 728628f5628f26fb43f4bb8050b941ce ""
   "/usr/share/texmf-dist/bibtex/bst/biblatex/biblatex.bst" 1689853683 65484 b7949c47a88ed6dca66ebc7a04577312 ""
-  "main.aux" 1715805278 12941 226b3d43a17cba3fbea610fb072f64fa "pdflatex"
+  "main.aux" 1717669188 12941 226b3d43a17cba3fbea610fb072f64fa "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1715805275 "main.tex" "main.pdf" "main" 1715805279 2
+["pdflatex"] 1717669185 "main.tex" "main.pdf" "main" 1717669188 2
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1689853683 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1689853683 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/jknappen/ec/ecbx1095.tfm" 1689853683 3584 21b378cca2e40816b0e6d74a4dc98f04 ""
@@ -329,11 +329,12 @@
   "configuration/style.tex" 1700682287 1641 ea7358159f1ef836b69206cc7c8e582f ""
   "front-page/elaborated-titlepage.tex" 1715804644 1404 c051952fcbccc7bc0cead5cfc1c74853 ""
   "front-page/info.tex" 1715805189 843 0fd43a7e6678af35a9ccb99affb3959e ""
-  "main.aux" 1715805278 12941 226b3d43a17cba3fbea610fb072f64fa "pdflatex"
+  "main.aux" 1717669188 12941 226b3d43a17cba3fbea610fb072f64fa "pdflatex"
   "main.bbl" 1715805100 60033 de226abf85896516b0935d0c0baacf83 "bibtex main"
-  "main.out" 1715805278 1677 13575a3ef512f6b8580cd91c46550c6a "pdflatex"
-  "main.run.xml" 1715805278 2661 d83e6f275cd62a21de6d34b8ef7adc51 "pdflatex"
-  "main.tex" 1715105834 2874 0c688d339f2094bdfdafa704936a2755 ""
+  "main.out" 1717669188 1677 13575a3ef512f6b8580cd91c46550c6a "pdflatex"
+  "main.run.xml" 1717669188 2661 d83e6f275cd62a21de6d34b8ef7adc51 "pdflatex"
+  "main.tex" 1717661197 2911 52881d4c72db7b6573a6dc20c77e6d97 ""
+  "text/aproximated-functionals.tex" 1717669185 63 336e71e3dfdef60d5d1317d3f66e8237 ""
   "text/text.tex" 1715805274 40580 fe56a042ee27610969e450deba06091f ""
   (generated)
   "main-blx.bib"

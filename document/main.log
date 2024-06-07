@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.12.1)  15 MAY 2024 22:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.12.1)  6 JUN 2024 12:19
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1698,54 +1698,54 @@ Overfull \hbox (18.47433pt too wide) in paragraph at lines 874--877
 []\T1/cmr/m/n/10.95 The one-electron density matrix in the spin-orbital representation was introduced in second quantization
  []
 
-) [10]
+) (./text/aproximated-functionals.tex) [10]
 
 Package biblatex Warning: Bibliography string 'in' untranslated
-(biblatex)                at entry 'helgaker2000second' on input line 91.
+(biblatex)                at entry 'helgaker2000second' on input line 92.
 
 
 Package biblatex Warning: Bibliography string 'pages' untranslated
-(biblatex)                at entry 'helgaker2000second' on input line 91.
+(biblatex)                at entry 'helgaker2000second' on input line 92.
 
 
-Overfull \hbox (16.27701pt too wide) in paragraph at lines 91--91
+Overfull \hbox (16.27701pt too wide) in paragraph at lines 92--92
 \T1/cmr/m/n/10.95 Density Matrices, Natural Spin-Orbitals, and Convergence Problems in the Method of Configurational
  []
 
 
-Overfull \hbox (16.27701pt too wide) in paragraph at lines 91--91
+Overfull \hbox (16.27701pt too wide) in paragraph at lines 92--92
 \T1/cmr/m/n/10.95 Density Matrices, Natural Spin-Orbitals, and Convergence Problems in the Method of Configurational
  []
 
 
-Overfull \hbox (0.50246pt too wide) in paragraph at lines 91--91
+Overfull \hbox (0.50246pt too wide) in paragraph at lines 92--92
 []\T1/cmr/m/n/10.95 Donnelly, RA; Parr, RG[][] Elementary Properties of an Energy Functional of the First-order Reduced
  []
 
 
 Package biblatex Warning: Bibliography string 'in' untranslated
-(biblatex)                at entry 'levy1987correlation' on input line 91.
+(biblatex)                at entry 'levy1987correlation' on input line 92.
 
 
 Package biblatex Warning: Bibliography string 'byeditor' untranslated
-(biblatex)                at entry 'levy1987correlation' on input line 91.
+(biblatex)                at entry 'levy1987correlation' on input line 92.
 
 
 Package biblatex Warning: Bibliography string 'pages' untranslated
-(biblatex)                at entry 'levy1987correlation' on input line 91.
+(biblatex)                at entry 'levy1987correlation' on input line 92.
 
 
-Overfull \hbox (9.7589pt too wide) in paragraph at lines 91--91
+Overfull \hbox (9.7589pt too wide) in paragraph at lines 92--92
 []\T1/cmr/m/n/10.95 Valone, SM[][] Consequences of Extending 1-matrix Energy Functionals from Pure^^UState Representable
  []
 
 
-Overfull \hbox (4.76381pt too wide) in paragraph at lines 91--91
+Overfull \hbox (4.76381pt too wide) in paragraph at lines 92--92
 []\T1/cmr/m/n/10.95 Valone, SM[][] A One-to-one Mapping between One-particle Densities and Some N-particle Ensembles[][].
  []
 
 
-Overfull \hbox (3.10132pt too wide) in paragraph at lines 91--91
+Overfull \hbox (3.10132pt too wide) in paragraph at lines 92--92
 []\T1/cmr/m/n/10.95 Kutzelnigg, W[][] Die Lösung des quantenmechanischen Zwei-Elektronenproblems durch unmittelbare
  []
 
@@ -1753,13 +1753,13 @@ Overfull \hbox (3.10132pt too wide) in paragraph at lines 91--91
 
 ]
 
-./main.tex:91: LaTeX Error: Invalid UTF-8 byte sequence (Å\bibinitperiod).
+./main.tex:92: LaTeX Error: Invalid UTF-8 byte sequence (Å\bibinitperiod).
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.91 \printbibliography[title={References}]
+l.92 \printbibliography[title={References}]
                                             % change from bibliography to re...
 The document does not appear to be in UTF-8 encoding.
 Try adding \UseRawInputEncoding as the first line of the file
@@ -1768,23 +1768,23 @@ in the document preamble.
 Alternatively, save the file in UTF-8 using your editor or another tool
 
 
-Overfull \hbox (10.50136pt too wide) in paragraph at lines 91--91
+Overfull \hbox (10.50136pt too wide) in paragraph at lines 92--92
 []\T1/cmr/m/n/10.95 BUIJSE, MA; BAERENDS, EJ[][] An Approximate Exchange-Correlation Hole Density as a Functional
  []
 
 
-Overfull \hbox (19.15758pt too wide) in paragraph at lines 91--91
+Overfull \hbox (19.15758pt too wide) in paragraph at lines 92--92
 []\T1/cmr/m/n/10.95 Buijse, MA[][] Electron Correlation Fermi and Coulomb Holes Dynamical and Nondynamical Correlation[][],
  []
 
 
-./main.tex:91: LaTeX Error: Invalid UTF-8 byte sequence (Å\bibinitperiod).
+./main.tex:92: LaTeX Error: Invalid UTF-8 byte sequence (Å\bibinitperiod).
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.91 \printbibliography[title={References}]
+l.92 \printbibliography[title={References}]
                                             % change from bibliography to re...
 The document does not appear to be in UTF-8 encoding.
 Try adding \UseRawInputEncoding as the first line of the file
@@ -1793,17 +1793,17 @@ in the document preamble.
 Alternatively, save the file in UTF-8 using your editor or another tool
 
 
-Overfull \hbox (9.3347pt too wide) in paragraph at lines 91--91
+Overfull \hbox (9.3347pt too wide) in paragraph at lines 92--92
 []\T1/cmr/m/n/10.95 Mentel, M; family=Meer given=R., pu; Gritsenko, OV; Baerends, EJ[][] The Density Matrix Functional
  []
 
 
-Overfull \hbox (10.70718pt too wide) in paragraph at lines 91--91
+Overfull \hbox (10.70718pt too wide) in paragraph at lines 92--92
 \T1/cmr/m/n/10.95 Approach to Electron Correlation: Dynamic and Nondynamic Correlation along the Full Dissociation
  []
 
 
-Overfull \hbox (42.74896pt too wide) in paragraph at lines 91--91
+Overfull \hbox (42.74896pt too wide) in paragraph at lines 92--92
 []\T1/cmr/m/n/10.95 Staroverov, VN; Scuseria, GE[][] Optimization of Density Matrix Functionals by the Hartree^^UFock^^UBogoliubov
  []
 
@@ -1827,13 +1827,13 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 ### semi simple group (level 1) entered at line 13 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 48351 strings out of 476872
- 958205 string characters out of 5820378
+ 48357 strings out of 476872
+ 958410 string characters out of 5820378
  1868388 words of memory out of 5000000
- 67774 multiletter control sequences out of 15000+600000
+ 67777 multiletter control sequences out of 15000+600000
  530589 words of font info for 76 fonts, out of 8000000 for 9000
  725 hyphenation exceptions out of 8191
- 94i,9n,100p,2026b,39835s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 94i,9n,100p,2026b,39837s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb>
 Output written on main.pdf (14 pages, 388946 bytes).
 PDF statistics:

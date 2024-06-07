@@ -1966,6 +1966,13 @@ INPUT /usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/jknappen/ec/ecbx1095.tfm
+INPUT ./text/aproximated-functionals.tex
+INPUT ./text/aproximated-functionals.tex
+INPUT ./text/aproximated-functionals.tex
+INPUT text/aproximated-functionals.tex
+INPUT ./text/aproximated-functionals.tex
+INPUT ./text/aproximated-functionals.tex
+INPUT text/aproximated-functionals.tex
 INPUT main.aux
 INPUT ./main.out
 INPUT ./main.out

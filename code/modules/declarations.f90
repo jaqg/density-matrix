@@ -8,7 +8,9 @@ module declarations
     !
     implicit none
     integer :: termwidth, ouf
-    character(len=80) :: d1fn, d2fn, h1fn, h2fn 
+    character(len=80) :: d1fn, d2fn, h1fn, h2fn, dfmt
+    real(kind=8) :: EH1D1
+    real(kind=8), dimension(:), allocatable :: NONMO 
     real(kind=8), dimension(:,:), allocatable :: D1MO, H1MO
     real(kind=8), dimension(:,:,:,:), allocatable :: D2MO, H2MO
 
@@ -22,6 +24,9 @@ module declarations
 
         ! Logic unit of the output file
         ouf = 6
+
+        ! D format
+        dfmt = '(*(d10.2))'
 
         return
     end subroutine parameters 

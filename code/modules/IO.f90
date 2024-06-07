@@ -170,15 +170,39 @@ module io
         return
     end subroutine read_4D_matrix 
 
-    subroutine print_matrix(A, fmt)
+    subroutine print_vector(label, vec, colrow, lu, fmt)
         implicit none
+        character(len=*), intent(in) :: label, colrow, fmt 
+        real(kind=8), dimension(:), intent(in) :: vec
+        integer, intent(in) :: lu 
+        !
+        integer :: i
+
+        write(lu,'(a)') label
+        if (colrow.eq.'col' .or. colrow.eq.'COL') then
+            ! Write it as column vector
+            do i=1, size(vec,1)
+                write(lu,trim(fmt)) vec(i)
+            end do
+        elseif (colrow.eq.'row' .or. colrow.eq.'ROW') then
+            ! Write it in a row
+            write(lu,trim(fmt)) ( vec(i), i=1, size(vec,1) )
+        end if
+        !
+        return
+    end subroutine print_vector 
+
+    subroutine print_matrix(label, A, lu, fmt)
+        implicit none
+        character(len=*), intent(in) :: label, fmt 
         real(kind=8), dimension(:,:), intent(in) :: A
-        character(len=*), intent(in) :: fmt 
+        integer, intent(in) :: lu 
         !
         integer :: i, j 
 
+        write(lu,'(a)') label
         do i=1, size(A,1)
-            write(*,trim(fmt)) (A(i,j), j=1, size(A,2))
+            write(lu,trim(fmt)) (A(i,j), j=1, size(A,2))
         end do
         !
         return
