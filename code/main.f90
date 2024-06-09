@@ -39,20 +39,48 @@ program main
     call print_matrix('D2MO', D2MO(1,1,1:6,1:6), ouf, dfmt) ; write(ouf,*)
     call print_matrix('H2MO', H2MO(1,1,1:6,1:6), ouf, dfmt) ; write(ouf,*)
 
-    ! Obtain the natural occupation numbers: the eigenvalues of D^(1)
+    ! Obtain the MO's occupation numbers: the eigenvalues of D^(1)
     call diag_2D_mat(D1MO, NONMO)
-    call print_vector('Natural occupation numbers:', NONMO, 'row', ouf, '(*(f6.2))')
-    write(ouf,*) ; write(ouf,'(a,f6.2)') 'Tr[D1] =', trace(D1MO) ; write(ouf,*)
+    call print_vector('MO occupation numbers:', NONMO, 'row', ouf, '(*(f6.2))')
+    write(ouf,*)
+    write(ouf,'(a,f6.2)') 'Tr[D1MO] =', trace(D1MO) ; write(ouf,*)
+
+    ! Transform D^(1) from MO to spin-orbital basis
+    call MO_to_SO(D1MO, D1SO)
+    call print_matrix('D1SO', D1SO(1:6,1:6), ouf, dfmt)     ; write(ouf,*)
+
+    ! Obtain the natural occupation numbers: the eigenvalues of D^(1) in SO
+    call diag_2D_mat(D1SO, NONSO)
+    call print_vector('natural occupation numbers:',NONSO,'row',ouf,'(*(f6.2))')
+    write(ouf,*)
+    write(ouf,'(a,f6.2)') 'Tr[D1SO] =', trace(D1SO) ; write(ouf,*)
 
     ! Compute the non-ee part of the energy: tr[D^(1) H^(1)]
     call H1D1_energy(D1MO, H1MO, EH1D1)
-    write(ouf,'(a, d10.2, a)') 'EH1D1 = ', EH1D1, 'a.u.' ; write(ouf,*)
+!   write(ouf,'(a, d10.2, a)') 'EH1D1 = ', EH1D1, 'a.u.' ; write(ouf,*)
 
-    ! Compute the total energy
-    ! call energy(EH1D1, Eee_D2, ED2)
+    !
+    ! Compute the Eee part with:
+    !
+    !   - Exact from the D^(2): EeeD2 = 1/2 sum_{pqrs} (pq|rs) D2_{pqrs}
+    call Eee_D2(D2MO, H2MO, EH2D2)
+    !   - BB functionals: BBC1, BBC3
+    ! call Eee_BBC('BBC1', NONSO, H2SO, EeeBBC1)  ! BUENO
+    ! call Eee_BBC('BBC3', NONSO, H2SO, EeeBBC3)  ! BUENO
+    ! TODO: pasar H2MO -> H2SO
+    call Eee_BBC('BBC1', NONMO, H2MO, EeeBBC1)  ! TEST
+    call Eee_BBC('BBC3', NONMO, H2MO, EeeBBC3)  ! TEST
 
-    ! Print the HF energy
-    ! write(ouf,'(a, d10.2, a)') 'Exact energy = ', ED2, 'a.u.'
+
+    ! Compute the total energy for each functional
+    call energy(EH1D1, EH2D2, E_exact)
+    call energy(EH1D1, EeeBBC1, EBBC1)
+    call energy(EH1D1, EeeBBC3, EBBC3)
+
+    ! Print the results
+    write(ouf,'(a, d10.2, a)') 'Exact energy = ', E_exact, 'a.u.'
+    write(ouf,'(a, d10.2, a)') 'BBC1 energy = ', EBBC1, 'a.u.'
+    write(ouf,'(a, d10.2, a)') 'BBC3 energy = ', EBBC3, 'a.u.'
 
     ! Deallocate arrays
     deallocate(D1MO)

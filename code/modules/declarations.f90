@@ -9,10 +9,11 @@ module declarations
     implicit none
     integer :: termwidth, ouf
     character(len=80) :: d1fn, d2fn, h1fn, h2fn, dfmt
-    real(kind=8) :: EH1D1
-    real(kind=8), dimension(:), allocatable :: NONMO 
-    real(kind=8), dimension(:,:), allocatable :: D1MO, H1MO
-    real(kind=8), dimension(:,:,:,:), allocatable :: D2MO, H2MO
+    real(kind=8) :: EH1D1, EH2D2, E_exact
+    real(kind=8) :: EeeBBC1, EeeBBC3, EBBC1, EBBC3 
+    real(kind=8), dimension(:), allocatable :: NONMO, NONSO 
+    real(kind=8), dimension(:,:), allocatable :: D1MO, H1MO, D1SO
+    real(kind=8), dimension(:,:,:,:), allocatable :: D2MO, H2MO, H2SO
 
     contains
 
