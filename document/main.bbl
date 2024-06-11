@@ -928,6 +928,115 @@
     \field{urlyear}{2024}
   \endentry
 
+  \entry{pernal2004phase}{article}{}
+    \name{author}{2}{}{%
+      {{hash=PK}{%
+         family={Pernal},
+         familyi={P\bibinitperiod},
+         given={Katarzyna},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=CJ}{%
+         family={Cioslowski},
+         familyi={C\bibinitperiod},
+         given={Jerzy},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{PKCJ1}
+    \strng{fullhash}{PKCJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    For closed-shell systems, a particular parametrization of coefficients in a configuration interaction (CI) expansion provides a convenient formulation for the search over electronic wave functions constrained by a set of natural orbitals (NOs) and the corresponding occupation numbers that are invoked in every variational construction of the density matrix functional (DMF) Vee(Γ) for the electron–electron repulsion energy. It produces an explicit expression for Vee in terms of the Coulomb and exchange integrals over NOs, and an idempotent matrix ω, diagonal elements of which equal the occupation numbers. At the same time, it reveals a very serious bottleneck affecting any rigorous approach to the DMF theory, namely the phase dilemma that stems from the necessity to carry out minimization over a large number of possible combinations of CI coefficient signs. While underscoring its lack of variational nature, a simple approximation for the phase factor products provides a strict derivation for the recently proposed Kollmar–Hess functional.%
+    }
+    \verb{doi}
+    \verb 10.1063/1.1651059
+    \endverb
+    \field{issn}{0021-9606}
+    \field{number}{13}
+    \field{pages}{5987\bibrangedash 5992}
+    \field{shortjournal}{The Journal of Chemical Physics}
+    \field{title}{Phase Dilemma in Density Matrix Functional Theory}
+    \verb{url}
+    \verb https://doi.org/10.1063/1.1651059
+    \endverb
+    \field{volume}{120}
+    \verb{file}
+    \verb /home/jose/Zotero/storage/383M2KCT/Phase-dilemma-in-density-matrix-fu
+    \verb nctional-theory.html
+    \endverb
+    \field{journaltitle}{The Journal of Chemical Physics}
+    \field{day}{01}
+    \field{month}{04}
+    \field{year}{2004}
+    \field{urlday}{08}
+    \field{urlmonth}{05}
+    \field{urlyear}{2024}
+  \endentry
+
+  \entry{mentel2014density}{article}{}
+    \name{author}{4}{}{%
+      {{hash=M�M}{%
+         family={Mentel},
+         familyi={M\bibinitperiod},
+         given={Ł.\bibnamedelima M.},
+         giveni={�\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=fpug}{%
+         family={family=Meer},
+         familyi={f\bibinitperiod},
+         suffix={given=R.},
+         suffixi={g\bibinitperiod},
+         given={prefix=van\bibnamedelima useprefix=true},
+         giveni={p\bibinitperiod\bibinitdelim u\bibinitperiod},
+      }}%
+      {{hash=GOV}{%
+         family={Gritsenko},
+         familyi={G\bibinitperiod},
+         given={O.\bibnamedelima V.},
+         giveni={O\bibinitperiod\bibinitdelim V\bibinitperiod},
+      }}%
+      {{hash=BEJ}{%
+         family={Baerends},
+         familyi={B\bibinitperiod},
+         given={E.\bibnamedelima J.},
+         giveni={E\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{M�MfgpuGOVBEJ1}
+    \strng{fullhash}{M�MfgpuGOVBEJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{shorttitle}
+    \field{abstract}{%
+    For chemistry an accurate description of bond weakening and breaking is vital. The great advantage of density matrix functionals, as opposed to density functionals, is their ability to describe such processes since they naturally cover both nondynamical and dynamical correlation. This is obvious in the Löwdin-Shull functional, the exact natural orbital functional for two-electron systems. We present in this paper extensions of this functional for the breaking of a single electron pair bond in N-electron molecules, using LiH, BeH+, and Li2 molecules as prototypes. Attention is given to the proper formulation of the functional in terms of not just J and K integrals but also the two-electron L integrals (K integrals with a different distribution of the complex conjugation of the orbitals), which is crucial for the calculation of response functions. Accurate energy curves are obtained with extended Löwdin-Shull functionals along the complete dissociation coordinate using full CI calculations as benchmark.%
+    }
+    \verb{doi}
+    \verb 10.1063/1.4879776
+    \endverb
+    \field{issn}{0021-9606}
+    \field{number}{21}
+    \field{pages}{214105}
+    \field{shortjournal}{The Journal of Chemical Physics}
+    \field{shorttitle}{The Density Matrix Functional Approach to Electron Correlation}
+    \field{title}{The Density Matrix Functional Approach to Electron Correlation: {{Dynamic}} and Nondynamic Correlation along the Full Dissociation Coordinate}
+    \verb{url}
+    \verb https://doi.org/10.1063/1.4879776
+    \endverb
+    \field{volume}{140}
+    \verb{file}
+    \verb /home/jose/Zotero/storage/CD8AYCZ4/The-density-matrix-functional-appr
+    \verb oach-to-electron.html
+    \endverb
+    \field{journaltitle}{The Journal of Chemical Physics}
+    \field{day}{03}
+    \field{month}{06}
+    \field{year}{2014}
+    \field{urlday}{08}
+    \field{urlmonth}{05}
+    \field{urlyear}{2024}
+  \endentry
+
   \entry{muller1984explicit}{article}{}
     \name{author}{1}{}{%
       {{hash=MAMK}{%
@@ -1093,112 +1202,63 @@
     \field{urlyear}{2024}
   \endentry
 
-  \entry{pernal2004phase}{article}{}
-    \name{author}{2}{}{%
+  \entry{rohr2008density}{article}{}
+    \name{author}{4}{}{%
+      {{hash=RDR}{%
+         family={Rohr},
+         familyi={R\bibinitperiod},
+         given={Daniel\bibnamedelima R.},
+         giveni={D\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
       {{hash=PK}{%
          family={Pernal},
          familyi={P\bibinitperiod},
          given={Katarzyna},
          giveni={K\bibinitperiod},
       }}%
-      {{hash=CJ}{%
-         family={Cioslowski},
-         familyi={C\bibinitperiod},
-         given={Jerzy},
-         giveni={J\bibinitperiod},
-      }}%
-    }
-    \strng{namehash}{PKCJ1}
-    \strng{fullhash}{PKCJ1}
-    \field{labelnamesource}{author}
-    \field{labeltitlesource}{title}
-    \field{abstract}{%
-    For closed-shell systems, a particular parametrization of coefficients in a configuration interaction (CI) expansion provides a convenient formulation for the search over electronic wave functions constrained by a set of natural orbitals (NOs) and the corresponding occupation numbers that are invoked in every variational construction of the density matrix functional (DMF) Vee(Γ) for the electron–electron repulsion energy. It produces an explicit expression for Vee in terms of the Coulomb and exchange integrals over NOs, and an idempotent matrix ω, diagonal elements of which equal the occupation numbers. At the same time, it reveals a very serious bottleneck affecting any rigorous approach to the DMF theory, namely the phase dilemma that stems from the necessity to carry out minimization over a large number of possible combinations of CI coefficient signs. While underscoring its lack of variational nature, a simple approximation for the phase factor products provides a strict derivation for the recently proposed Kollmar–Hess functional.%
-    }
-    \verb{doi}
-    \verb 10.1063/1.1651059
-    \endverb
-    \field{issn}{0021-9606}
-    \field{number}{13}
-    \field{pages}{5987\bibrangedash 5992}
-    \field{shortjournal}{The Journal of Chemical Physics}
-    \field{title}{Phase Dilemma in Density Matrix Functional Theory}
-    \verb{url}
-    \verb https://doi.org/10.1063/1.1651059
-    \endverb
-    \field{volume}{120}
-    \verb{file}
-    \verb /home/jose/Zotero/storage/383M2KCT/Phase-dilemma-in-density-matrix-fu
-    \verb nctional-theory.html
-    \endverb
-    \field{journaltitle}{The Journal of Chemical Physics}
-    \field{day}{01}
-    \field{month}{04}
-    \field{year}{2004}
-    \field{urlday}{08}
-    \field{urlmonth}{05}
-    \field{urlyear}{2024}
-  \endentry
-
-  \entry{mentel2014density}{article}{}
-    \name{author}{4}{}{%
-      {{hash=M�M}{%
-         family={Mentel},
-         familyi={M\bibinitperiod},
-         given={Ł.\bibnamedelima M.},
-         giveni={�\bibinitperiod\bibinitdelim M\bibinitperiod},
-      }}%
-      {{hash=fpug}{%
-         family={family=Meer},
-         familyi={f\bibinitperiod},
-         suffix={given=R.},
-         suffixi={g\bibinitperiod},
-         given={prefix=van\bibnamedelima useprefix=true},
-         giveni={p\bibinitperiod\bibinitdelim u\bibinitperiod},
-      }}%
       {{hash=GOV}{%
          family={Gritsenko},
          familyi={G\bibinitperiod},
-         given={O.\bibnamedelima V.},
+         given={Oleg\bibnamedelima V.},
          giveni={O\bibinitperiod\bibinitdelim V\bibinitperiod},
       }}%
       {{hash=BEJ}{%
          family={Baerends},
          familyi={B\bibinitperiod},
-         given={E.\bibnamedelima J.},
+         given={Evert\bibnamedelima Jan},
          giveni={E\bibinitperiod\bibinitdelim J\bibinitperiod},
       }}%
     }
-    \strng{namehash}{M�MfgpuGOVBEJ1}
-    \strng{fullhash}{M�MfgpuGOVBEJ1}
+    \strng{namehash}{RDRPKGOVBEJ1}
+    \strng{fullhash}{RDRPKGOVBEJ1}
     \field{labelnamesource}{author}
-    \field{labeltitlesource}{shorttitle}
+    \field{labeltitlesource}{title}
     \field{abstract}{%
-    For chemistry an accurate description of bond weakening and breaking is vital. The great advantage of density matrix functionals, as opposed to density functionals, is their ability to describe such processes since they naturally cover both nondynamical and dynamical correlation. This is obvious in the Löwdin-Shull functional, the exact natural orbital functional for two-electron systems. We present in this paper extensions of this functional for the breaking of a single electron pair bond in N-electron molecules, using LiH, BeH+, and Li2 molecules as prototypes. Attention is given to the proper formulation of the functional in terms of not just J and K integrals but also the two-electron L integrals (K integrals with a different distribution of the complex conjugation of the orbitals), which is crucial for the calculation of response functions. Accurate energy curves are obtained with extended Löwdin-Shull functionals along the complete dissociation coordinate using full CI calculations as benchmark.%
+    A recently proposed series of corrections to the earliest JK-only functionals has considerably improved the prospects of density matrix functional theory (DMFT). Still, the most advanced of these functionals (correction C3) requires a preselection of the terms in the pair density Γ(r1,r2) involving the bonding and antibonding natural orbitals (NOs) belonging to an electron pair bond. Ideally, a DMFT functional should only depend on the NOs and their occupation numbers, and we propose a functional with an occupation number driven weighing of terms in the pair density. These are formulated as “damping” for certain ranges of occupation numbers of the two-electron cumulant that arises in the expansion of the two-particle density matrix of the paradigmatic two-electron system. This automatic version of C3, which we denote AC3, provides the correct dissociation limit for electron pair bonds and it excellently reproduces the potential energy curves of the multireference configuration interaction (MRCI) method for the dissociation of the electron pair bond in the series of the ten-electron hydrides CH4, NH3, H2O, and HF. AC3 reproduces closely the experimental equilibrium distances and at Re it yields correlation energies of the ten-electron systems with an average error in the absolute values of only 3.3\% compared to the MRCI values. We stress the importance of treatment of strong correlation cases (NO occupation numbers differing significantly from 2.0 and 0.0) by appropriate terms in the cumulant.%
     }
     \verb{doi}
-    \verb 10.1063/1.4879776
+    \verb 10.1063/1.2998201
     \endverb
     \field{issn}{0021-9606}
-    \field{number}{21}
-    \field{pages}{214105}
+    \field{number}{16}
+    \field{pages}{164105}
     \field{shortjournal}{The Journal of Chemical Physics}
-    \field{shorttitle}{The Density Matrix Functional Approach to Electron Correlation}
-    \field{title}{The Density Matrix Functional Approach to Electron Correlation: {{Dynamic}} and Nondynamic Correlation along the Full Dissociation Coordinate}
+    \field{title}{A Density Matrix Functional with Occupation Number Driven Treatment of Dynamical and Nondynamical Correlation}
     \verb{url}
-    \verb https://doi.org/10.1063/1.4879776
+    \verb https://doi.org/10.1063/1.2998201
     \endverb
-    \field{volume}{140}
+    \field{volume}{129}
     \verb{file}
-    \verb /home/jose/Zotero/storage/CD8AYCZ4/The-density-matrix-functional-appr
-    \verb oach-to-electron.html
+    \verb /home/jose/Zotero/storage/4KC8WNHB/Rohr et al. - 2008 - A density mat
+    \verb rix functional with occupation number.pdf;/home/jose/Zotero/storage/W
+    \verb 2B353KR/A-density-matrix-functional-with-occupation-number.html
     \endverb
     \field{journaltitle}{The Journal of Chemical Physics}
-    \field{day}{03}
-    \field{month}{06}
-    \field{year}{2014}
-    \field{urlday}{08}
-    \field{urlmonth}{05}
+    \field{day}{23}
+    \field{month}{10}
+    \field{year}{2008}
+    \field{urlday}{10}
+    \field{urlmonth}{06}
     \field{urlyear}{2024}
   \endentry
 

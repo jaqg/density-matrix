@@ -1,0 +1,113 @@
+\subsection{Reduced Density Matrix Functional Theory} % (fold)
+
+% subsubsection 1-RDM (end)
+Many methods of electronic structure theory are based on variational
+optimization of an energy functional.
+An idempotent first-order reduced density matrix (1-RDM) is variationally
+optimized in the Hartree-Fock (HF) method\mycite{kollmar2004structure}.
+
+The 1-RDM is determined by the natural orbitals and their occupation
+numbers\mycite{lowdin1955quantuma}, leading to denote the corresponding energy
+functional as density matrix functional (DMF) or natural orbital functional (NOF).
+This is explained in detail in the following sections.
+
+% \subsubsection{1-RDM} % (fold)
+% \label{sec:1-RDM}
+
+% subsubsection 1-RDM (end)
+% NOTAS SACADAS DEL PERNAL
+% mirar tb seccion 1.7.3 del Hergakel
+In the coordinate representation of first quantization,
+the \textit{first-order reduced density matrix} (1-RDM), $\fordm$, is defined
+for an $n$-electron wavefunction, $\Psi$, as
+\begin{equation} \label{eq:fordm-coordinate-representation}
+    \fordm \left( \mat{x}_1, \mat{x}_1\myprime \right) =
+    n \idotsint
+    \Psi \left( \mat{x}_1, \mat{x_2}, \ldots,  \mat{x}_n \right)
+    \Psi^{*} \left( \mat{x}_1\myprime, \mat{x_2}, \ldots,  \mat{x}_n \right)
+    \dd{ \mat{x}_2} \cdots \dd{ \mat{x}_n}
+    ,
+\end{equation}
+and the \textit{second-order reduced density matrix} (2-RDM), $\sordm$, as 
+\begin{equation} \label{eq:sordm-coordinate-representation}
+    \sordm \left( \mat{x}_1, \mat{x}_2, \mat{x}_1\myprime, \mat{x}_2\myprime \right)
+    =
+    \frac{n\left( n - 1 \right)}{2} \idotsint
+    \Psi \left( \mat{x}_1, \mat{x}_2, \mat{x}_3, \ldots,  \mat{x}_n \right)
+    \Psi^{*} \left( \mat{x}_1\myprime, \mat{x}_2\myprime, \mat{x}_3, \ldots,  \mat{x}_n \right)
+    \dd{ \mat{x}_3} \cdots \dd{ \mat{x}_n}
+    ,
+\end{equation}
+where $ \mat{x} = \left( \mat{r}, s \right)$ is a combined spatial and spin
+coordinate.
+
+%TODO: incluir info de seccion 2 del pernal
+
+% An inmidiate advantage of using 1-RDM instead of the electron density, $\rho$,
+% is that the kinetic energy is an explicit functional of $\fordm$ but not of
+% $\rho$.
+Employing the 1-RDM rather than the electron density, $\rho$, has the immediate
+advantage of making the kinetic energy an explicit functional of $\fordm$ rather
+than $\rho$.
+
+% Then, there is no need to introduce a ficticious noninteracting system.
+Then, introducing a fictitious noninteracting system is not necessary.
+
+% Moreover, orbitals present in Reduced Density Matrix Functional Theory (RDMFT)
+% are fractionally occupied, so functionals 
+% of $\fordm$ seem to be better suited to account for static correlation.
+Furthermore, fractionally occupied orbitals are a feature of Reduced Density 
+Matrix Functional Theory (RDMFT), which suggests that functionals of $\fordm$ are 
+better suited to explain static correlation.
+
+Self-adjointness of $\fordm$, as defined in \cref{eq:fordm-coordinate-representation},
+allows for its spectral representation\mycite{lowdin1955quantum}
+\begin{equation}
+    \fordm \left( \mat{x}, \mat{x}\myprime \right) =
+    \sum_{p} n_p 
+    \varphi_p \left( \mat{x} \right)
+    \varphi_p^{*} \left( \mat{x}\myprime \right)
+    .
+\end{equation}
+
+The eigenvalues of 1-RDM are called natural occupation numbers,
+$\left\{ n_p \right\}$, and the eigenfunctions are known as natural
+spin-orbitals, $\left\{ \varphi_p \right\}$.
+% For convention, the indices $p,q,r,s$ are referred to natural spin-orbitals
+% and $a,b,c,d$ to arbitrary one-eletron functions.
+% Also, atomic units are employed throughout the document.
+By convention, natural spin-orbitals are denoted by the indices $p$, $q$, $r$, and $s$, 
+and arbitrary one-eletron functions by the indices $a$, $b$, $c$, and $d$. 
+
+% Some properties of the natural spin-orbitals and occupation numbers, known as the 
+% $n$-representability conditions, are:
+% the ensemble n-representability conditions for the first-order reduced density
+% matrix have a particularly simple form\mycite{coleman1963structure}
+The ensemble $n$-representability conditions, which are some properties of the 
+natural spin-orbitals and occupation numbers, have a particularly simple 
+form\mycite{coleman1963structure} and read:
+\begin{enumerate}
+    \item Self-adjointness of $\fordm$: implies orthonormality of the natural orbitals 
+        \begin{equation} \label{ec:self-adjoint-condition}
+            \int
+            \varphi_p^{*} \left( \mat{x} \right)
+            \varphi_q \left( \mat{x} \right)
+            = \delta_{pq}
+            \quad \forall_{p,q} 
+            .
+        \end{equation}
+        
+    \item $\fordm$ is assumed to be normalized to a number of electrons, $n$.
+        Therefore, the natural occupancies sum up to $n$  
+        \begin{equation} \label{ec:normalization-condition}
+            \sum_{p} n_p = n
+            .
+        \end{equation}
+
+    \item Occupation number, $n_p$, is nonnegative and not grater than 1 
+    \begin{equation} \label{ec:occ-number-condition}
+        0 \leq n_p \leq 1 \quad \forall_{p}
+        .
+    \end{equation}
+\end{enumerate}
+

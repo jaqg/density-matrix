@@ -1,0 +1,385 @@
+\subsection{Properties in terms of the density matrices} % (fold)
+\label{sub:Properties in terms of the density matrices}
+
+% subsection Properties in terms of the density matrices (end)
+% As demonstrated by Gilbert, who extended the Hohenberg-Kohn theorems to nonlocal
+% potentials\mycite{gilbert1975hohenbergkohn, donnelly1978elementary}, there
+% exists a 1-RDM functional\mycite{gilbert1975hohenbergkohn, hohenberg1964inhomogeneousa}
+% such that
+Gilbert proved that there is a 1-RDM functional\mycite{gilbert1975hohenbergkohn, hohenberg1964inhomogeneousa}
+such that the Hohenberg-Kohn theorems extend to 
+nonlocal potentials\mycite{gilbert1975hohenbergkohn, donnelly1978elementary}
+\begin{equation} \label{ec:HK-functional}
+    \func{E_{\nu}^{\text{HK}}}{\fordm} = 
+    \mytrace{\hat{h} \hat{\fordm}} + 
+    \Braket{\func{\Psi}{\fordm} | \hat{V}_{\text{ee}} | \func{\Psi}{\fordm}}
+    ,
+\end{equation}
+% where $\func{\Psi}{\fordm}$ denotes a ground state wavefunction pertinent to a
+% $\nu$-representable $\fordm$.
+% $\hat{h}$ stands for a one-electron Hamiltonian comprising the kinetic
+% energy, $\hat{T}$, and external potential, $\hat{V}_{\text{ext}}$ 
+where a ground state wavefunction relevant to a $\nu$-representable $\fordm$ 
+is denoted by the symbol $\func{\Psi}{\fordm}$.
+The one-electron Hamiltonian, $\hat{h}$, is composed of the external
+potential, $\hat{V}_{\text{text}}$, and the kinetic energy, $\hat{T}$
+\begin{equation}
+    \hat{h} = \hat{T} + \hat{V}_{\text{ext}}
+        ,
+\end{equation}
+and $\hat{V}_{\text{ee}}$ is an electron interaction operator 
+\begin{equation}
+    \hat{V}_{\text{ee}} = 
+    \sum_{i>j}^{n} \frac{1}{r_{ij}}
+    .
+\end{equation}
+
+This functional follows the variational principle 
+\begin{equation} \label{ec:var-princ-nu-rep}
+    \func{E_{\nu}}{\fordm} \ge E_0 \quad \forall_{\fordm \in \text{$\nu$-rep}}
+    ,
+\end{equation}
+where $\nu$-rep denotes a set of pure-state $\nu$-representable 1-RDMs.
+
+% The domain of a density matrix functional to all pure-state $n$-representable
+% 1-RDMs was extended by Levy by defining the electron repulsion functional\mycite{doi:10.1073/pnas.76.12.6062, levy1987correlation} 
+Levy defined the electron repulsion functional\mycite{doi:10.1073/pnas.76.12.6062, levy1987correlation}, extending the domain of a density matrix 
+functional to all pure-state $n$-representable 1-RDMs
+\begin{equation} \label{ec:levy-functional}
+    \func{E_{\text{ee}}^{\text{L}}}{\fordm} = 
+    \min_{\Psi \to \fordm} \Braket{\Psi | \hat{V}_{\text{ee}} | \Psi}
+    ,
+\end{equation}
+and further extended to ensemble $n$-representable 1-RDMs (belonging to a set
+``$n$-rep'') by Valone\mycite{valone2008consequences, valone2008one}, so the
+exact functional reads 
+\begin{equation} \label{ec:ee-functional}
+    \func{E_{\text{ee}}}{\fordm} =
+    \min_{\sordm^{\left( n \right)}\to \fordm} \mytrace{\hat{ \mat{H}} \hat{\sordm}^{\left( n \right)}}
+    ,
+\end{equation}
+where the minimization is carried out with respect to $n$-electron density
+matrices $\sordm^{\left( n \right)}$ that yield $\fordm$.
+
+% For a given external potential, $\hat{V}_{\text{ext}}$, minima of the Hohenberg-Kohn
+% functional given in \cref{ec:HK-functional}, the Levy functional given in
+% \cref{ec:levy-functional} and that in \cref{ec:ee-functional} defined, respectively,
+% for $\nu$-rep, pure-state $n$-representable, and ensemble $n$-representable
+% ($n$-rep) 1-RDMs, coincide\mycite{valone2008consequences, nguyen-dang1985variation}.
+% Therefore, taking into account a variational principle given in \cref{ec:var-princ-nu-rep},
+% one concludes that a functional defined for $n$-rep 1-RDMs yields a ground state
+% energy at minimum
+The minima of the Levy functional given in \cref{ec:levy-functional}, the 
+Hohenberg-Kohn functional given in \cref{ec:HK-functional}, and that defined in
+\cref{ec:ee-functional}, respectively for $\nu$-rep, pure-state $n$-representable,
+and ensemble $n$-representable ($n$-rep) 1-RDMs coincide
+for a given external potential, $\hat{V}_{\text{ext}}$\mycite{valone2008consequences, nguyen-dang1985variation}.
+Thus, considering the variational principle given in \cref{ec:var-princ-nu-rep}, 
+it can be concluded that a ground state energy at minimum is produced by a 
+functional defined for $n$-rep 1-RDMs
+\begin{equation} \label{ec:gs-energy}
+    E_0 = \min_{\fordm \in \text{$n$-rep}}
+    \left\{ \mytrace{\hat{h} \hat{\fordm}} + \func{E_{\text{ee}}}{\fordm} \right\}
+    .
+\end{equation}
+The ground state energy is a functional of the 1-RDM and, therefore, it can be
+obtained directly from the 1-RDM for a given electron repulsion functional,
+$E_{\text{ee}}\left[ \fordm \right]$
+\begin{equation}
+    E \left[ \fordm \right] = 
+    E_{\text{oe}} \left[ \fordm \right] +
+    E_{\text{ee}} \left[ \fordm \right]
+    .
+\end{equation}
+Indeed, \cref{ec:self-adjoint-condition,ec:normalization-condition,ec:occ-number-condition,ec:gs-energy}
+are the foundation for RDMFT.
+
+In the second quantization formalism, the electronic molecular Hamiltonian in 
+the spin-orbital basis is given by
+\begin{equation}
+    \hat{H} =
+    \sum_{pq} h_{pq} a_p^{\dagger} a_q
+    +
+    \frac{1}{2} \sum_{pqrs} \PBraket{pr | qs} a_p^{\dagger} a_q^{\dagger} a_s a_r
+    .
+\end{equation}
+
+Using restricted spin-orbitals, it is convenient to define the operators 
+\begin{equation}
+    E_{pq} =
+    \sum_{\sigma} a_{p\sigma}^{\dagger} a_{q\sigma}
+    ,
+\end{equation}
+such that 
+\begin{equation}
+    \left[ E_{pq}, E_{rs} \right] =
+    \delta_{qr} E_{ps} - \delta_{ps} E_{qr}
+    .
+\end{equation}
+
+Then, the Hamiltonian can be written as 
+\begin{equation}
+    \hat{H} =
+    \sum_{pq} h_{pq} E_{pq}
+    + \frac{1}{2}
+    \sum_{pqrs} \PBraket{pq | rs}\left( E_{pq} E_{rs} - \delta_{qr}E_{ps} \right)
+    .
+\end{equation}
+
+% The expectation value of $\hat{H}$ with respect to a normalized reference state
+% $\Ket{0}$ written as a linear combination of ON vectors 
+Given a normalized reference state
+$\Ket{0}$ written as a linear combination of ON vectors 
+\begin{equation}
+    \Ket{0} = \sum_{k} c_k \Ket{k}
+    , \quad
+    \Braket{0 | 0} = 1
+    ,
+\end{equation}
+the expectation value of $\hat{H}$ with respect to $\Ket{0}$ reads
+\begin{equation} \label{eq:GS-energy-1}
+    E_0 = \Braket{0 | \hat{H} | 0} =
+    \sum_{pq} h_{pq} D_{pq} + \frac{1}{2} \sum_{pqrs}
+    \PBraket{pq | rs} \left( d_{pqrs} - \delta_{qr} D_{ps} \right)
+    ,
+\end{equation}
+where 
+\begin{equation}
+    d_{pqrs} = \Braket{0 | E_{pq} E_{rs} | 0}
+    ,
+\end{equation}
+and
+\begin{equation} \label{eq:oedm-spin-representation}
+    D_{pq} = \Braket{0 | E_{pq} | 0} \equiv \oedm_{pq}
+    ,
+\end{equation}
+are the elements (densities) of an $m \times m$ Hermitian matrix, the
+\textit{one-electron spin-orbital density matrix}, $ \mat{\oedm}$, since 
+\begin{equation}
+    D_{pq}^{*} =
+    \Braket{0 | a_p^{\dagger} a_q | 0} =
+    \Braket{0 | a_q^{\dagger} a_p | 0} =
+    D_{qp}
+    ,
+\end{equation}
+which is also symmetric for real wave functions.
+
+% The one-electron density matrix is positive semidefinite since its elements are 
+% either trivially equal to zero or inner products of states in the subspace
+% $F\left( m, n-1 \right)$.
+% The diagonal elements of $ \mat{\oedm}$ are the expectation values of the
+% occupation-number operators, $n_p$, in $F\left( m,n \right)$, and are referred to as
+% the occupation numbers, $\omega_p$, of the electronic state 
+Since the elements of the one-electron density matrix are inner products of 
+states in the subspace $F\left( m, n-1 \right)$ or trivially equal to zero, 
+the one-electron density matrix is positive semidefinite.
+The occupation numbers, $\omega_p$, of the electronic state are given by the
+diagonal elements of $ \mat{\oedm}$, i.e. the expectation values of the 
+occupation-number operators, $n_p$, in $F\left( m,n \right)$
+\begin{equation}
+    \omega_p = \oedm_{pp} = \Braket{0 | n_p | 0}
+    .
+\end{equation}
+
+The diagonal elements of $ \mat{\oedm}$ reduce to the usual occupation numbers,
+$k_p$, whenever the reference state is an eigenfunction of the ON operators, i.e.
+when the reference state is an ON vector 
+\begin{equation}
+    \Braket{k | n_p | k} = k_p
+    .
+\end{equation}
+
+Considering that the ON operators are projectors, $\omega_p$ can be written 
+over the projected electronic state 
+\begin{equation}
+    n_p \Ket{0} = \sum_{k} k_p c_k \Ket{k}
+    ,
+\end{equation}
+as 
+the squared norm of the part of the reference state where the spin orbital
+$\varphi_p$ is occupied in each ON vector
+\begin{equation}
+    \omega_p =
+    \Braket{0 | n_p n_p | 0} =
+    \sum_{k} k_p \left| c_k \right|^2
+    .
+\end{equation}
+
+Recalling the $n$-representability conditions 
+(\cref{ec:occ-number-condition,ec:normalization-condition}),
+the occupation numbers are real numbers between zero and one 
+and its sum, the trace of the density matrix, is equal to the total number
+of electrons in the system 
+\begin{equation}
+    \trace \mat{\oedm} =
+    \sum_{p} \omega_p =
+    \sum_{p} \Braket{0 | n_p | 0} =
+    n
+    .
+\end{equation}
+
+Since $ \mat{\oedm}$ is Hermitian, it can be diagonalized by the spectral
+decomposition for a unitary matrix, $ \mat{U}$, as
+\begin{equation} \label{eq:diagonalization-oedm}
+    \mat{\oedm} =
+    \mat{U} \lambda \mat{U}^{\dagger}
+    .
+\end{equation}
+
+The eigenvalues, $\lambda_p$, are real numbers 
+\begin{equation}
+    0 \le \lambda_p \le 1
+    ,
+\end{equation}
+known as the natural-orbital occupation numbers, which also fulfill 
+\begin{equation}
+    \sum_{p} \lambda_p = n
+    .
+\end{equation}
+
+A new set of spin orbitals, the natural spin orbitals, are obtained from the
+eigenvectors, the columns of $ \mat{U}$, resulted from 
+\cref{eq:diagonalization-oedm}.
+
+Following the idea given in \cref{ec:ee-functional} and 
+with the definition of the one-electron density matrix given in 
+\cref{eq:oedm-spin-representation}, \cref{eq:GS-energy-1} can be further
+simplified introducing the \textit{two-electron spin-orbital density matrix}
+\begin{equation} \label{eq:tedm-spin-representation}
+    \tedm_{pqrs} = d_{pqrs} - \delta_{qr} D_{ps}
+    ,
+\end{equation}
+as
+\begin{equation} \label{eq:GS-energy-2}
+    E_0 =
+    \sum_{pq} h_{pq} \oedm_{pq} + \frac{1}{2} \sum_{pqrs}
+    \PBraket{pq | rs} \tedm_{pqrs}
+    .
+\end{equation}
+
+Then, due to the two-particle nature of the electron interaction functional
+given in \cref{ec:ee-functional}, the contraction of the 2-RDM matrix components,
+$\tedm_{pqrs}$, with two-electron integrals $\PBraket{pq | rs}$, the
+electronic repulsion energy $E_{\text{ee}}$ may be approximated as
+\begin{equation}
+    E_{\text{ee}} \left[ \fordm \right]
+    =
+    \frac{1}{2} \sum_{pqrs}
+    \sordm_{pqrs}\left[ \left\{ n_t \right\} \right] 
+    \Braket{rs | pq}
+    ,
+\end{equation}
+where the 2-RDM is formally defined as 
+\begin{equation}
+    \tedm_{pqrs} = \Braket{0 | a_r^{\dagger} a_s^{\dagger} a_q a_p | 0}
+    .
+\end{equation}
+Therefore, the 2-RDM is formally a functional of the 1-RDM. %TODO: incluir alguna cita
+
+The elements of $ \mat{\tedm}$ are not all independent because of the
+anticommutation relations between the creation and annihilation operators 
+\begin{equation}
+    \tedm_{pqrs} = - \tedm_{rqps} = - \tedm_{ps rq} = \tedm_{rspq}
+    .
+\end{equation}
+
+Also, in accordance with the Pauli principle 
+\begin{equation}
+    \tedm_{pqps} = \tedm_{pqrq} = \tedm_{pqpq} = 0
+    .
+\end{equation}
+
+The two-electron density matrix can be rewritten as a
+$m\left( m-1 \right) /2 \times m\left( m-1 \right) /2$ 
+matrix, $ \mat{T}$ 
+\begin{equation}
+    T_{pq,rs} = \Braket{0 | a_p^{\dagger} a_q^{\dagger} a_s a_r | 0}
+    , \quad
+    p>q,\ r>s
+    ,
+\end{equation}
+with composite indices $pq$, composing a subset of $ \mat{\tedm}$ by a
+reordering of the middle indices 
+\begin{equation}
+    T_{pq,rs} = \tedm_{prqs}
+    , \quad
+    p>q,\ r>s
+    .
+\end{equation}
+
+The matrix $ \mat{T}$ is also Hermitian and, therefore, symmetric for real
+wave functions.
+Furthermore, it is positive semidefinite since its elements are either zero
+or inner products of states in $F\left( m, n-2 \right)$.
+
+The diagonal elements of $ \mat{T}$, considering that $p > q$ and introducing
+the ON operators, are given by
+\begin{equation}
+    \omega_{pq} = T_{pq,pq} =
+    \Braket{0 | a_p^{\dagger} a_q^{\dagger} a_q a_p | 0} =
+    \Braket{0 | n_p n_q | 0},
+\end{equation}
+which can be interpreted as simultaneous occupations of pairs of spin orbitals
+from the part of the wave function where the spin
+orbitals $\varphi_p$ and $\varphi_q$ are simultaneously occupied.
+It can be simply denoted as pair occupations, and fulfill the following conditions:
+\begin{enumerate}
+        % Simultaneous occupation of a given spin-orbital pair cannot exceed those of
+        % the individual spin orbitals 
+    \item The simultaneous occupation of a given spin-orbital cannot be greater than that
+        of the individual spin orbitals
+        \begin{equation}
+            0 \le \omega_{pq} \le \min\left[ \omega_p, \omega_q \right] \le 1
+            .
+        \end{equation}
+
+    \item The sum of all pair occupations $\omega_{pq}$ is equal to the number of
+        electron pairs in the system 
+        \begin{equation}
+            \trace \left[ \mat{T} \right] =
+            \sum_{p>q} \Braket{0 | n_p n_q | 0} =
+            \frac{1}{2} \sum_{pq} \Braket{0 | n_p n_q | 0}
+            - \frac{1}{2} \sum_{p} \Braket{0 | n_p | 0} =
+            \frac{1}{2} n \left( n - 1 \right)
+            .
+        \end{equation}
+\end{enumerate}
+
+% For a state containing a single ON vector, $\Ket{k}$, the $ \mat{T}$ matrix
+% has a simple diagonal structure and may be constructed directly from the
+% one-electron density matrix as
+The $ \mat{T}$ matrix for a state with a single ON vector, $\Ket{k}$, has a 
+straightforward diagonal form and may be constructed directly from the one-
+electron density matrix as
+\begin{equation}
+    T_{pq,rs}^{\Ket{k}} = D_{pq}^{\Ket{k}} D_{qs}^{\Ket{k}}
+    .
+\end{equation}
+% and, likewise, the expectation value of any one- and two-electron operator
+% may be obtained directly from the one-electron density matrix.
+Similarly, the one-electron density matrix can be used to obtain the 
+expectation value of any one or two-electron operator.
+
+% This observation is consistent with the picture of an uncorrelated description
+% of the electronic system where the simultaneoys occupations of pairs of spin
+% orbitals are just the products of the individual occupations.
+% For a general electronic state containing more than one ON vector , $ \mat{T}$ 
+% is in general not diagonal and cannot be generated directly from the one-electron
+% density elements. In practice, it can be diagonalized with an unitary matrix
+% as shown for the one-electron density matrix.
+The picture of an uncorrelated description of the electronic system, in which 
+the simultaneous occupations of pairs of spin orbitals are merely the products 
+of the individual occupations, is compatible with this result.
+In the case of a general electronic state containing several ON vectors, $\mat{T}$
+is generally non-diagonal and cannot be produced directly from the elements of 
+the one electron density matrix. As demonstrated for the one-electron density 
+matrix in \cref{eq:diagonalization-oedm}, $ \mat{\tedm}$ can be diagonalized
+in practice using the spectral decomposition.
+
+Therefore, it can be stated that the one-electron density matrix probes the
+individual occupancies of the spin orbitals and describes how the $n$ electrons
+are distributed among the $m$ spin orbitals, whereas the two-electron density
+matrix probes the simultaneous occupations of the spin orbitals and describes
+how the $n\left( n-1 \right) /2$ electron pairs are distributed among the 
+$m\left( m-1 \right) /2$ spin-orbital pairs\mycite{helgaker2000second}.
+

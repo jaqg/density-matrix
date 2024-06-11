@@ -34,7 +34,8 @@ program main
     ! call read_4D_matrix(h2fn, .true., H2MO)  ! two-electron density matrix
 
     ! Print matrices
-    call print_matrix('D1MO', D1MO(1:6,1:6), ouf, dfmt)     ; write(ouf,*)
+    ! call print_matrix('D1MO', D1MO(1:6,1:6), ouf, dfmt)     ; write(ouf,*)
+    call print_matrix('D1MO', D1MO, ouf, '(*(f6.2))')     ; write(ouf,*)
     call print_matrix('H1MO', H1MO(1:6,1:6), ouf, dfmt)     ; write(ouf,*)
     call print_matrix('D2MO', D2MO(1,1,1:6,1:6), ouf, dfmt) ; write(ouf,*)
     call print_matrix('H2MO', H2MO(1,1,1:6,1:6), ouf, dfmt) ; write(ouf,*)
@@ -42,6 +43,14 @@ program main
     ! Obtain the MO's occupation numbers: the eigenvalues of D^(1)
     call diag_2D_mat(D1MO, NONMO)
     call print_vector('MO occupation numbers:', NONMO, 'row', ouf, '(*(f6.2))')
+    write(ouf,'(a)') 'Occupied MO orbitals:'
+    j = 1
+    do i = 1, size(NONMO)
+        if (NONMO(i).gt.fthres) then
+            write(ouf,'(i0,2x,f4.2)') j, NONMO(i)
+            j = j + 1
+        end if
+    end do
     write(ouf,*)
     write(ouf,'(a,f6.2)') 'Tr[D1MO] =', trace(D1MO) ; write(ouf,*)
 
@@ -70,6 +79,8 @@ program main
     ! TODO: pasar H2MO -> H2SO
     call Eee_BBC('BBC1', NONMO, H2MO, EeeBBC1)  ! TEST
     call Eee_BBC('BBC3', NONMO, H2MO, EeeBBC3)  ! TEST
+    !   - PNOF functionals: PNOF5
+    call Eee_PNOF(NONSO, 1.d-16)
 
 
     ! Compute the total energy for each functional

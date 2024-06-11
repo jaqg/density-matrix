@@ -1,0 +1,59 @@
+% ------------
+\subsection{Equivalence between spin-orbital and coordinate representations}
+% ------------
+In this section, the equivalence relations between first and second quantization
+formalisms for the density matrices are established.
+
+% A relationship between the definition of the 1-RDM
+% (\cref{eq:fordm-coordinate-representation})
+% and 2-RDM (\cref{eq:sordm-coordinate-representation}) in the first quantization
+% formalism, in the coordinate representation, and the one and two-electron
+% density matrices in the spin-orbital representation 
+% (\cref{eq:oedm-spin-representation,eq:tedm-spin-representation})
+% can be stablished.
+
+The one-electron density matrix in the spin-orbital representation was
+introduced in second quantization for the evaluation of the expectation values
+of one-electron operators in the form 
+\begin{equation}
+    \Braket{0 | \hat{g} | 0} =
+    \sum_{pq} \oedm_{pq} g_{pq}
+    ,
+\end{equation}
+with the $g_{pq}$ integrals 
+\begin{equation}
+    g_{pq} = \int
+    \varphi_p \left( \mat{x}_1 \right)^{*} 
+    g \left( \mat{x}_1 \right) 
+    \varphi_q \left( \mat{x}_1 \right)
+    \dd{ \mat{x}_1}
+    .
+\end{equation}
+
+Combining both, the 1-RDM in the coordinates representation given in 
+\cref{eq:fordm-coordinate-representation} can be written
+in terms of the one-electron density matrix in the spin-orbital representation
+given in \cref{eq:oedm-spin-representation}, as
+\begin{equation}
+    \fordm \left( \mat{x}_1, \mat{x}_1^{\prime} \right) =
+    \sum_{pq} \oedm_{pq} 
+    \varphi_p^{*} \left( \mat{x}_1^{\prime} \right)
+    \varphi_q \left( \mat{x}_1 \right)
+    .
+\end{equation}
+
+Similarly, the following relationship between the two-electron density matrix
+in the coordinate representation (\cref{eq:sordm-coordinate-representation}) 
+and that in the spin-orbital representation (\cref{eq:tedm-spin-representation})
+may be established
+\begin{equation}
+    \sordm \left( \mat{x}_1, \mat{x}_2, \mat{x}_1^{\prime}, \mat{x}_2^{\prime} \right)
+    =
+    \frac{1}{2} \sum_{pqrs} \tedm_{pqrs}
+    \varphi_p^{*}\left( \mat{x}_1^{\prime} \right)
+    \varphi_q    \left( \mat{x}_1          \right)
+    \varphi_r^{*}\left( \mat{x}_2^{\prime} \right)
+    \varphi_s    \left( \mat{x}_2          \right)
+    .
+\end{equation}
+
