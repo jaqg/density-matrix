@@ -30,17 +30,62 @@ module density_matrices
     
     end function trace 
 
-    subroutine diag_2D_mat(Amat, EVvec)
+    subroutine asure_descending(vec, desc_vec)
+        implicit none
+        real(kind=8), dimension(:), intent(in) :: vec
+        real(kind=8), dimension(:), allocatable, intent(out) :: desc_vec
+        !
+        integer :: i, j, n, ierr 
+        real(kind=8) :: oldval, newval, temp
+        logical :: sort
+
+        n = size(vec)
+        allocate(desc_vec(n), stat=ierr)
+        if (ierr .ne. 0) &
+            & stop 'asure_descending: Error in allocation of desc_vec'
+
+        ! Check if vec is already in descending order
+        sort = .false.
+        do i = 1, n-1
+            oldval = vec(i)
+            do j = i+1, n
+                newval = vec(j)
+                if (newval.gt.oldval) then 
+                    sort = .true.
+                end if
+            end do
+        end do
+
+        desc_vec = vec
+        if (sort) then
+            ! Apply the Bubble Sort algorithm
+            do i = 1, n-1
+                do j = 1, n-i
+                    if (desc_vec(j).lt.desc_vec(j+1)) then
+                        ! Interchange elements
+                        temp = desc_vec(j)
+                        desc_vec(j) = desc_vec(j+1)
+                        desc_vec(j+1) = temp
+                    end if
+                end do
+            end do
+        end if
+        !
+        return
+    end subroutine asure_descending 
+
+    subroutine diag_2D_mat(Amat, sort, EVvec)
         !
         ! Subroutine to diagonalize a 2D matrix using the LAPACK routine
         ! DSYEV()
         !
         implicit none
         real(kind=8), dimension(:,:), intent(in) :: Amat
+        logical, intent(in) :: sort
         real(kind=8), dimension(:), allocatable, intent(out) :: EVvec
         !
         real(kind=8), dimension(:,:), allocatable :: Aaux
-        real(kind=8), dimension(:), allocatable :: work
+        real(kind=8), dimension(:), allocatable :: work, EVvec_aux
         integer :: n, ierr, lwork, info
 
         ! Save the original matrix
@@ -64,10 +109,13 @@ module density_matrices
         !
         allocate(EVvec(n), stat=ierr)
         if (ierr .ne. 0) stop 'diag_2D_mat: Error in allocation of EVvec'
+        !
+        allocate(EVvec_aux(n), stat=ierr)
+        if (ierr .ne. 0) stop 'diag_2D_mat: Error in allocation of EVvec_aux'
         
         ! Call the diagonalization subroutine
         ! checkear dsyevd
-        CALL DSYEV( 'V', 'U', n, Aaux, n, EVvec, work, lwork, info )
+        CALL DSYEV( 'V', 'U', n, Aaux, n, EVvec_aux, work, lwork, info )
         if (info.lt.0) then 
             write(*,'(a,i0,a)') 'diag_2D_mat: Error: the ',info, &
             & '-th argument had an illegal value'
@@ -78,12 +126,52 @@ module density_matrices
             & tridiagonal form did not converge to zero.'
             stop
         end if
-        
+
+        ! Sort the eigenvalues vector in descending order
+        if (sort) then
+            call asure_descending(EVvec_aux, EVvec)
+        else
+            EVvec = EVvec_aux
+        end if
         !
         return
     end subroutine diag_2D_mat 
 
-    subroutine MO_to_SO(AMO, ASO)
+    subroutine checknorm_D1(D1, Nelec, thres, lu)
+        implicit none
+        real(kind=8), dimension(:,:), intent(in) :: D1
+        integer, intent(in) :: Nelec, lu
+        real(kind=8), intent(in) :: thres 
+        !
+        if (trace(D1).lt.dble(Nelec)-thres .or. &
+          & trace(D1).gt.dble(Nelec)+thres) then 
+            !
+            write(lu,'(a)') 'checknorm_D1: D1 is not normalized'
+            write(lu,'(a,f8.4,a,i0)') 'Tr[D1] = ', trace(D1), 'Nelec = ', Nelec
+        end if
+        !
+        return
+    end subroutine checknorm_D1
+
+    subroutine check_SO_ON(ON)
+        !
+        ! Subroutine to check that ON is in spin-orbital basis, i.e.
+        ! 0 <= n_p <= 1 forall p
+        !
+        implicit none
+        real(kind=8), dimension(:), intent(in) :: ON
+        integer :: i 
+         
+        do i = 1, size(ON)
+            if (ON(i).gt.1.d0) then
+                stop 'check_SO_ON: Error: ON(i) > 1'
+            end if
+        end do
+         
+        return
+    end subroutine check_SO_ON 
+
+    subroutine MO_to_SO_D1(AMO, ASO)
         implicit none
         real(kind=8), dimension(:,:), intent(in) :: AMO
         real(kind=8), dimension(:,:), allocatable, intent(out) :: ASO
@@ -93,11 +181,11 @@ module density_matrices
         ! Get size of the matrix & asure it is square
         n = size(AMO, dim=1)
         if (n .ne. size(AMO, dim=2)) &
-        & stop 'MO_to_SO: Error: input matrix not square'
+        & stop 'MO_to_SO_D1: Error: input matrix not square'
         
         ! Allocate ASO
         allocate(ASO(2*n, 2*n), stat=ierr)
-        if (ierr .ne. 0) stop 'MO_to_SO: Error in allocation of ASO'
+        if (ierr .ne. 0) stop 'MO_to_SO_D1: Error in allocation of ASO'
         ASO = 0.d0
 
         ! Transform to spin-orbital basis as:
@@ -113,7 +201,46 @@ module density_matrices
         
         !
         return
-    end subroutine MO_to_SO 
+    end subroutine MO_to_SO_D1 
+
+    subroutine MO_to_SO_D2(AMO, ASO)
+        implicit none
+        real(kind=8), dimension(:,:,:,:), intent(in) :: AMO
+        real(kind=8), dimension(:,:,:,:), allocatable, intent(out) :: ASO
+        !
+        integer :: ierr, i, j, k, l, n
+
+        ! Get size of the matrix & asure it is square
+        n = size(AMO, dim=1)
+        if (n .ne. size(AMO, dim=2) .or. &
+          & n .ne. size(AMO, dim=3) .or. &
+          & n .ne. size(AMO, dim=4) ) &
+          & stop 'MO_to_SO_D2: Error: input matrix not square'
+        
+        ! Allocate ASO
+        allocate(ASO(2*n, 2*n, 2*n, 2*n), stat=ierr)
+        if (ierr .ne. 0) stop 'MO_to_SO_D2: Error in allocation of ASO'
+        ASO = 0.d0
+
+        ! TODO: confirmar que esta bien
+        ! Transform to spin-orbital basis as:
+        ! ASO(ialpha, jalpha, kalpha, lalpha) = 1/2 AMO(i, j, k, l)
+        ! ASO(ibeta, jbeta, kbeta, lbeta) = 1/2 AMO(i, j, k, l)
+        ! The rest = 0
+        do l = 1, n
+            do k = 1, n
+                do j = 1, n
+                    do i = 1, n
+                        ASO(2*i-1, 2*j-1, 2*k-1, 2*l-1) = 0.5d0 * AMO(i,j,k,l)
+                        ASO(2*i, 2*j, 2*k, 2*l) = 0.5d0 * AMO(i,j,k,l)
+                    end do
+                end do
+            end do
+        end do
+        
+        !
+        return
+    end subroutine MO_to_SO_D2 
 
     subroutine H1D1_energy(D1, H1, E1)
         !
@@ -189,6 +316,62 @@ module density_matrices
         return
     end subroutine Eee_D2 
 
+    subroutine Eee_ELS(ONin, H2, Eee)
+        implicit none
+        real(kind=8), dimension(:), intent(in) :: ONin
+        real(kind=8), dimension(:,:,:,:), intent(in) :: H2
+        real(kind=8), intent(out) :: Eee
+        !
+        integer :: i, j, n, ierr 
+        real(kind=8) :: sum1 
+        real(kind=8), dimension(:), allocatable :: ON
+
+        ! Check for inconsistencies in dimension
+        n = size(ONin)
+        if (n.ne.size(H2, dim=1) .or. &
+          & n.ne.size(H2, dim=2) .or. &
+          & n.ne.size(H2, dim=3) .or. &
+          & n.ne.size(H2, dim=4)) &
+          stop 'Eee_ELS: Error: inconsistent dimensions'
+
+        ! Check that ON is in spin-orbital basis
+        ! call check_SO_ON(ON)
+
+        ! Check that ON is sorted in descending order
+        allocate(ON(n), stat=ierr)
+        if (ierr .ne. 0) stop 'Eee_ELS: Error in allocation of ON'
+        ON = ONin
+        call asure_descending(ONin, ON)
+
+        ! Compute the sum
+        sum1 = 0.d0
+        do i = 1, n
+            do j = 1, n
+                sum1 = sum1 + GLS(i,j) * H2(i,j,j,i)
+            end do
+        end do
+
+        ! Compute Eee
+        Eee = 0.5d0 * sum1
+
+        ! ---------- Intern functions ---------- 
+        contains
+        function GLS(p,q) result(res)
+            implicit none
+            integer, intent(in) :: p,q
+            real(kind=8) :: res 
+        
+            if (p.eq.q) then 
+                res = ON(p)
+            elseif (p.eq.1 .and. q.gt.1 .or. p.gt.1 .and. q.eq.1) then 
+                res = - dsqrt(ON(p) * ON(q))
+            else
+                res = dsqrt(ON(p) * ON(q))
+            end if
+        
+        end function GLS 
+    end subroutine Eee_ELS 
+
     subroutine Eee_BBC(level, ON, H2, Eee)
         implicit none
         character(len=*), intent(in) :: level 
@@ -207,6 +390,9 @@ module density_matrices
         &   n.ne.size(H2, dim=3) .or. &
         &   n.ne.size(H2, dim=4)) &
         & stop 'Eee_BBC: Error: Inconsistent dimensions'
+
+        ! Check that ON is in spin-orbital basis
+        ! call check_SO_ON(ON)
 
         ! Compute the GBBC matrix
         allocate(GBBC(n,n), stat=ierr)
@@ -254,7 +440,7 @@ module density_matrices
             implicit none
             real(kind=8), intent(in) :: np
             logical :: isfrontier
-            !
+            ! TODO: comprobar que esta definicion de frontier orbital esta bien
             if (np.gt.0.5d0 .and. np.lt.1.0d0) then
                 isfrontier = .true.
             else
@@ -310,72 +496,72 @@ module density_matrices
         end subroutine calc_GBBC 
     end subroutine Eee_BBC 
 
-    subroutine Eee_PNOF(ON, thres)
-        implicit none
-        real(kind=8), dimension(:), intent(in) :: ON
-        real(kind=8), intent(in) :: thres 
-        !
-        integer :: ierr, i, j, n, occON
-        real(kind=8), dimension(:), allocatable :: ONaux, ONred
-        real(kind=8), dimension(:,:), allocatable :: pairs
-
-        !
-        ! For PNOF5:
-        !
-        ! Extract the density matrix only with occupied orbitals, i.e.
-        ! D'_ij <- D^(1)_ij > 0
-        ! which, for the ON vector read
-        ! ON'_i <- ON_i > 0
-        ! Get dimensions of D1
-        n = size(ON)
-        allocate(ONaux(n), stat=ierr)
-        if (ierr .ne. 0) stop 'Eee_PNOF: Error in allocation of ONaux'
-        ONaux = 0.d0
-        occON = 1
-        do i = 1, n
-            if (ON(i).gt.thres) then
-                ONaux(occON) = ON(i)
-                occON = occON + 1
-            end if
-        end do
-        ! Store these ON in ON red
-        allocate(ONred(2*occON), stat=ierr)
-        if (ierr .ne. 0) stop 'Eee_PNOF: Error in allocation of ONred'
-        do i = 1, occON
-            ONred(i) = ONaux(i)/2.d0
-            ONred(2*occON-i+1) = ONaux(i)/2.d0
-        end do
-
-        write(*,*) 'Number of occupied orbitals:', occON
-        write(*,*) 'ONred:'
-        write(*,*) ONred
-        write(*,*) 'sum(ON):', sum(ONred)
-
-        ! Divide D' into N/2 pairs fulfilling
-        ! np + nq = 1 with p,q coupled orbitals in a pair P
-        ! for an element of D' find another element such that its sum = 1
-        ! and store them in a pair P
-        ! remove those orbitals and loop over D' until finding all P pairs
-        allocate(pairs(2,occON), stat=ierr)
-        if (ierr .ne. 0) stop 'Eee_PNOF: Error in allocation of pairs'
-        pairs = 0.d0
-        ! each pair P is stored as a column in 'pairs'
-        P = 1
-        pairs(1,P) = ONred(P)
-        pair_indeces = 
-        do i = 2, 2*occON
-            if (  (ONred(i) + pairs(i,P) > 1.d0 - thres) .or. &
-                & (ONred(i) + pairs(i,P) < 1.d0 + thres)) then
-                pairs(2,P) = ONred(i)
-                P = P + 1
-            end if
-        end do
-        
-
-        ! Compute EeePNOF5
-        !
-        return
-    end subroutine Eee_PNOF 
+    ! subroutine Eee_PNOF(ON, thres)
+    !     implicit none
+    !     real(kind=8), dimension(:), intent(in) :: ON
+    !     real(kind=8), intent(in) :: thres 
+    !     !
+    !     integer :: ierr, i, j, n, occON
+    !     real(kind=8), dimension(:), allocatable :: ONaux, ONred
+    !     real(kind=8), dimension(:,:), allocatable :: pairs
+    !
+    !     !
+    !     ! For PNOF5:
+    !     !
+    !     ! Extract the density matrix only with occupied orbitals, i.e.
+    !     ! D'_ij <- D^(1)_ij > 0
+    !     ! which, for the ON vector read
+    !     ! ON'_i <- ON_i > 0
+    !     ! Get dimensions of D1
+    !     n = size(ON)
+    !     allocate(ONaux(n), stat=ierr)
+    !     if (ierr .ne. 0) stop 'Eee_PNOF: Error in allocation of ONaux'
+    !     ONaux = 0.d0
+    !     occON = 1
+    !     do i = 1, n
+    !         if (ON(i).gt.thres) then
+    !             ONaux(occON) = ON(i)
+    !             occON = occON + 1
+    !         end if
+    !     end do
+    !     ! Store these ON in ON red
+    !     allocate(ONred(2*occON), stat=ierr)
+    !     if (ierr .ne. 0) stop 'Eee_PNOF: Error in allocation of ONred'
+    !     do i = 1, occON
+    !         ONred(i) = ONaux(i)/2.d0
+    !         ONred(2*occON-i+1) = ONaux(i)/2.d0
+    !     end do
+    !
+    !     write(*,*) 'Number of occupied orbitals:', occON
+    !     write(*,*) 'ONred:'
+    !     write(*,*) ONred
+    !     write(*,*) 'sum(ON):', sum(ONred)
+    !
+    !     ! Divide D' into N/2 pairs fulfilling
+    !     ! np + nq = 1 with p,q coupled orbitals in a pair P
+    !     ! for an element of D' find another element such that its sum = 1
+    !     ! and store them in a pair P
+    !     ! remove those orbitals and loop over D' until finding all P pairs
+    !     allocate(pairs(2,occON), stat=ierr)
+    !     if (ierr .ne. 0) stop 'Eee_PNOF: Error in allocation of pairs'
+    !     pairs = 0.d0
+    !     ! each pair P is stored as a column in 'pairs'
+    !     P = 1
+    !     pairs(1,P) = ONred(P)
+    !     pair_indeces = 
+    !     do i = 2, 2*occON
+    !         if (  (ONred(i) + pairs(i,P) > 1.d0 - thres) .or. &
+    !             & (ONred(i) + pairs(i,P) < 1.d0 + thres)) then
+    !             pairs(2,P) = ONred(i)
+    !             P = P + 1
+    !         end if
+    !     end do
+    !     
+    !
+    !     ! Compute EeePNOF5
+    !     !
+    !     return
+    ! end subroutine Eee_PNOF 
 
     subroutine energy(E1, E2, Etot)
         implicit none

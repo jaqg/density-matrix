@@ -12,10 +12,11 @@ module declarations
     character(len=80) :: d1fn, d2fn, h1fn, h2fn, dfmt
     real(kind=8) :: fthres 
     real(kind=8) :: EH1D1, EH2D2, E_exact
-    real(kind=8) :: EeeBBC1, EeeBBC3, EBBC1, EBBC3 
+    real(kind=8) :: EeeELS, EeeBBC1, EeeBBC3
+    real(kind=8) :: EELS, EBBC1, EBBC3 
     real(kind=8), dimension(:), allocatable :: NONMO, NONSO 
     real(kind=8), dimension(:,:), allocatable :: D1MO, H1MO, D1SO
-    real(kind=8), dimension(:,:,:,:), allocatable :: D2MO, H2MO, H2SO
+    real(kind=8), dimension(:,:,:,:), allocatable :: D2MO, H2MO, D2SO, H2SO
 
     contains
 

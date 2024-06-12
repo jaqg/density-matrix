@@ -41,7 +41,7 @@ program main
     call print_matrix('H2MO', H2MO(1,1,1:6,1:6), ouf, dfmt) ; write(ouf,*)
 
     ! Obtain the MO's occupation numbers: the eigenvalues of D^(1)
-    call diag_2D_mat(D1MO, NONMO)
+    call diag_2D_mat(D1MO, .true., NONMO)
     call print_vector('MO occupation numbers:', NONMO, 'row', ouf, '(*(f6.2))')
     write(ouf,'(a)') 'Occupied MO orbitals:'
     j = 1
@@ -53,16 +53,26 @@ program main
     end do
     write(ouf,*)
     write(ouf,'(a,f6.2)') 'Tr[D1MO] =', trace(D1MO) ; write(ouf,*)
+    ! TODO: implementar que imprima Nelec desde DALTON para poder usarlo aqui
+    call checknorm_D1(D1MO, 10, fthres, ouf)
 
     ! Transform D^(1) from MO to spin-orbital basis
-    call MO_to_SO(D1MO, D1SO)
-    call print_matrix('D1SO', D1SO(1:6,1:6), ouf, dfmt)     ; write(ouf,*)
+    call MO_to_SO_D1(D1MO, D1SO)
+    call print_matrix('D1SO', D1SO(1:6,1:6), ouf, dfmt) ; write(ouf,*)
+
+    ! Transform D^(2) from MO to spin-orbital basis
+    call MO_to_SO_D2(D2MO, D2SO)
+    call print_matrix('D2SO', D2SO(1,1,1:6,1:6), ouf, dfmt) ; write(ouf,*)
+
+    ! TODO: transform H1MO -> H1SO y H2MO -> H2SO
 
     ! Obtain the natural occupation numbers: the eigenvalues of D^(1) in SO
-    call diag_2D_mat(D1SO, NONSO)
+    call diag_2D_mat(D1SO, .true., NONSO)
     call print_vector('natural occupation numbers:',NONSO,'row',ouf,'(*(f6.2))')
-    write(ouf,*)
-    write(ouf,'(a,f6.2)') 'Tr[D1SO] =', trace(D1SO) ; write(ouf,*)
+    ! write(ouf,*)
+    ! write(ouf,'(a,f6.2)') 'Tr[D1SO] =', trace(D1SO) ; write(ouf,*)
+    ! TODO: implementar que imprima Nelec desde DALTON para poder usarlo aqui
+    call checknorm_D1(D1SO, 10, fthres, ouf)
 
     ! Compute the non-ee part of the energy: tr[D^(1) H^(1)]
     call H1D1_energy(D1MO, H1MO, EH1D1)
@@ -73,25 +83,31 @@ program main
     !
     !   - Exact from the D^(2): EeeD2 = 1/2 sum_{pqrs} (pq|rs) D2_{pqrs}
     call Eee_D2(D2MO, H2MO, EH2D2)
+    !   - Extended LS functional: ELS
+    ! TODO: pasar H2MO -> H2SO
+    ! TODO: comprobar que H2SO y D2SO estan bien
+    ! call Eee_ELS(NONSO, H2SO, EeeELS)  ! BUENO
+    call Eee_ELS(NONMO, H2MO, EeeELS)  ! TEST
     !   - BB functionals: BBC1, BBC3
     ! call Eee_BBC('BBC1', NONSO, H2SO, EeeBBC1)  ! BUENO
     ! call Eee_BBC('BBC3', NONSO, H2SO, EeeBBC3)  ! BUENO
-    ! TODO: pasar H2MO -> H2SO
     call Eee_BBC('BBC1', NONMO, H2MO, EeeBBC1)  ! TEST
     call Eee_BBC('BBC3', NONMO, H2MO, EeeBBC3)  ! TEST
     !   - PNOF functionals: PNOF5
-    call Eee_PNOF(NONSO, 1.d-16)
+    ! call Eee_PNOF(NONSO, 1.d-16)
 
 
     ! Compute the total energy for each functional
     call energy(EH1D1, EH2D2, E_exact)
+    call energy(EH1D1, EeeELS, EELS)
     call energy(EH1D1, EeeBBC1, EBBC1)
     call energy(EH1D1, EeeBBC3, EBBC3)
 
     ! Print the results
-    write(ouf,'(a, d10.2, a)') 'Exact energy = ', E_exact, 'a.u.'
-    write(ouf,'(a, d10.2, a)') 'BBC1 energy = ', EBBC1, 'a.u.'
-    write(ouf,'(a, d10.2, a)') 'BBC3 energy = ', EBBC3, 'a.u.'
+    write(ouf,'(a, d10.2, 1x, a)') 'Exact energy = ', E_exact, 'a.u.'
+    write(ouf,'(a, d10.2, 1x, a)') 'ELS energy = ', EELS, 'a.u.'
+    write(ouf,'(a, d10.2, 1x, a)') 'BBC1 energy = ', EBBC1, 'a.u.'
+    write(ouf,'(a, d10.2, 1x, a)') 'BBC3 energy = ', EBBC3, 'a.u.'
 
     ! Deallocate arrays
     deallocate(D1MO)
