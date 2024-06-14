@@ -8,135 +8,13 @@ module density_matrices
     !
     use declarations
     use strings
+    use IO
+    use matmod
     !
     implicit none
     !
     contains
     
-    function trace(Amat) result(res)
-        !
-        ! Function to compute the trace of a matrix, Amat
-        !
-        implicit none
-        real(kind=8), dimension(:,:), intent(in) :: Amat
-        real(kind=8) :: res 
-        !
-        integer :: i 
-    
-        res = 0.d0 
-        do i = 1, size(Amat, dim=1)
-            res = res + Amat(i,i)
-        end do 
-    
-    end function trace 
-
-    subroutine asure_descending(vec, desc_vec)
-        implicit none
-        real(kind=8), dimension(:), intent(in) :: vec
-        real(kind=8), dimension(:), allocatable, intent(out) :: desc_vec
-        !
-        integer :: i, j, n, ierr 
-        real(kind=8) :: oldval, newval, temp
-        logical :: sort
-
-        n = size(vec)
-        allocate(desc_vec(n), stat=ierr)
-        if (ierr .ne. 0) &
-            & stop 'asure_descending: Error in allocation of desc_vec'
-
-        ! Check if vec is already in descending order
-        sort = .false.
-        do i = 1, n-1
-            oldval = vec(i)
-            do j = i+1, n
-                newval = vec(j)
-                if (newval.gt.oldval) then 
-                    sort = .true.
-                end if
-            end do
-        end do
-
-        desc_vec = vec
-        if (sort) then
-            ! Apply the Bubble Sort algorithm
-            do i = 1, n-1
-                do j = 1, n-i
-                    if (desc_vec(j).lt.desc_vec(j+1)) then
-                        ! Interchange elements
-                        temp = desc_vec(j)
-                        desc_vec(j) = desc_vec(j+1)
-                        desc_vec(j+1) = temp
-                    end if
-                end do
-            end do
-        end if
-        !
-        return
-    end subroutine asure_descending 
-
-    subroutine diag_2D_mat(Amat, sort, EVvec)
-        !
-        ! Subroutine to diagonalize a 2D matrix using the LAPACK routine
-        ! DSYEV()
-        !
-        implicit none
-        real(kind=8), dimension(:,:), intent(in) :: Amat
-        logical, intent(in) :: sort
-        real(kind=8), dimension(:), allocatable, intent(out) :: EVvec
-        !
-        real(kind=8), dimension(:,:), allocatable :: Aaux
-        real(kind=8), dimension(:), allocatable :: work, EVvec_aux
-        integer :: n, ierr, lwork, info
-
-        ! Save the original matrix
-        allocate(Aaux(size(Amat, dim=1),size(Amat, dim=2)), stat=ierr)
-        if (ierr .ne. 0) stop 'diag_2D_mat: Error in allocation of Aaux'
-        !
-        Aaux = Amat        
-
-        ! Check for inconsistency in the dimensions
-        n = size(Aaux, dim=1)
-        if (n .ne. size(Aaux, dim=2)) &
-        & stop 'diag_2D_mat: Error: Inconsistent dimensions'
-
-        ! Set the size of the WORK vector for the diagonalization algorithm
-        ! LWORK=3*N-1  ! minimum
-        lwork = 3 * n
-
-        ! Allocate arrays
-        allocate(work(lwork), stat=ierr)
-        if (ierr .ne. 0) stop 'diag_2D_mat: Error in allocation of work'
-        !
-        allocate(EVvec(n), stat=ierr)
-        if (ierr .ne. 0) stop 'diag_2D_mat: Error in allocation of EVvec'
-        !
-        allocate(EVvec_aux(n), stat=ierr)
-        if (ierr .ne. 0) stop 'diag_2D_mat: Error in allocation of EVvec_aux'
-        
-        ! Call the diagonalization subroutine
-        ! checkear dsyevd
-        CALL DSYEV( 'V', 'U', n, Aaux, n, EVvec_aux, work, lwork, info )
-        if (info.lt.0) then 
-            write(*,'(a,i0,a)') 'diag_2D_mat: Error: the ',info, &
-            & '-th argument had an illegal value'
-            stop
-        else if (info.gt.0) then
-            write(*,'(a,i0,a)') 'diag_2D_mat: Error: the algorithm failed to &
-            & converge; ', info, ' off-diagonal elements of an intermediate &
-            & tridiagonal form did not converge to zero.'
-            stop
-        end if
-
-        ! Sort the eigenvalues vector in descending order
-        if (sort) then
-            call asure_descending(EVvec_aux, EVvec)
-        else
-            EVvec = EVvec_aux
-        end if
-        !
-        return
-    end subroutine diag_2D_mat 
-
     subroutine checknorm_D1(D1, Nelec, thres, lu)
         implicit none
         real(kind=8), dimension(:,:), intent(in) :: D1
@@ -147,7 +25,8 @@ module density_matrices
           & trace(D1).gt.dble(Nelec)+thres) then 
             !
             write(lu,'(a)') 'checknorm_D1: D1 is not normalized'
-            write(lu,'(a,f8.4,a,i0)') 'Tr[D1] = ', trace(D1), 'Nelec = ', Nelec
+            write(lu,'(a,f18.4,a,i0)') 'Tr[D1] = ',trace(D1),', Nelec = ',Nelec
+            stop
         end if
         !
         return
@@ -241,6 +120,52 @@ module density_matrices
         !
         return
     end subroutine MO_to_SO_D2 
+
+    ! subroutine MO_to_SO_H2(H2MO, H2SO)
+    !     implicit none
+    !     real(kind=8), dimension(:,:,:,:), intent(in) :: H2MO
+    !     real(kind=8), dimension(:,:,:,:), allocatable, intent(out) :: H2SO
+    !     !
+    !     integer :: p, q, r, s, ps, qs, rs, ss, ierr, n 
+    !
+    !     ! Check for inconsistencies in the dimensions
+    !     n = size(H2MO, dim=1)
+    !     if (n.ne.size(H2MO, dim=2) .or. &
+    !     &   n.ne.size(H2MO, dim=3) .or. &
+    !     &   n.ne.size(H2MO, dim=4)) &
+    !     & stop 'MO_to_SO_H2: Error: Inconsistent dimensions'
+    !
+    !     allocate(H2SO(2*n, 2*n, 2*n, 2*n), stat=ierr)
+    !     if (ierr .ne. 0) stop 'MO_to_SO_H2: Error in allocation of H2SO'
+    !     H2SO = 0.d0
+    !
+    !     do p = 1, n
+    !         do q = 1, n
+    !             do r = 1, n
+    !                 do s = 1, n
+    !
+    !                     ! alpha-alpha spin-orbitals
+    !                     ps = 2*p - 1
+    !                     qs = 2*q - 1
+    !                     rs = 2*r - 1
+    !                     ss = 2*s - 1
+    !                     H2SO(ps, qs, rs, ss) = H2MO(p, q, r, s)
+    !
+    !                     ! beta-beta spin-orbitals
+    !                     ps = 2*p
+    !                     qs = 2*q
+    !                     rs = 2*r
+    !                     ss = 2*s
+    !                     H2SO(ps, qs, rs, ss) = H2MO(p, q, r, s)
+    !
+    !                     ! mixed alpha-beta -> 0
+    !                 end do
+    !             end do
+    !         end do
+    !     end do
+    !     !
+    !     return
+    ! end subroutine MO_to_SO_H2 
 
     subroutine H1D1_energy(D1, H1, E1)
         !

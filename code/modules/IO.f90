@@ -8,6 +8,7 @@ module io
     !
     use declarations
     use strings
+    use matmod
     !
     implicit none
     !
@@ -197,13 +198,10 @@ module io
         character(len=*), intent(in) :: label, fmt 
         real(kind=8), dimension(:,:), intent(in) :: A
         integer, intent(in) :: lu 
-        !
-        integer :: i, j 
 
         write(lu,'(a)') label
-        do i=1, size(A,1)
-            write(lu,trim(fmt)) (A(i,j), j=1, size(A,2))
-        end do
+        call write_mat(A, lu, fmt, size(A, dim=2))
+        write(lu,*)
         !
         return
     end subroutine print_matrix 
