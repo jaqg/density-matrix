@@ -1,0 +1,53 @@
+# Fortran build files
+*.o
+*.mod
+*.exe
+*.out
+*.a
+*.so
+*.dll
+*.pdb
+*.suo
+*.plist
+*.dSYM/
+*.dylib
+
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.blg
+*.brf
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.lot
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.fls
+*.fdb_latexmk
+
+# Backup files
+*~
+*.bak
+*.backup
+*.tmp
+*.swp
+*.swo
+.*.sw?
+
+# Other temporary files
+.DS_Store
+Thumbs.db
+
