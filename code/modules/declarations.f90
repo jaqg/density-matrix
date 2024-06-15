@@ -7,14 +7,14 @@ module declarations
     ! Module to declare variables
     !
     implicit none
-    logical :: tstdbg
+    logical :: tstdbg, diag
     integer :: i, j 
     integer :: termwidth, ouf, pmatsize
     character(len=80) :: d1fn, d2fn, h1fn, h2fn, dfmt
     real(kind=8) :: fthres 
     real(kind=8) :: EH1D1, EH2D2, E_exact
-    real(kind=8) :: EeeELS, EeeBBC1, EeeBBC3
-    real(kind=8) :: EELS, EBBC1, EBBC3 
+    real(kind=8) :: EeeELS, EeeBBC1, EeeBBC2, EeeBBC3, EeeBBC3M
+    real(kind=8) :: EELS, EBBC1, EBBC2, EBBC3, EBBC3M
     real(kind=8), dimension(:), allocatable :: NONMO, NONSO 
     real(kind=8), dimension(:,:), allocatable :: D1MO, D1SO, H1MO, H1SO
     real(kind=8), dimension(:,:,:,:), allocatable :: D2MO, D2SO, H2MO, H2SO

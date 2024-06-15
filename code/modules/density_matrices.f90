@@ -101,7 +101,6 @@ module density_matrices
         if (ierr .ne. 0) stop 'MO_to_SO_D2: Error in allocation of ASO'
         ASO = 0.d0
 
-        ! TODO: confirmar que esta bien
         ! Transform to spin-orbital basis as:
         ! ASO(ialpha, jalpha, kalpha, lalpha) = 1/2 AMO(i, j, k, l)
         ! ASO(ibeta, jbeta, kbeta, lbeta) = 1/2 AMO(i, j, k, l)
@@ -260,7 +259,7 @@ module density_matrices
           stop 'Eee_ELS: Error: inconsistent dimensions'
 
         ! Check that ON is in spin-orbital basis
-        ! call check_SO_ON(ON)
+        call check_SO_ON(ON)
 
         ! Check that ON is sorted in descending order
         allocate(ON(n), stat=ierr)
@@ -307,6 +306,8 @@ module density_matrices
         integer :: i, j, ierr, n
         real(kind=8) :: sum1, sum2, ni, nj
         real(kind=8), dimension(:,:), allocatable :: GBBC 
+        real(kind=8), dimension(:), allocatable :: Sb, Sc, Wa, Wh 
+        integer, dimension(:), allocatable :: Sb_ind, Sc_ind, Wa_ind, Wh_ind 
 
         ! Check for inconsistencies in the dimensions
         n = size(ON)
@@ -317,7 +318,7 @@ module density_matrices
         & stop 'Eee_BBC: Error: Inconsistent dimensions'
 
         ! Check that ON is in spin-orbital basis
-        ! call check_SO_ON(ON)
+        call check_SO_ON(ON)
 
         ! Compute the GBBC matrix
         allocate(GBBC(n,n), stat=ierr)
@@ -361,17 +362,232 @@ module density_matrices
             end if
         endfunction is_weak
 
+        function is_bonding(np) result(isbonding)
+            implicit none
+            real(kind=8), intent(in) :: np
+            logical :: isbonding
+            !
+            isbonding = .false.
+            if (np.gt.0.9d0 .and. np.lt.1.d0) then
+                isbonding = .true.
+            end if
+        endfunction is_bonding
+
+        function is_antibond(np) result(isantibond)
+            implicit none
+            real(kind=8), intent(in) :: np
+            logical :: isantibond
+            !
+            isantibond = .false.
+            if (np.gt.0.d0 .and. np.lt.0.1d0) then
+                isantibond = .true.
+            end if
+        endfunction is_antibond
+
         function is_frontier(np) result(isfrontier)
             implicit none
             real(kind=8), intent(in) :: np
             logical :: isfrontier
-            ! TODO: comprobar que esta definicion de frontier orbital esta bien
-            if (np.gt.0.5d0 .and. np.lt.1.0d0) then
+
+            isfrontier = .false.
+            if (is_bonding(np) .or. is_antibond(np)) then
                 isfrontier = .true.
-            else
-                isfrontier = .false.
             end if
         endfunction is_frontier
+
+        function is_degenerate(np,nq) result(isdeg)
+            implicit none
+            real(kind=8), intent(in) :: np, nq
+            logical :: isdeg
+
+            isdeg = .false.
+            if (dabs(np-nq).lt.1.d-5) then
+                isdeg = .true.
+            end if
+        endfunction is_degenerate
+
+        function in_subset(p, subset_ind) result(insub)
+            !
+            ! Function to check if p index in is subset_ind
+            !
+            implicit none
+            integer, intent(in) :: p
+            integer, dimension(:), intent(in) :: subset_ind
+            logical :: insub
+            !
+            integer :: i, n 
+
+            n = size(subset_ind)
+
+            insub = .false.
+            do i = 1, n
+                if (p .eq. subset_ind(i)) then
+                    insub = .true.
+                end if
+            end do
+        endfunction in_subset
+
+        subroutine add_to_set(set, set_ind, element, index)
+            !
+            ! Subroutine to add the element 'element' to the end of 'set', and
+            ! the index 'index' to the end of 'set_ind'.
+            !
+            implicit none
+            real(kind=8), allocatable, intent(inout) :: set(:)
+            integer, allocatable, intent(inout) :: set_ind(:)
+            real(kind=8), intent(in) :: element
+            integer, intent(in) :: index
+            !
+            integer :: n
+            real(kind=8), dimension(:), allocatable :: set_old
+            integer, dimension(:), allocatable :: set_ind_old
+
+            n = size(set)
+            allocate(set_old(n), set_ind_old(n))
+            set_old = set
+            set_ind_old = set_ind
+            if (n == 0) then
+                deallocate(set, set_ind)
+                allocate(set(1))
+                allocate(set_ind(1))
+                set(1) = element
+                set_ind(1) = index
+            else
+                deallocate(set, set_ind)
+                allocate(set(n+1))
+                allocate(set_ind(n+1))
+                set(1:n) = set_old
+                set(n+1) = element
+                set_ind(1:n) = set_ind_old
+                set_ind(n+1) = index
+            end if
+        end subroutine add_to_set
+
+        subroutine subdivide_S(On, Sb, Sb_ind, Sc, Sc_ind)
+            !
+            ! Subroutine to apply the modification by Lathiotakis and Marques:
+            ! Subdivide S into:
+            ! - Sb for the degenerate bonding orbitals 
+            ! - Sc for the rest
+            !
+            implicit none
+            real(kind=8), dimension(:), intent(in) :: On
+            real(kind=8), dimension(:), allocatable, intent(out) :: Sb, Sc
+            integer, dimension(:), allocatable, intent(out) :: Sb_ind, Sc_ind
+            !
+            integer :: i, j, n, ierr
+            logical :: is_deg
+
+            ! Get the size of the input set
+            n = size(On)
+
+            ! Initialize subsets and index arrays as empty
+            allocate(Sb(0), stat=ierr)
+            if (ierr .ne. 0) stop 'subdivide_S: Error in allocation of Sb'
+            !
+            allocate(Sc(0), stat=ierr)
+            if (ierr .ne. 0) stop 'subdivide_S: Error in allocation of Sc'
+            !
+            allocate(Sb_ind(0), stat=ierr)
+            if (ierr .ne. 0) stop 'subdivide_S: Error in allocation of Sb_ind'
+            !
+            allocate(Sc_ind(0), stat=ierr)
+            if (ierr .ne. 0) stop 'subdivide_S: Error in allocation of Sc_ind'
+
+            ! Iterate over the orbitals in ON
+            do i = 1, n
+                if (in_subset(i,Sb_ind)) cycle
+                ni = ON(i)
+                if (.not.is_weak(ni) .and. is_bonding(ni) .and. i.lt.n) then
+                    ! Check for degeneracy
+                    is_deg = .false.
+                    do j = i+1, n
+                        nj = ON(j)
+                        if (.not.is_weak(nj) .and. &
+                            &is_bonding(nj) .and. is_degenerate(ni, nj)) then
+                            is_deg = .true.
+                            exit
+                        end if
+                    end do
+                    if (is_deg) then
+                        ! Add ni to Sb if it's bonding and degenerate with nj
+                        call add_to_set(Sb, Sb_ind, ni, i)
+                        ! Add nj to Sb if it's bonding and degenerate with ni
+                        call add_to_set(Sb, Sb_ind, nj, j)
+                    else
+                        ! Add to Sc otherwise
+                        call add_to_set(Sc, Sc_ind, ni, i)
+                    end if
+                else
+                    ! Add to Sc if it's not a bonding orbital
+                    call add_to_set(Sc, Sc_ind, ni, i)
+                end if
+            end do
+            return
+        end subroutine subdivide_S 
+
+        subroutine subdivide_W(ON, Wa, Wa_ind, Wh, Wh_ind)
+            !
+            ! Subroutine to apply the modification by Lathiotakis and Marques:
+            ! Subdivide W into:
+            ! - Wa for the degenerate antibonding orbitals 
+            ! - Wh for the rest
+            !
+            implicit none
+            real(kind=8), dimension(:), intent(in) :: On
+            real(kind=8), dimension(:), allocatable, intent(out) :: Wa, Wh
+            integer, dimension(:), allocatable, intent(out) :: Wa_ind, Wh_ind
+            !
+            integer :: i, j, n
+            logical :: is_deg
+
+            ! Get the size of the input set
+            n = size(On)
+
+            ! Initialize subsets and index arrays as empty
+            allocate(Wa(0), stat=ierr)
+            if (ierr .ne. 0) stop 'subdivide_S: Error in allocation of Wa'
+            !
+            allocate(Wh(0), stat=ierr)
+            if (ierr .ne. 0) stop 'subdivide_S: Error in allocation of Wh'
+            !
+            allocate(Wa_ind(0), stat=ierr)
+            if (ierr .ne. 0) stop 'subdivide_S: Error in allocation of Wa_ind'
+            !
+            allocate(Wh_ind(0), stat=ierr)
+            if (ierr .ne. 0) stop 'subdivide_S: Error in allocation of Wh_ind'
+
+            ! Iterate over the orbitals in ON
+            do i = 1, n
+                if (in_subset(i,Wa_ind)) cycle
+                ni = ON(i)
+                if (is_weak(ni) .and. is_antibond(ni) .and. i.lt.n) then
+                    ! Check for degeneracy
+                    is_deg = .false.
+                    do j = i+1, n
+                        nj = ON(j)
+                        if (is_weak(nj) .and. &
+                            &is_antibond(nj) .and. is_degenerate(ni, nj)) then
+                            is_deg = .true.
+                            exit
+                        end if
+                    end do
+                    if (is_deg) then
+                        ! Add ni to Wa if it's bonding and degenerate with nj
+                        call add_to_set(Wa, Wa_ind, ni, i)
+                        ! Add nj to Wa if it's bonding and degenerate with ni
+                        call add_to_set(Wa, Wa_ind, nj, j)
+                    else
+                        ! Add to Wh otherwise
+                        call add_to_set(Wh, Wh_ind, ni, i)
+                    end if
+                else
+                    ! Add to Wh if it's not a bonding orbital
+                    call add_to_set(Wh, Wh_ind, ni, i)
+                end if
+            end do
+            return
+        end subroutine subdivide_W
 
         subroutine calc_GBBC
             if (level.eq.'1' .or. level.eq.'BBC1') then
@@ -380,8 +596,24 @@ module density_matrices
                     do j = 1, n
                         ni = ON(i) ; nj = ON(j)
                         if (j.ne.i .and. is_weak(ni) .and. is_weak(nj)) then
-                            ! For p/=q and p,q are weakly coupled (np,nq < 1/2)
+                            ! For p/=q and p,q are weakly occupied (np,nq < 1/2)
                             GBBC(i,j) = dsqrt(ni * nj)
+                        else
+                            GBBC(i,j) = - dsqrt(ni * nj)
+                        end if
+                    end do 
+                end do
+            elseif (level.eq.'2' .or. level.eq.'BBC2') then
+                do i = 1, n
+                    do j = 1, n
+                        ni = ON(i) ; nj = ON(j)
+                        if (j.ne.i .and. is_weak(ni) .and. is_weak(nj)) then
+                            ! For p/=q and p,q are weakly occupied (np,nq < 1/2)
+                            GBBC(i,j) = dsqrt(ni * nj)
+                        elseif (j.ne.i .and. .not.is_weak(ni) &
+                            &          .and. .not.is_weak(nj)) then
+                            ! For p/=q and p,q are strongly occupied (np,nq > 1/2)
+                            GBBC(i,j) = -ni * nj
                         else
                             GBBC(i,j) = - dsqrt(ni * nj)
                         end if
@@ -393,12 +625,15 @@ module density_matrices
                         ni = ON(i) ; nj = ON(j)
                         if ((i.ne.j .and. is_weak(ni) .and. is_weak(nj)) .or. &
                             ! For p/=q and p,q weak
-                            &   (is_weak(ni) .and. is_frontier(nj)) .or. &
+                            &   (is_weak(ni) .and. is_frontier(nj) &
+                            &                .and.is_weak(nj)) .or. &
                             ! Or p weak, q frontier (weak) 
-                            &   (is_frontier(ni) .and. is_weak(nj))) then
+                            &   (is_frontier(ni) .and. is_weak(ni) &
+                            &                    .and. is_weak(nj))&
+                            &) then
                             ! Or p frontier (weak), q weak 
                             GBBC(i, j) = dsqrt(ni * nj)
-                        elseif ((i.ne.j .and. .not.is_weak(nj) .and. &
+                        elseif ((i.ne.j .and. .not.is_weak(ni) .and. &
                             & .not.is_weak(nj)) .or. &
                             ! For p/=q and p,q strong
                             &   (.not.is_weak(ni) .and. is_frontier(nj)) .or. &
@@ -415,8 +650,45 @@ module density_matrices
                         end if
                     end do 
                 end do
+            elseif (level.eq.'3M' .or. level.eq.'BBC3M') then
+                !
+                ! Modified BBC3 by Lathiotakis and Marques
+                !
+                ! Subdivide S into Sb,Sc and W into Wa, Wh
+                call subdivide_S(ON, Sb, Sb_ind, Sc, Sc_ind)
+                call subdivide_W(ON, Wa, Wa_ind, Wh, Wh_ind)
+
+                do i = 1, n
+                    do j = 1, n
+                        ni = ON(i) ; nj = ON(j)
+                        if (j.ne.i .and. is_weak(ni) .and. is_weak(nj)) then
+                            ! For p/=q and p,q are weakly occupied (np,nq < 1/2)
+                            GBBC(i,j) = dsqrt(ni * nj)
+                        elseif (j.ne.i .and. .not.is_weak(ni) &
+                            &          .and. .not.is_weak(nj)) then
+                            ! For p/=q and p,q are strongly occupied (np,nq > 1/2)
+                            GBBC(i,j) = -ni * nj
+                        elseif (&
+                            &(in_subset(i,Sc_ind) .and. in_subset(j,Wa_ind))&
+                            &.or.&
+                            &(in_subset(i,Wa_ind) .and. in_subset(j,Sc_ind))&
+                            &) then
+                            ! For p in Sc and q in Wa, or p in Wa and q in Sc
+                            GBBC(i,j) = -ni * nj
+                        elseif (j.ne.i .and. &
+                            &(in_subset(i,Sc_ind) .or. in_subset(i,Wh_ind))&
+                            &.and.&
+                            &(in_subset(j,Sc_ind) .or. in_subset(j,Wh_ind))&
+                            &) then
+                            ! For p/= q and p,q in {Sc + Wh}
+                            GBBC(i,j) = - ni**2
+                        else
+                            GBBC(i,j) = - dsqrt(ni * nj)
+                        end if
+                    end do 
+                end do
             else
-                stop 'Eee_BBC: Error: Invalid level. Available: BBC1, BBC3'
+                stop 'Eee_BBC: Error: Invalid level. Available: BBC1, BBC2, BBC3, BBC3M'
             end if
         end subroutine calc_GBBC 
     end subroutine Eee_BBC 

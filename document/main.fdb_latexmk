@@ -1,15 +1,15 @@
 # Fdb version 4
-["bibtex main"] 1718131282 "main.aux" "main.bbl" "main" 1718131288 2
-  "./TFM.bib" 1718130204 47408 9726da625b921e51bc9e68faff17e42d ""
-  "./main-blx.bib" 1718131287 346 8a1f808130e9472c5c717face872344c ""
+["bibtex main"] 1718464225 "main.aux" "main.bbl" "main" 1718467706 2
+  "./TFM.bib" 1718465487 48720 281108f3022ee70e292e99e9318fcfbe ""
+  "./main-blx.bib" 1718467705 346 8a1f808130e9472c5c717face872344c ""
   "/home/jose/Documents/latex/preamble/references.bib" 1646593657 1306 728628f5628f26fb43f4bb8050b941ce ""
   "/usr/share/texmf-dist/bibtex/bst/biblatex/biblatex.bst" 1689853683 65484 b7949c47a88ed6dca66ebc7a04577312 ""
-  "main.aux" 1718131287 10434 43bdcca0ed014f7447620d0b523cf5da "pdflatex"
+  "main.aux" 1718467705 14607 820949fdec47b867b653f348826ebb07 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1718131284 "main.tex" "main.pdf" "main" 1718131288 0
+["pdflatex"] 1718467701 "main.tex" "main.pdf" "main" 1718467706 2
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1689853683 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1689853683 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/jknappen/ec/ecbx0600.tfm" 1689853683 3584 ad9fcbc26a2a7bccd6d08b0a5792fbe0 ""
@@ -336,17 +336,17 @@
   "configuration/style.tex" 1718100827 1641 ea7358159f1ef836b69206cc7c8e582f ""
   "front-page/elaborated-titlepage.tex" 1718100827 1404 c051952fcbccc7bc0cead5cfc1c74853 ""
   "front-page/info.tex" 1718100827 875 944d45a436cde0d9de9f2430031ae9e6 ""
-  "main.aux" 1718131287 10434 43bdcca0ed014f7447620d0b523cf5da "pdflatex"
-  "main.bbl" 1718131282 63439 c143e8686173acfda8af3631dfeddcbb "bibtex main"
-  "main.out" 1718131287 2318 600c04319133c656230a35358a449775 "pdflatex"
-  "main.run.xml" 1718131287 2661 d83e6f275cd62a21de6d34b8ef7adc51 "pdflatex"
-  "main.tex" 1718131278 3067 bd1b83087ea310c431421a8a83b58f63 ""
-  "main.toc" 1718131287 1121 fdcb7ad5ecc8fb6759abd33860d27b30 "pdflatex"
+  "main.aux" 1718467705 14607 820949fdec47b867b653f348826ebb07 "pdflatex"
+  "main.bbl" 1718464225 65574 66c9d6a297bbe986dd421ebe89cb3511 "bibtex main"
+  "main.out" 1718467705 2318 600c04319133c656230a35358a449775 "pdflatex"
+  "main.run.xml" 1718467705 2661 d83e6f275cd62a21de6d34b8ef7adc51 "pdflatex"
+  "main.tex" 1718460737 3065 4e21a21ad11b4dea6d8693e7ca39d0d5 ""
+  "main.toc" 1718467705 1121 24b81f450d60547098ab74eafeb799e9 "pdflatex"
   "text/conclusions.tex" 1718131024 147 5af5e440bd2571414167d17ffb45864f ""
-  "text/electron-repulsion-functional.tex" 1718130855 17094 0d6af590aa3c8a0820ebc37eb00bab93 ""
+  "text/electron-repulsion-functional.tex" 1718467699 18415 81056f9323361e045b35a9ceec092597 ""
   "text/introduction.tex" 1718126164 558 fe5ae21d46542c3ece49cec683bb6d59 ""
   "text/introduction/equivalence-spinorbitals-coordinate-representations.tex" 1718125987 2255 d7431920719f07dcd2a52347ada925dc ""
-  "text/introduction/properties-of-density-matrices.tex" 1718125943 15723 70b692759109a0f7d8f3168c5c590e00 ""
+  "text/introduction/properties-of-density-matrices.tex" 1718461218 16049 4764bf27e456d09e931a24fa082642e6 ""
   "text/introduction/reduced-density-matrix-functional-theory.tex" 1718125899 5054 f1379c22c0b8d7fa3bc3f688fa5257e8 ""
   "text/introduction/second-quantization.tex" 1718100939 1827 bd4de39cdd4f97d400c6f16328436e6e ""
   "text/methodology-calculations.tex" 1718131278 1099 1e2ac24beee8987e7bbc6287b9be5559 ""

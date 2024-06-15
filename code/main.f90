@@ -43,14 +43,20 @@ program main
     end if
 
     ! Obtain the MO's occupation numbers: the eigenvalues of D^(1)
-    call diag_2D_mat(D1MO, .true., NONMO)
+    call is_diag(D1MO, fthres, diag)  ! Check if D1MO is already diagonal
+    if (diag) then
+        call extract_diag(D1MO, NONMO)
+    else
+        write(ouf,'(a)') 'D1MO is not diagonal. Diagonalizing...'
+        call diag_2D_mat(D1MO, .true., NONMO)
+    end if
     if (tstdbg) then 
         call print_vector('MO occupation numbers:', NONMO, 'row', ouf, '(*(f6.2))')
         write(ouf,'(a)') 'Occupied MO orbitals:'
         j = 1
         do i = 1, size(NONMO)
             if (NONMO(i).gt.fthres) then
-                write(ouf,'(i0,2x,f4.2)') j, NONMO(i)
+                write(ouf,'(2(i0,2x),f4.2)') j, i, NONMO(i)
                 j = j + 1
             end if
         end do
@@ -75,11 +81,25 @@ program main
     end if
 
     ! Obtain the natural occupation numbers: the eigenvalues of D^(1) in SO
-    call diag_2D_mat(D1SO, .true., NONSO)
+    call is_diag(D1SO, fthres, diag)
+    if (diag) then
+        call extract_diag(D1SO, NONSO)
+    else
+        write(ouf,'(a)') 'D1SO is not diagonal. Diagonalizing...'
+        call diag_2D_mat(D1SO, .true., NONSO)
+    end if
     if (tstdbg) then 
         call print_vector('natural occupation numbers:',NONSO,'row',ouf,'(*(f6.2))')
-        ! write(ouf,*)
-        ! write(ouf,'(a,f6.2)') 'Tr[D1SO] =', trace(D1SO) ; write(ouf,*)
+        write(ouf,'(a)') 'Occupied SO orbitals:'
+        j = 1
+        do i = 1, size(NONSO)
+            if (NONSO(i).gt.fthres) then
+                write(ouf,'(2(i0,2x),f4.2)') j, i, NONSO(i)
+                j = j + 1
+            end if
+        end do
+        write(ouf,*)
+        write(ouf,'(a,f6.2)') 'Tr[D1SO] =', trace(D1SO) ; write(ouf,*)
     end if
     ! TODO: implementar que imprima Nelec desde DALTON para poder usarlo aqui
     call checknorm_D1(D1SO, 10, fthres, ouf)
@@ -101,10 +121,18 @@ program main
     call Eee_ELS(NONSO, H2SO, EeeELS)  ! BUENO
     ! call Eee_ELS(NONMO, H2MO, EeeELS)  ! TEST
     !   - BB functionals: BBC1, BBC3
-    call Eee_BBC('BBC1', NONSO, H2SO, EeeBBC1)  ! BUENO
-    call Eee_BBC('BBC3', NONSO, H2SO, EeeBBC3)  ! BUENO
+    ! call Eee_BBC('BBC1', NONSO, H2SO, EeeBBC1)  ! BUENO
+    ! call Eee_BBC('BBC2', NONSO, H2SO, EeeBBC2)  ! BUENO
+    ! call Eee_BBC('BBC3', NONSO, H2SO, EeeBBC3)  ! BUENO
+    ! call Eee_BBC('BBC3M', NONSO, H2SO, EeeBBC3M)  ! BUENO
+    call Eee_BBC('BBC1', NONMO/2.d0, H2MO, EeeBBC1)  ! TEST
+    call Eee_BBC('BBC2', NONMO/2.d0, H2MO, EeeBBC2)  ! TEST
+    call Eee_BBC('BBC3', NONMO/2.d0, H2MO, EeeBBC3)  ! TEST
+    call Eee_BBC('BBC3M', NONMO/2.d0, H2MO, EeeBBC3M)  ! TEST
     ! call Eee_BBC('BBC1', NONMO, H2MO, EeeBBC1)  ! TEST
+    ! call Eee_BBC('BBC2', NONMO, H2MO, EeeBBC2)  ! TEST
     ! call Eee_BBC('BBC3', NONMO, H2MO, EeeBBC3)  ! TEST
+    ! call Eee_BBC('BBC3M', NONMO, H2MO, EeeBBC3M)  ! TEST
     !   - PNOF functionals: PNOF5
     ! call Eee_PNOF(NONSO, 1.d-16)
 
@@ -113,14 +141,18 @@ program main
     call energy(EH1D1, EH2D2, E_exact)
     call energy(EH1D1, EeeELS, EELS)
     call energy(EH1D1, EeeBBC1, EBBC1)
+    call energy(EH1D1, EeeBBC2, EBBC2)
     call energy(EH1D1, EeeBBC3, EBBC3)
+    call energy(EH1D1, EeeBBC3M, EBBC3M)
 
     ! Print the results
     if (tstdbg) then 
         write(ouf,'(a, f10.4, 1x, a)') 'Exact energy = ', E_exact, 'a.u.'
         write(ouf,'(a, f10.4, 1x, a)') 'ELS energy = ', EELS, 'a.u.'
         write(ouf,'(a, f10.4, 1x, a)') 'BBC1 energy = ', EBBC1, 'a.u.'
+        write(ouf,'(a, f10.4, 1x, a)') 'BBC2 energy = ', EBBC2, 'a.u.'
         write(ouf,'(a, f10.4, 1x, a)') 'BBC3 energy = ', EBBC3, 'a.u.'
+        write(ouf,'(a, f10.4, 1x, a)') 'BBC3M energy = ', EBBC3M, 'a.u.'
     end if
 
     ! Deallocate arrays

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.12.1)  11 JUN 2024 20:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.12.1)  15 JUN 2024 18:08
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1701,7 +1701,7 @@ Overfull \hbox (18.47433pt too wide) in paragraph at lines 15--18
 []\T1/cmr/m/n/10.95 The one-electron density matrix in the spin-orbital representation was introduced in second quantization
  []
 
-)) (./text/electron-repulsion-functional.tex [8]
+[8])) (./text/electron-repulsion-functional.tex
 Overfull \hbox (27.76848pt too wide) in paragraph at lines 12--15
 []$\OML/cmm/m/it/10.95 n$\T1/cmr/bx/n/10.95 -electron noninteracting systems\T1/cmr/m/n/10.95 : the 1-RDM corresponding to a single determinant wavefunction
  []
@@ -1719,7 +1719,116 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 232.
 
-[11]) (./text/new-hypothesis.tex) (./text/methodology-calculations.tex) (./text/results.tex) (./text/conclusions.tex) [12] (./main.aux)
+[11]) (./text/new-hypothesis.tex) (./text/methodology-calculations.tex [12]) (./text/results.tex) (./text/conclusions.tex) [13]
+
+Package biblatex Warning: Bibliography string 'in' untranslated
+(biblatex)                at entry 'helgaker2000second' on input line 97.
+
+
+Package biblatex Warning: Bibliography string 'pages' untranslated
+(biblatex)                at entry 'helgaker2000second' on input line 97.
+
+
+Overfull \hbox (16.27701pt too wide) in paragraph at lines 97--97
+\T1/cmr/m/n/10.95 Density Matrices, Natural Spin-Orbitals, and Convergence Problems in the Method of Configurational
+ []
+
+
+Overfull \hbox (16.27701pt too wide) in paragraph at lines 97--97
+\T1/cmr/m/n/10.95 Density Matrices, Natural Spin-Orbitals, and Convergence Problems in the Method of Configurational
+ []
+
+
+Overfull \hbox (0.50246pt too wide) in paragraph at lines 97--97
+[]\T1/cmr/m/n/10.95 Donnelly, RA; Parr, RG[][] Elementary Properties of an Energy Functional of the First-order Reduced
+ []
+
+
+Package biblatex Warning: Bibliography string 'in' untranslated
+(biblatex)                at entry 'levy1987correlation' on input line 97.
+
+
+Package biblatex Warning: Bibliography string 'byeditor' untranslated
+(biblatex)                at entry 'levy1987correlation' on input line 97.
+
+
+Package biblatex Warning: Bibliography string 'pages' untranslated
+(biblatex)                at entry 'levy1987correlation' on input line 97.
+
+
+Overfull \hbox (9.7589pt too wide) in paragraph at lines 97--97
+[]\T1/cmr/m/n/10.95 Valone, SM[][] Consequences of Extending 1-matrix Energy Functionals from Pure^^UState Representable
+ []
+
+
+Overfull \hbox (4.76381pt too wide) in paragraph at lines 97--97
+[]\T1/cmr/m/n/10.95 Valone, SM[][] A One-to-one Mapping between One-particle Densities and Some N-particle Ensembles[][].
+ []
+
+
+Overfull \hbox (3.10132pt too wide) in paragraph at lines 97--97
+[]\T1/cmr/m/n/10.95 Kutzelnigg, W[][] Die Lösung des quantenmechanischen Zwei-Elektronenproblems durch unmittelbare
+ []
+
+[14
+
+]
+
+./main.tex:97: LaTeX Error: Invalid UTF-8 byte sequence (Å\bibinitperiod).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.97 \printbibliography[title={References}]
+                                            % change from bibliography to re...
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+
+./main.tex:97: LaTeX Error: Invalid UTF-8 byte sequence (Å\bibinitperiod).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.97 \printbibliography[title={References}]
+                                            % change from bibliography to re...
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+
+Overfull \hbox (9.3347pt too wide) in paragraph at lines 97--97
+[]\T1/cmr/m/n/10.95 Mentel, M; family=Meer given=R., pu; Gritsenko, OV; Baerends, EJ[][] The Density Matrix Functional
+ []
+
+
+Overfull \hbox (10.70718pt too wide) in paragraph at lines 97--97
+\T1/cmr/m/n/10.95 Approach to Electron Correlation: Dynamic and Nondynamic Correlation along the Full Dissociation
+ []
+
+
+Overfull \hbox (10.50136pt too wide) in paragraph at lines 97--97
+[]\T1/cmr/m/n/10.95 BUIJSE, MA; BAERENDS, EJ[][] An Approximate Exchange-Correlation Hole Density as a Functional
+ []
+
+
+Overfull \hbox (19.15758pt too wide) in paragraph at lines 97--97
+[]\T1/cmr/m/n/10.95 Buijse, MA[][] Electron Correlation Fermi and Coulomb Holes Dynamical and Nondynamical Correlation[][],
+ []
+
+
+Overfull \hbox (42.74896pt too wide) in paragraph at lines 97--97
+[]\T1/cmr/m/n/10.95 Staroverov, VN; Scuseria, GE[][] Optimization of Density Matrix Functionals by the Hartree^^UFock^^UBogoliubov
+ []
+
+[15] (./main.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -1739,99 +1848,18 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 ### semi simple group (level 1) entered at line 14 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 48639 strings out of 476872
- 960755 string characters out of 5820378
- 1868388 words of memory out of 5000000
- 68018 multiletter control sequences out of 15000+600000
+ 48739 strings out of 476872
+ 965275 string characters out of 5820378
+ 1869388 words of memory out of 5000000
+ 68111 multiletter control sequences out of 15000+600000
  533691 words of font info for 84 fonts, out of 8000000 for 9000
  725 hyphenation exceptions out of 8191
- 94i,15n,100p,2026b,39727s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{cite.0@staroverov2002optimization} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@rohr2008density} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@gritsenko2005improved} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@buijse1991electron} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@buijse2002approximate} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@muller1984explicit} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@mentel2014density} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@pernal2004phase} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@cioslowski2000ground} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@sheng2013natural} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@shull1956correlation} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@kutzelnigg1963loesung} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@goedecker1998natural} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@lieb1981variational} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@nguyen-dang1985variation} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@valone2008one} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@valone2008consequences} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@levy1987correlation} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@doi:10.1073/pnas.76.12.6062} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@donnelly1978elementary} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@hohenberg1964inhomogeneousa} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@gilbert1975hohenbergkohn} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@coleman1963structure} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@lowdin1955quantum} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@lowdin1955quantuma} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@kollmar2004structure} has been referenced but does not exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{cite.0@helgaker2000second} has been referenced but does not exist, replaced by a fixed one
-
+ 94i,9n,100p,2026b,39941s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx0800.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb>
-Output written on main.pdf (14 pages, 386524 bytes).
+Output written on main.pdf (17 pages, 411122 bytes).
 PDF statistics:
- 447 PDF objects out of 1000 (max. 8388607)
- 377 compressed objects within 4 object streams
- 132 named destinations out of 1000 (max. 500000)
+ 516 PDF objects out of 1000 (max. 8388607)
+ 442 compressed objects within 5 object streams
+ 139 named destinations out of 1000 (max. 500000)
  109 words of extra memory for PDF output out of 10000 (max. 10000000)
 

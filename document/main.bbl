@@ -1262,6 +1262,55 @@
     \field{urlyear}{2024}
   \endentry
 
+  \entry{lathiotakis2008benchmark}{article}{}
+    \name{author}{2}{}{%
+      {{hash=LNN}{%
+         family={Lathiotakis},
+         familyi={L\bibinitperiod},
+         given={N.\bibnamedelima N.},
+         giveni={N\bibinitperiod\bibinitdelim N\bibinitperiod},
+      }}%
+      {{hash=MMAL}{%
+         family={Marques},
+         familyi={M\bibinitperiod},
+         given={Miguel A.\bibnamedelima L.},
+         giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LNNMMAL1}
+    \strng{fullhash}{LNNMMAL1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Reduced density-matrix functional theory (RDMFT) is a promising alternative approach to the problem of electron correlation. Like standard density functional theory, it contains an unknown exchange-correlation functional, for which several approximations have been proposed in the last years. In this article, we benchmark some of these functionals in an extended set of molecules with respect to total and atomization energies. Our results show that the most recent RDMFT functionals give very satisfactory results compared to standard quantum chemistry and density functional approaches.%
+    }
+    \verb{doi}
+    \verb 10.1063/1.2899328
+    \endverb
+    \field{issn}{0021-9606}
+    \field{number}{18}
+    \field{pages}{184103}
+    \field{shortjournal}{The Journal of Chemical Physics}
+    \field{title}{Benchmark Calculations for Reduced Density-Matrix Functional Theory}
+    \verb{url}
+    \verb https://doi.org/10.1063/1.2899328
+    \endverb
+    \field{volume}{128}
+    \verb{file}
+    \verb /home/jose/Zotero/storage/F6WE4J5H/Lathiotakis and Marques - 2008 - B
+    \verb enchmark calculations for reduced density-matrix .pdf;/home/jose/Zote
+    \verb ro/storage/KCQH5CLK/Benchmark-calculations-for-reduced-density-matrix
+    \verb .html
+    \endverb
+    \field{journaltitle}{The Journal of Chemical Physics}
+    \field{day}{09}
+    \field{month}{05}
+    \field{year}{2008}
+    \field{urlday}{15}
+    \field{urlmonth}{06}
+    \field{urlyear}{2024}
+  \endentry
+
   \entry{staroverov2002optimization}{article}{}
     \name{author}{2}{}{%
       {{hash=SVN}{%

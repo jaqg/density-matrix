@@ -248,49 +248,90 @@ The first correction reads
 \begin{equation}
     G_{pq}^{\text{BBC1}} = 
     \begin{cases}
-        \sqrt{n_p n_q} & p \not= q,\ p,q \in \text{weak}, \\
+        \sqrt{n_p n_q} & p \not= q \wedge p,q \in W, \\
         -\sqrt{n_p n_q} & \text{otherwise}, \\
     \end{cases}
 \end{equation}
-where $p,q \in \text{weak}$ refer to weakly occupied spin-orbitals, i.e. 
-orbitals with $n_p < \frac{1}{2}$ and $n_q < \frac{1}{2}$ and, thus, 
-$p,q \in \text{strong}$ for $n_p, n_q > \frac{1}{2}$.
+where $p,q \in W$ means that the spin-orbitals $p,q$ belong to the set of weakly
+occupied spin-orbitals, i.e. 
+orbitals with $n_p < \frac{1}{2}$ and $n_q < \frac{1}{2}$, and
+$p,q \in S$ refer to strongly occupied spin-orbitals for
+$n_p, n_q > \frac{1}{2}$.
+The symbol $\wedge$ stands for the logical \textit{and}.
+
 The drawback of the BBC1 functional is that it overbinds diatomic molecules,
 indicating a need for further repulsive corrections\mycite{gritsenko2005improved}.
 
-The BBC2 functional addressed the interaction between two strongly occupied
-orbitals, while the BBC3 functional dealt with the interaction between a pair 
+The BBC2 functional improved BBC1 by addressing the interaction between two
+strongly occupied orbitals as
+\begin{equation}
+    G_{pq}^{\text{BBC2}} = 
+    \begin{cases}
+        \sqrt{n_p n_q} & p \not= q \wedge p,q \in W, \\
+        -n_p n_q & p \not= q \wedge p,q \in S, \\
+        -\sqrt{n_p n_q} & \text{otherwise}, \\
+    \end{cases}
+\end{equation}
+
+In the BBC3 functional, corrections were included for the interaction between a pair 
 of bonding and antibonding (frontier) spinorbitals.
 Additionally, BBC3 eliminated self-interaction effects from all orbitals except
 the frontier ones.
-\textcolor{red}{Duda: frontier orbitals. Pág 135 (11 en el pdf) del Pernal} 
 \begin{equation}
     G_{pq}^{\text{BBC3}} =
     \begin{cases}
         \sqrt{n_p n_q} &
-        \begin{cases}
-            \text{if}\ p\not=q,\ p,q \in \text{weak}, \\
-            \text{or}\ p \in \text{weak},\ q \in \text{frontier (weak)}, \\
-            \text{or}\ p \in \text{frontier (weak)},\ q \in \text{weak},
-        \end{cases} \\
+        p\not=q \wedge p,q \in W,
+        \\
+        %
+        \sqrt{n_p n_q} &
+        \left( p \in W \wedge q \in F_W \right) \vee
+        \left( p \in F_W \wedge q \in W \right),
+        \\
         %
         -n_p n_q &
-        \begin{cases}
-            \text{if}\ p\not=q,\ p,q \in \text{strong}, \\
-            \text{or}\ p \in \text{strong},\ q \in \text{frontier}, \\
-            \text{or}\ p \in \text{frontier},\ q \in \text{strong},
-        \end{cases} \\
+        p\not=q \wedge p,q \in S,
+        \\
         %
-        -n_p^{2} & p=q,\ p\not\in \text{frontier}, \\
+        -n_p n_q &
+        \left( p \in S \wedge q \in F \right) \vee
+        \left( p \in F \wedge q \in S \right),
+        \\
+        %
+        -n_p^{2} & p=q \wedge p\not\in F, \\
         - \sqrt{n_p n_q} & \text{otherwise},
     \end{cases}
 \end{equation}
-where $p \in \text{frontier (weak)}$ refers to a weakly occupied frontier orbital.
+where $p \in F_W$ refers to a weakly occupied frontier orbital.
+The symbol $\vee$ stands for the logical \textit{or}.
+
 Over the practical difficulty of the need to select bonding and antibonding
 orbitals, BBC3 accounts for both dynamic and static correlation, providing 
 accurate potential energy and recovering most of the correlation energy. 
 This practical difficulty has been addressed by attempting to automate it with
 functions such as AC3 proposed by Rohr \textit{et al.}\mycite{rohr2008density}.
+
+One found issue is that, when applied to systems with large number of
+electrons, there is the possibility of degenerate bonding and antibonding
+orbitals which, if selected as bonding or antibonding, break the symmetry
+of the molecule.
+In order to avoid this issue, the modification by Lathiotakis and 
+Marques\mycite{lathiotakis2008benchmark} is used here.
+The $S$ set is subdivided into
+two subsets: the subset $S_b$ for the degenerate bonding orbitals and the subset
+$S_c$ for the rest. The $W$ set is subdivided into $W_a$ for the degenerate
+antibonding orbitals and $W_h$ for the rest weakly occupied orbitals
+\begin{equation}
+    G_{pq}^{\text{BBC3}} = 
+    \begin{cases}
+        \sqrt{n_p n_q} & p \not= q \wedge p,q \in W, \\
+        -n_p n_q & p \not= q \wedge p,q \in S, \\
+        -n_p n_q & \left( p \in S_c \wedge q \in W_a \right) \vee \left( p \in W_a \wedge q \in S_c \right), \\
+        -n_p^{2} & p \not= q \wedge p,q \in S_c \cup W_h, \\
+        -\sqrt{n_p n_q} & \text{otherwise}, \\
+    \end{cases}
+\end{equation}
+where the symbol $\cup$ stands for the union of two sets.
 
 \textcolor{red}{ELS functional?}
 

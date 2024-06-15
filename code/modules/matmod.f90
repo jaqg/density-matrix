@@ -71,6 +71,67 @@ module matmod
         return
     end subroutine asure_descending 
 
+    subroutine is_diag(Amat, thres, diag)
+        !
+        ! Subroutine to check if a matrix is diagonal
+        !
+        implicit none
+        real(kind=8), dimension(:,:), intent(in) :: Amat
+        real(kind=8), intent(in) :: thres 
+        logical, intent(out) :: diag
+        !
+        integer :: i, j, n
+
+        n = size(Amat, dim=1)
+        if (n.ne.size(Amat, dim=2)) stop 'ERROR is_diag: Matrix is not square' 
+
+        diag = .true.
+        
+        ! Elements above the diagonal
+        do i = 1, n-1
+            do j = i+1, n
+                if (dabs(Amat(i,j)).gt.thres) then
+                    diag = .false.
+                    return
+                end if
+            end do
+        end do
+
+        ! Check elements below the diagonal
+        do i = 2, n
+            do j = 1, i-1
+                if (abs(Amat(i,j)).gt.thres) then
+                    diag = .false.
+                    return
+                end if
+            end do
+        end do
+        
+        !
+        return
+    end subroutine is_diag 
+
+    subroutine extract_diag(Amat, vec)
+        implicit none
+        real(kind=8), dimension(:,:), intent(in) :: Amat
+        real(kind=8), dimension(:), allocatable, intent(out) :: vec
+        !
+        integer :: i, ierr, n
+
+        n = size(Amat, dim=1)
+        if (n.ne.size(Amat, dim=2)) stop 'ERROR extract_diag: Matrix is not square' 
+
+        allocate(vec(n), stat=ierr)
+        if (ierr .ne. 0) stop 'ERROR extract_diag: Error in allocation of vec'
+
+        do i = 1, n
+            vec(i) = Amat(i,i)
+        end do
+        
+        !
+        return
+    end subroutine extract_diag 
+
     subroutine diag_2D_mat(Amat, sort, EVvec)
         !
         ! Subroutine to diagonalize a 2D matrix using the LAPACK routine
