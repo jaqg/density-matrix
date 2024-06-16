@@ -155,6 +155,14 @@ program main
         write(ouf,'(a, f10.4, 1x, a)') 'BBC3M energy = ', EBBC3M, 'a.u.'
     end if
 
+    ! Compute the Minkowski distances
+    ! notation: MD2_D2SO: Minkowski Distance (order) 2 for D_SO^(2)
+    call Minkowski_distance_4D(2, D2SO, D2SO, MD2_D2SO)
+
+
+    ! Print the results
+    call print_energies
+
     ! Deallocate arrays
     deallocate(D1MO)
     deallocate(H1MO)

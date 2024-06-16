@@ -206,4 +206,17 @@ module io
         return
     end subroutine print_matrix 
 
+    subroutine print_energies
+        integer :: eouf 
+        !
+        open(newunit=eouf, file="energies.dat")
+
+        write(eouf,'(a)') 'ED1D2      ELS        BBC1       BBC2       BBC3       BBC3M'
+        write(eouf,'(*(f9.4,2x))') E_exact, EELS, EBBC1, EBBC2, EBBC3, EBBC3M
+
+        close(eouf)
+        !
+        return
+    end subroutine print_energies 
+
 end module io 

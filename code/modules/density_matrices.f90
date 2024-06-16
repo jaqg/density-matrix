@@ -770,4 +770,56 @@ module density_matrices
         return
     end subroutine energy 
 
+    subroutine Minkowski_distance_4D(p, D2, D2p, d)
+        !
+        ! Subroutine to compute the Minkowski distance between two 4D matrices,
+        ! treated as high-dimensional vectors.
+        ! Each element of the 4D matrix is considered as a coordinate in this
+        ! 4D space.
+        !
+        ! The distance of order p between two points (x,y) in n-dimensional
+        ! space is given by
+        ! d(x,y) = (sum_{i=1}^n (x_i - y_i)^p)^(1/p)
+        !
+        ! - p=1   -> Manhattan distance
+        ! - p=2   -> Euclidean distance
+        ! - p->oo -> Chebyshev distance
+        !
+        implicit none
+        integer, intent(in) :: p 
+        real(kind=8), dimension(:,:,:,:), intent(in) :: D2, D2p
+        real(kind=8), intent(out) :: d
+        !
+        integer :: i, j, k, l, n
+        integer :: n1, n2, n3, n4, np1, np2, np3, np4 
+
+        ! Check for inconsistencies in the dimension
+        n1 = size(D2, dim=1) ; n2 = size(D2, dim=2)
+        n3 = size(D2, dim=3) ; n4 = size(D2, dim=4)
+        np1 = size(D2p, dim=1) ; np2 = size(D2p, dim=2)
+        np3 = size(D2p, dim=3) ; np4 = size(D2p, dim=4)
+        n = n1
+        if (n.ne.n2 .or. n.ne.n3 .or. n.ne.n4 .or. &
+           &n.ne.np1 .or. n.ne.np2 .or. n.ne.np3 .or. n.ne.np4) &
+        & stop 'ERROR Minkowski_distance_4D: Inconsistent dimensions'
+
+        ! Compute the sum
+        d = 0.d0
+        do l = 1, n
+            do k = 1, n
+                do j = 1, n
+                    do i = 1, n
+                        d = d + dabs(D2(i,j,k,l) - D2p(i,j,k,l))**p
+                    end do
+                end do
+            end do
+        end do
+
+        ! Compute the distance
+        d = d**(1.d0/dble(p))
+        
+        !
+        return
+    end subroutine Minkowski_distance_4D 
+
 end module density_matrices 
