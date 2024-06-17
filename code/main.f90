@@ -12,6 +12,8 @@ program main
     use IO
     use matmod
     use density_matrices
+    use LS
+    use BBC
     !
     implicit none
     !
@@ -147,21 +149,67 @@ program main
 
     ! Print the results
     if (tstdbg) then 
-        write(ouf,'(a, f10.4, 1x, a)') 'Exact energy = ', E_exact, 'a.u.'
-        write(ouf,'(a, f10.4, 1x, a)') 'ELS energy = ', EELS, 'a.u.'
-        write(ouf,'(a, f10.4, 1x, a)') 'BBC1 energy = ', EBBC1, 'a.u.'
-        write(ouf,'(a, f10.4, 1x, a)') 'BBC2 energy = ', EBBC2, 'a.u.'
-        write(ouf,'(a, f10.4, 1x, a)') 'BBC3 energy = ', EBBC3, 'a.u.'
-        write(ouf,'(a, f10.4, 1x, a)') 'BBC3M energy = ', EBBC3M, 'a.u.'
+        write(ouf,'(a)') '-- Energies calculated from the approximated E_ee:'
+        write(ouf,'(a12, " = ", f10.4, 1x, a)') 'Exact energy', E_exact, 'a.u.'
+        write(ouf,'(a12, " = ", f10.4, 1x, a)') 'ELS energy', EELS, 'a.u.'
+        write(ouf,'(a12, " = ", f10.4, 1x, a)') 'BBC1 energy', EBBC1, 'a.u.'
+        write(ouf,'(a12, " = ", f10.4, 1x, a)') 'BBC2 energy', EBBC2, 'a.u.'
+        write(ouf,'(a12, " = ", f10.4, 1x, a)') 'BBC3 energy', EBBC3, 'a.u.'
+        write(ouf,'(a12, " = ", f10.4, 1x, a)') 'BBC3M energy', EBBC3M, 'a.u.'
+        write(ouf,*)
     end if
-
-    ! Compute the Minkowski distances
-    ! notation: MD2_D2SO: Minkowski Distance (order) 2 for D_SO^(2)
-    call Minkowski_distance_4D(2, D2SO, D2SO, MD2_D2SO)
-
 
     ! Print the results
     call print_energies
+
+    ! Compute the approximated 2-RDM
+    call D2_LS(NONSO, D2LSSO)
+    call D2_BBC('BBC1', NONSO, D2BBC1SO)
+    call D2_BBC('BBC2', NONSO, D2BBC2SO)
+    call D2_BBC('BBC3', NONSO, D2BBC3SO)
+    call D2_BBC('BBC3M', NONSO, D2BBC3MSO)
+    if (tstdbg) then 
+        ! call print_matrix('D2LSSO', D2LSSO(1,1,1:6,1:6), ouf, dfmt) 
+    end if
+
+    ! Compute the Eee from the reconstructed 2-RDMS
+    call Eee_D2(D2LSSO, H2SO, EH2D2LS)
+    call Eee_D2(D2BBC1SO, H2SO, EH2D2BBC1)
+    call Eee_D2(D2BBC2SO, H2SO, EH2D2BBC2)
+    call Eee_D2(D2BBC3SO, H2SO, EH2D2BBC3)
+    call Eee_D2(D2BBC3MSO, H2SO, EH2D2BBC3M)
+    ! and the full energy
+    call energy(EH1D1, EH2D2LS, EELS)
+    call energy(EH1D1, EH2D2BBC1, EBBC1)
+    call energy(EH1D1, EH2D2BBC2, EBBC2)
+    call energy(EH1D1, EH2D2BBC3, EBBC3)
+    call energy(EH1D1, EH2D2BBC3M, EBBC3M)
+    if (tstdbg) then 
+        write(ouf,'(a)') '-- Energies recalculated for the constructed 2-RDMs:'
+        write(ouf,'(a16, " = ", f10.4, 1x, a)') 'New ELS energy', EELS, 'a.u.'
+        write(ouf,'(a16, " = ", f10.4, 1x, a)') 'New BBC1 energy', EBBC1, 'a.u.'
+        write(ouf,'(a16, " = ", f10.4, 1x, a)') 'New BBC2 energy', EBBC2, 'a.u.'
+        write(ouf,'(a16, " = ", f10.4, 1x, a)') 'New BBC3 energy', EBBC3, 'a.u.'
+        write(ouf,'(a16, " = ", f10.4, 1x, a)') 'New BBC3M energy', EBBC3M, 'a.u.'
+        write(ouf,*)
+    end if
+
+    ! Compute the Minkowski distances
+    ! notation: MD2_D2SO: Minkowski Distance (order) 2 for D^(2)-D_LS^(2) (in SO)
+    call Minkowski_distance_4D(minkord, D2SO, D2LSSO, MD2_D2SO_D2LSSO)
+    call Minkowski_distance_4D(minkord, D2SO, D2BBC1SO, MD2_D2SO_D2BBC1SO)
+    call Minkowski_distance_4D(minkord, D2SO, D2BBC2SO, MD2_D2SO_D2BBC2SO)
+    call Minkowski_distance_4D(minkord, D2SO, D2BBC3SO, MD2_D2SO_D2BBC3SO)
+    call Minkowski_distance_4D(minkord, D2SO, D2BBC3MSO, MD2_D2SO_D2BBC3MSO)
+    if (tstdbg) then 
+        write(ouf,'(a,i0,":")') '-- Minkowski metric (distance) of order ',minkord
+        write(ouf,'(a18, " = ", f8.4)') 'MD2_D2SO_D2LSSO', MD2_D2SO_D2LSSO
+        write(ouf,'(a18, " = ", f8.4)') 'MD2_D2SO_D2BBC1SO', MD2_D2SO_D2BBC1SO
+        write(ouf,'(a18, " = ", f8.4)') 'MD2_D2SO_D2BBC2SO', MD2_D2SO_D2BBC2SO
+        write(ouf,'(a18, " = ", f8.4)') 'MD2_D2SO_D2BBC3SO', MD2_D2SO_D2BBC3SO
+        write(ouf,'(a18, " = ", f8.4)') 'MD2_D2SO_D2BBC3MSO', MD2_D2SO_D2BBC3MSO
+    end if
+
 
     ! Deallocate arrays
     deallocate(D1MO)

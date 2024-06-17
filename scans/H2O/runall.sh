@@ -37,6 +37,9 @@ do
     else
         echo "Warning: energies.dat not found or empty for iteration $n"
     fi
+
+    # Remove the 'energies.dat' file
+    rm -f energies.dat
     
     echo "Executed main with input for H2O-$n"
 done
