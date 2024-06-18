@@ -381,13 +381,18 @@ module BBC
     end subroutine calc_GBBC 
     
     subroutine Eee_BBC(level, ON, H2, Eee)
+        !
+        ! Subroutine to compute the Eee for the BBCn approximations in
+        ! the spin-orbital basis with
+        ! 0 <= np <= 1 forall p
+        !
         implicit none
         character(len=*), intent(in) :: level 
         real(kind=8), dimension(:), intent(in) :: ON
         real(kind=8), dimension(:,:,:,:), intent(in) :: H2
         real(kind=8), intent(out) :: Eee
         !
-        integer :: i, j, ierr, n
+        integer :: i, j, n
         real(kind=8) :: sum1, sum2, ni, nj
         real(kind=8), dimension(:,:), allocatable :: GBBC 
 
@@ -427,6 +432,59 @@ module BBC
 
         !
     end subroutine Eee_BBC 
+
+    subroutine Eee_BBC_spacial(level, ON, H2, Eee)
+        !
+        ! Subroutine to compute the Eee for the BBCn approximations in
+        ! the spacial orbital basis with
+        ! 0 <= np <= 1 forall p
+        !
+        implicit none
+        character(len=*), intent(in) :: level 
+        real(kind=8), dimension(:), intent(in) :: ON
+        real(kind=8), dimension(:,:,:,:), intent(in) :: H2
+        real(kind=8), intent(out) :: Eee
+        !
+        integer :: i, j, n
+        real(kind=8) :: sum1, sum2, ni, nj
+        real(kind=8), dimension(:,:), allocatable :: GBBC 
+
+        ! Check for inconsistencies in the dimensions
+        n = size(ON)
+        if (n.ne.size(H2, dim=1) .or. &
+            &   n.ne.size(H2, dim=2) .or. &
+            &   n.ne.size(H2, dim=3) .or. &
+            &   n.ne.size(H2, dim=4)) &
+            & stop 'Eee_BBC: Error: Inconsistent dimensions'
+
+        ! Check that ON is in spin-orbital basis
+        call check_SO_ON(ON)
+
+        ! Compute the GBBC matrix
+        call calc_GBBC(level, ON, GBBC)
+
+        ! Compute first sum
+        sum1 = 0.d0
+        do i = 1, n
+            do j = 1, n
+                ni = ON(i) ; nj = ON(j)
+                sum1 = sum1 + ni * nj * H2(i,i,j,j)
+            end do
+        end do
+
+        ! Compute second sum
+        sum2 = 0.d0
+        do i = 1, n
+            do j = 1, n
+                sum2 = sum2 + GBBC(i,j) * H2(i,j,j,i)
+            end do
+        end do
+
+        ! Compute the energy
+        Eee = 2.d0 * sum1 - 0.5d0 * sum2
+
+        !
+    end subroutine Eee_BBC_spacial 
 
     subroutine D2_BBC(level, ON, D2)
         implicit none

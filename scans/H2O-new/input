@@ -1,0 +1,10 @@
+# Folder containing the files
+data
+# Name of the file containing one-electron density matrix
+H2O-7-MCSCF-D1-matrix
+# Name of the file containing two-electron density matrix
+H2O-7-MCSCF-D2-matrix
+# Name of the file containing one-electron integrals
+H2O-7-MCSCF-oneintMObasis
+# Name of the file containing two-electron integrals
+H2O-7-MCSCF-twointMObasis

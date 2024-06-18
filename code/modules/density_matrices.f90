@@ -51,6 +51,10 @@ module density_matrices
     end subroutine check_SO_ON 
 
     subroutine MO_to_SO_D1(AMO, ASO)
+        !
+        ! Subroutine to transform 1-RDM from MO basis to spin-orbital basis, i.e.
+        ! 0 <= nu_p <= 2 forall p in MOs -> 0 <= n_p <= 1 forall p in SOs
+        !
         implicit none
         real(kind=8), dimension(:,:), intent(in) :: AMO
         real(kind=8), dimension(:,:), allocatable, intent(out) :: ASO
@@ -83,6 +87,10 @@ module density_matrices
     end subroutine MO_to_SO_D1 
 
     subroutine MO_to_SO_D2(AMO, ASO)
+        !
+        ! Subroutine to transform 2-RDM from MO basis to spin-orbital basis, i.e.
+        ! 0 <= nu_p <= 2 forall p in MOs -> 0 <= n_p <= 1 forall p in SOs
+        !
         implicit none
         real(kind=8), dimension(:,:,:,:), intent(in) :: AMO
         real(kind=8), dimension(:,:,:,:), allocatable, intent(out) :: ASO
@@ -120,51 +128,77 @@ module density_matrices
         return
     end subroutine MO_to_SO_D2 
 
-    ! subroutine MO_to_SO_H2(H2MO, H2SO)
-    !     implicit none
-    !     real(kind=8), dimension(:,:,:,:), intent(in) :: H2MO
-    !     real(kind=8), dimension(:,:,:,:), allocatable, intent(out) :: H2SO
-    !     !
-    !     integer :: p, q, r, s, ps, qs, rs, ss, ierr, n 
-    !
-    !     ! Check for inconsistencies in the dimensions
-    !     n = size(H2MO, dim=1)
-    !     if (n.ne.size(H2MO, dim=2) .or. &
-    !     &   n.ne.size(H2MO, dim=3) .or. &
-    !     &   n.ne.size(H2MO, dim=4)) &
-    !     & stop 'MO_to_SO_H2: Error: Inconsistent dimensions'
-    !
-    !     allocate(H2SO(2*n, 2*n, 2*n, 2*n), stat=ierr)
-    !     if (ierr .ne. 0) stop 'MO_to_SO_H2: Error in allocation of H2SO'
-    !     H2SO = 0.d0
-    !
-    !     do p = 1, n
-    !         do q = 1, n
-    !             do r = 1, n
-    !                 do s = 1, n
-    !
-    !                     ! alpha-alpha spin-orbitals
-    !                     ps = 2*p - 1
-    !                     qs = 2*q - 1
-    !                     rs = 2*r - 1
-    !                     ss = 2*s - 1
-    !                     H2SO(ps, qs, rs, ss) = H2MO(p, q, r, s)
-    !
-    !                     ! beta-beta spin-orbitals
-    !                     ps = 2*p
-    !                     qs = 2*q
-    !                     rs = 2*r
-    !                     ss = 2*s
-    !                     H2SO(ps, qs, rs, ss) = H2MO(p, q, r, s)
-    !
-    !                     ! mixed alpha-beta -> 0
-    !                 end do
-    !             end do
-    !         end do
-    !     end do
-    !     !
-    !     return
-    ! end subroutine MO_to_SO_H2 
+    subroutine MO_to_SO_H1(H1MO, H1SO)
+        !
+        ! Subroutine to transform one-electron integrals in spacial orbital
+        ! basis (p|h|q) to spin-orbital basis <p|h|q>
+        !
+        implicit none
+        real(kind=8), dimension(:,:), intent(in) :: H1MO
+        real(kind=8), dimension(:,:), allocatable, intent(out) :: H1SO
+        !
+        integer :: p, q, ierr, n 
+
+        ! Check for inconsistencies in the dimensions
+        n = size(H1MO, dim=1)
+        if (n.ne.size(H1MO, dim=2)) &
+        & stop 'MO_to_SO_H1: Error: Inconsistent dimensions'
+
+        allocate(H1SO(2*n, 2*n), stat=ierr)
+        if (ierr .ne. 0) stop 'MO_to_SO_H1: Error in allocation of H1SO'
+        H1SO = 0.d0
+
+        do p = 1, n
+            do q = 1, n
+                ! alpha-alpha spin-orbitals
+                H1SO(2*p-1, 2*q-1) = H1MO(p, q)
+                ! beta-beta spin-orbitals
+                H1SO(2*p, 2*q) = H1MO(p, q)
+                ! mixed alpha-beta -> 0
+            end do
+        end do
+        !
+        return
+    end subroutine MO_to_SO_H1 
+
+    subroutine MO_to_SO_H2(H2MO, H2SO)
+        !
+        ! Subroutine to transform two-electron integrals in spacial orbital
+        ! basis (pq|rs) to spin-orbital basis <pq|rs>
+        !
+        implicit none
+        real(kind=8), dimension(:,:,:,:), intent(in) :: H2MO
+        real(kind=8), dimension(:,:,:,:), allocatable, intent(out) :: H2SO
+        !
+        integer :: p, q, r, s, ierr, n 
+
+        ! Check for inconsistencies in the dimensions
+        n = size(H2MO, dim=1)
+        if (n.ne.size(H2MO, dim=2) .or. &
+        &   n.ne.size(H2MO, dim=3) .or. &
+        &   n.ne.size(H2MO, dim=4)) &
+        & stop 'MO_to_SO_H2: Error: Inconsistent dimensions'
+
+        allocate(H2SO(2*n, 2*n, 2*n, 2*n), stat=ierr)
+        if (ierr .ne. 0) stop 'MO_to_SO_H2: Error in allocation of H2SO'
+        H2SO = 0.d0
+
+        do p = 1, n
+            do q = 1, n
+                do r = 1, n
+                    do s = 1, n
+                        ! alpha-alpha spin-orbitals
+                        H2SO(2*p-1, 2*q-1, 2*r-1, 2*s-1) = H2MO(p, q, r, s)
+                        ! beta-beta spin-orbitals
+                        H2SO(2*p, 2*q, 2*r, 2*s) = H2MO(p, q, r, s)
+                        ! mixed alpha-beta -> 0
+                    end do
+                end do
+            end do
+        end do
+        !
+        return
+    end subroutine MO_to_SO_H2 
 
     subroutine H1D1_energy(D1, H1, E1)
         !

@@ -14,7 +14,9 @@ module declarations
     real(kind=8) :: fthres 
     real(kind=8) :: EH1D1, EH2D2, E_exact
     real(kind=8) :: EeeELS, EeeBBC1, EeeBBC2, EeeBBC3, EeeBBC3M
+    real(kind=8) :: EeeBBC1sp, EeeBBC2sp, EeeBBC3sp, EeeBBC3Msp 
     real(kind=8) :: EELS, EBBC1, EBBC2, EBBC3, EBBC3M
+    real(kind=8) :: EBBC1sp, EBBC2sp, EBBC3sp, EBBC3Msp 
     real(kind=8), dimension(:), allocatable :: NONMO, NONSO 
     real(kind=8), dimension(:,:), allocatable :: D1MO, D1SO, H1MO, H1SO
     real(kind=8), dimension(:,:,:,:), allocatable :: D2MO, D2SO, H2MO, H2SO
@@ -31,6 +33,7 @@ module declarations
 
         ! Print debug information
         tstdbg = .true.
+        ! tstdbg = .false.
         
         ! floating-point numbers threshold to consider it 0, i.e.
         ! a -> 0 if a < fthres

@@ -24,7 +24,9 @@ program main
     call parameters
 
     ! Print the title
-    call title(ouf, 'Density Matrices', termwidth)
+    if (tstdbg) then
+        call title(ouf, 'Density Matrices', termwidth)
+    end if
 
     ! Read the input
     call read_input('input', d1fn, d2fn, h1fn, h2fn)
@@ -69,11 +71,10 @@ program main
     call checknorm_D1(D1MO, 10, fthres, ouf)
 
     ! Transform D^(1), D^(2), H1, H2 from MO to spin-orbital basis
-    ! TODO: comprobar que la transformacion para H1 y H2 este bien
     call MO_to_SO_D1(D1MO, D1SO)
     call MO_to_SO_D2(D2MO, D2SO)
-    call MO_to_SO_D1(H1MO, H1SO)
-    call MO_to_SO_D2(H2MO, H2SO)
+    call MO_to_SO_H1(H1MO, H1SO)
+    call MO_to_SO_H2(H2MO, H2SO)
 
     if (tstdbg) then 
         call print_matrix('D1SO', D1SO(1:6,1:6), ouf, dfmt) 
@@ -109,7 +110,7 @@ program main
     ! Compute the non-ee part of the energy: tr[D^(1) H^(1)]
     call H1D1_energy(D1MO, H1MO, EH1D1)
     if (tstdbg) then 
-          write(ouf,'(a, d10.2, a)') 'EH1D1 = ', EH1D1, 'a.u.' ; write(ouf,*)
+          write(ouf,'(a, f10.4, a)') 'EH1D1 = ', EH1D1, 'a.u.' ; write(ouf,*)
     end if
 
     !
@@ -135,6 +136,11 @@ program main
     ! call Eee_BBC('BBC2', NONMO, H2MO, EeeBBC2)  ! TEST
     ! call Eee_BBC('BBC3', NONMO, H2MO, EeeBBC3)  ! TEST
     ! call Eee_BBC('BBC3M', NONMO, H2MO, EeeBBC3M)  ! TEST
+    !   - BBCn functionals for spacial orbitals
+    call Eee_BBC_spacial('BBC1', NONMO/2.d0, H2MO, EeeBBC1sp)  ! TEST
+    call Eee_BBC_spacial('BBC2', NONMO/2.d0, H2MO, EeeBBC2sp)  ! TEST
+    call Eee_BBC_spacial('BBC3', NONMO/2.d0, H2MO, EeeBBC3sp)  ! TEST
+    call Eee_BBC_spacial('BBC3M', NONMO/2.d0, H2MO, EeeBBC3Msp)  ! TEST
     !   - PNOF functionals: PNOF5
     ! call Eee_PNOF(NONSO, 1.d-16)
 
@@ -146,6 +152,10 @@ program main
     call energy(EH1D1, EeeBBC2, EBBC2)
     call energy(EH1D1, EeeBBC3, EBBC3)
     call energy(EH1D1, EeeBBC3M, EBBC3M)
+    call energy(EH1D1, EeeBBC1sp, EBBC1sp)
+    call energy(EH1D1, EeeBBC2sp, EBBC2sp)
+    call energy(EH1D1, EeeBBC3sp, EBBC3sp)
+    call energy(EH1D1, EeeBBC3Msp, EBBC3Msp)
 
     ! Print the results
     if (tstdbg) then 
@@ -156,6 +166,10 @@ program main
         write(ouf,'(a12, " = ", f10.4, 1x, a)') 'BBC2 energy', EBBC2, 'a.u.'
         write(ouf,'(a12, " = ", f10.4, 1x, a)') 'BBC3 energy', EBBC3, 'a.u.'
         write(ouf,'(a12, " = ", f10.4, 1x, a)') 'BBC3M energy', EBBC3M, 'a.u.'
+        write(ouf,'(a12, " = ", f10.4, 1x, a)') 'BBC1sp energy', EBBC1sp, 'a.u.'
+        write(ouf,'(a12, " = ", f10.4, 1x, a)') 'BBC2sp energy', EBBC2sp, 'a.u.'
+        write(ouf,'(a12, " = ", f10.4, 1x, a)') 'BBC3sp energy', EBBC3sp, 'a.u.'
+        write(ouf,'(a12, " = ", f10.4, 1x, a)') 'BBC3Msp energy', EBBC3Msp, 'a.u.'
         write(ouf,*)
     end if
 
@@ -168,9 +182,6 @@ program main
     call D2_BBC('BBC2', NONSO, D2BBC2SO)
     call D2_BBC('BBC3', NONSO, D2BBC3SO)
     call D2_BBC('BBC3M', NONSO, D2BBC3MSO)
-    if (tstdbg) then 
-        ! call print_matrix('D2LSSO', D2LSSO(1,1,1:6,1:6), ouf, dfmt) 
-    end if
 
     ! Compute the Eee from the reconstructed 2-RDMS
     call Eee_D2(D2LSSO, H2SO, EH2D2LS)
