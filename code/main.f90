@@ -35,8 +35,7 @@ program main
     call read_2D_matrix(d1fn, .true., D1MO)  ! one-electron density matrix
     call read_2D_matrix(h1fn, .true., H1MO)  ! one-electron integral matrix
     call read_4D_matrix(d2fn, .false., D2MO)  ! two-electron density matrix
-    call read_4D_matrix(h2fn, .false., H2MO)  ! test
-    ! call read_4D_matrix(h2fn, .true., H2MO)  ! two-electron density matrix
+    call read_4D_matrix(h2fn, .true., H2MO)  ! two-electron density matrix
 
     ! Print matrices
     if (tstdbg) then 
@@ -76,6 +75,11 @@ program main
     call MO_to_SO_H1(H1MO, H1SO)
     call MO_to_SO_H2(H2MO, H2SO)
 
+    ! TODO: eliminar esto
+    ! TEST: haciendo 0 la parte inactiva (en vez de 2) para hacer el calculo solo con
+    ! la parte activa
+    ! D1MO(1,1) = 0.d0 ; D2MO(1,1,1,1) = 0.d0
+
     if (tstdbg) then 
         call print_matrix('D1SO', D1SO(1:6,1:6), ouf, dfmt) 
         call print_matrix('D2SO', D2SO(1,1,1:6,1:6), ouf, dfmt) 
@@ -104,11 +108,13 @@ program main
         write(ouf,*)
         write(ouf,'(a,f6.2)') 'Tr[D1SO] =', trace(D1SO) ; write(ouf,*)
     end if
+
     ! TODO: implementar que imprima Nelec desde DALTON para poder usarlo aqui
     call checknorm_D1(D1SO, 10, fthres, ouf)
 
     ! Compute the non-ee part of the energy: tr[D^(1) H^(1)]
-    call H1D1_energy(D1MO, H1MO, EH1D1)
+    ! call H1D1_energy(D1MO, H1MO, EH1D1)  ! bueno
+    call H1D1_energy(D1SO, H1SO, EH1D1)  ! test: deberia dar lo mismo
     if (tstdbg) then 
           write(ouf,'(a, f10.4, a)') 'EH1D1 = ', EH1D1, 'a.u.' ; write(ouf,*)
     end if
@@ -117,30 +123,31 @@ program main
     ! Compute the Eee part with:
     !
     !   - Exact from the D^(2): EeeD2 = 1/2 sum_{pqrs} (pq|rs) D2_{pqrs}
-    call Eee_D2(D2MO, H2MO, EH2D2)
+    ! call Eee_D2(D2MO, H2MO, EH2D2)  ! bueno
+    call Eee_D2(D2SO, H2SO, EH2D2)  ! test: deberia dar lo mismo
     !   - Extended LS functional: ELS
     ! TODO: pasar H2MO -> H2SO
     ! TODO: comprobar que H2SO y D2SO estan bien
     call Eee_ELS(NONSO, H2SO, EeeELS)  ! BUENO
     ! call Eee_ELS(NONMO, H2MO, EeeELS)  ! TEST
     !   - BB functionals: BBC1, BBC3
-    ! call Eee_BBC('BBC1', NONSO, H2SO, EeeBBC1)  ! BUENO
-    ! call Eee_BBC('BBC2', NONSO, H2SO, EeeBBC2)  ! BUENO
-    ! call Eee_BBC('BBC3', NONSO, H2SO, EeeBBC3)  ! BUENO
-    ! call Eee_BBC('BBC3M', NONSO, H2SO, EeeBBC3M)  ! BUENO
-    call Eee_BBC('BBC1', NONMO/2.d0, H2MO, EeeBBC1)  ! TEST
-    call Eee_BBC('BBC2', NONMO/2.d0, H2MO, EeeBBC2)  ! TEST
-    call Eee_BBC('BBC3', NONMO/2.d0, H2MO, EeeBBC3)  ! TEST
-    call Eee_BBC('BBC3M', NONMO/2.d0, H2MO, EeeBBC3M)  ! TEST
+    call Eee_BBC('BBC1', NONSO, H2SO, EeeBBC1)  ! BUENO
+    call Eee_BBC('BBC2', NONSO, H2SO, EeeBBC2)  ! BUENO
+    call Eee_BBC('BBC3', NONSO, H2SO, EeeBBC3)  ! BUENO
+    call Eee_BBC('BBC3M', NONSO, H2SO, EeeBBC3M)  ! BUENO
+    ! call Eee_BBC('BBC1', NONMO/2.d0, H2MO, EeeBBC1)  ! TEST
+    ! call Eee_BBC('BBC2', NONMO/2.d0, H2MO, EeeBBC2)  ! TEST
+    ! call Eee_BBC('BBC3', NONMO/2.d0, H2MO, EeeBBC3)  ! TEST
+    ! call Eee_BBC('BBC3M', NONMO/2.d0, H2MO, EeeBBC3M)  ! TEST
     ! call Eee_BBC('BBC1', NONMO, H2MO, EeeBBC1)  ! TEST
     ! call Eee_BBC('BBC2', NONMO, H2MO, EeeBBC2)  ! TEST
     ! call Eee_BBC('BBC3', NONMO, H2MO, EeeBBC3)  ! TEST
     ! call Eee_BBC('BBC3M', NONMO, H2MO, EeeBBC3M)  ! TEST
     !   - BBCn functionals for spacial orbitals
-    call Eee_BBC_spacial('BBC1', NONMO/2.d0, H2MO, EeeBBC1sp)  ! TEST
-    call Eee_BBC_spacial('BBC2', NONMO/2.d0, H2MO, EeeBBC2sp)  ! TEST
-    call Eee_BBC_spacial('BBC3', NONMO/2.d0, H2MO, EeeBBC3sp)  ! TEST
-    call Eee_BBC_spacial('BBC3M', NONMO/2.d0, H2MO, EeeBBC3Msp)  ! TEST
+    call Eee_BBC_spacial('BBC1', NONMO/2.d0, H2MO, EeeBBC1sp)  ! BUENO
+    call Eee_BBC_spacial('BBC2', NONMO/2.d0, H2MO, EeeBBC2sp)  ! BUENO
+    call Eee_BBC_spacial('BBC3', NONMO/2.d0, H2MO, EeeBBC3sp)  ! BUENO
+    call Eee_BBC_spacial('BBC3M', NONMO/2.d0, H2MO, EeeBBC3Msp)  ! BUENO
     !   - PNOF functionals: PNOF5
     ! call Eee_PNOF(NONSO, 1.d-16)
 

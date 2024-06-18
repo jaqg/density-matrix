@@ -150,13 +150,15 @@ module io
             Amat(iind,jind,kind,lind) = xint
         end do
 
-        ! Mirror the upper triangular
+        ! Simetrize the 4D tensor
         if (is_triangular .eqv. .true.) then
-            do l=1, n
-                do k=1, n
-                    do j=1, n-1
-                        do i=j+1, n
-                            Amat(i,j,k,l) = Amat(j,i,k,l)
+            do k=1, n
+                do l=k, n
+                    do i=1, n
+                        do j=i, n
+                            Amat(j,i,l,k) = Amat(i,j,k,l)
+                            Amat(i,j,l,k) = Amat(i,j,k,l)
+                            Amat(j,i,k,l) = Amat(i,j,k,l)
                         end do
                     end do
                 end do
