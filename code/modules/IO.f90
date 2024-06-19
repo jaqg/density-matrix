@@ -137,6 +137,7 @@ module io
         ! Allocate Amat
         allocate(Amat(n,n,n,n), stat=ios)
         if (ios /= 0) stop "read_4D_matrix: Error in allocation of Amat"
+        Amat = 0.d0
 
         ! Read the triangular part of Amat
         iind = -1
@@ -172,6 +173,97 @@ module io
         !
         return
     end subroutine read_4D_matrix 
+
+    subroutine read_neptunus(fn, is_triangular, H1mat, H2mat)
+        !
+        ! fn: matrix input file name
+        ! H2mat: any 4D matrix
+        !
+        implicit none
+        character(len=*), intent(in) :: fn
+        logical :: is_triangular
+        real(kind=8), dimension(:,:), allocatable, intent(out) :: H1mat
+        real(kind=8), dimension(:,:,:,:), allocatable, intent(out) :: H2mat
+        !
+        logical :: found_norb
+        integer :: i, j, k, l, pos, ios, nlu, n, iind, jind, kind, lind
+        real(kind=8) :: xint 
+        character(len=100) :: line 
+
+        ! Open file
+        open(newunit=nlu, file=trim(fn), iostat=ios)
+        if (ios /= 0) stop "read_4D_matrix: Error opening file trim(fn)"
+
+        ! Read dimensions of H2mat
+        found_norb = .false.
+
+        ! Read the file
+        read(nlu, *)  ! skip first line
+        read(nlu, '(A)', iostat=ios) line
+        if (ios /= 0) stop 'read_4D_matrix_neptunus: Error reading file.'
+
+        ! Search for "NORB="
+        pos = index(line, 'NORB=')
+        if (pos /= 0) then
+            read(line(pos+5:), *) n  ! Read NORB
+        end if
+
+        ! Skip following 3 lines
+        do i=1,3; read(nlu,*) ; end do
+
+        ! Allocate H2mat
+        allocate(H1mat(n,n), stat=ios)
+        if (ios /= 0) stop "read_neptunus: Error in allocation of H1mat"
+        H1mat = 0.d0
+
+        ! Allocate H2mat
+        allocate(H2mat(n,n,n,n), stat=ios)
+        if (ios /= 0) stop "read_neptunus: Error in allocation of H2mat"
+        H2mat = 0.d0
+
+        ! Read the triangular part of H2mat
+        iind = -1
+        jind = -1
+        kind = -1
+        lind = -1
+        do
+            read(nlu,*,iostat=ios) xint, kind, lind, iind, jind
+            if (ios /= 0) stop 'read_neptunus: Error reading file.'
+
+            if (kind.eq.0 .and. lind.eq.0 .and. iind.eq.0 .and. jind.eq.0) exit  ! end of file
+
+            if (iind.ne.0 .and. jind.ne.0) then
+                H2mat(iind,jind,kind,lind) = xint
+            else
+                ! H1 mat when the last 2 indeces are 0
+                H1mat(kind,lind) = xint
+            end if
+        end do
+
+        if (is_triangular .eqv. .true.) then
+            do k=1, n
+                do l=k, n
+                    ! Simetrize the triangular H1mat matrix
+                    H1mat(l,k) = H1mat(k,l)
+                    do i=1, n
+                        do j=i, n
+                            ! Simetrize the 4D tensor H2mat
+                            H2mat(j,i,l,k) = H2mat(i,j,k,l)
+                            H2mat(i,j,l,k) = H2mat(i,j,k,l)
+                            H2mat(j,i,k,l) = H2mat(i,j,k,l)
+                        end do
+                    end do
+                end do
+            end do
+        end if
+
+        ! Close file
+        close(unit=nlu, iostat=ios, status="keep")
+        if (ios /= 0) stop "read_neptunus: Error closing file unit nlu"
+        
+        !
+        return
+    end subroutine read_neptunus
 
     subroutine print_vector(label, vec, colrow, lu, fmt)
         implicit none

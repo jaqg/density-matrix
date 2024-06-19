@@ -37,12 +37,29 @@ program main
     call read_4D_matrix(d2fn, .false., D2MO)  ! two-electron density matrix
     call read_4D_matrix(h2fn, .true., H2MO)  ! two-electron density matrix
 
+    ! TEST with Neptunus
+    if (tstnep) then 
+        call read_neptunus('data/H2O-0-MCSCF-molecule.fmt', .true., H1MOnep, H2MOnep)
+    end if
+
     ! Print matrices
     if (tstdbg) then 
         call print_matrix('D1MO', D1MO(1:6,1:6), ouf, dfmt)    
         call print_matrix('H1MO', H1MO(1:6,1:6), ouf, dfmt)    
+        if (tstnep) then
+            call print_matrix('H1MOnep', H1MOnep(1:6,1:6), ouf, dfmt)    
+        end if
         call print_matrix('D2MO', D2MO(1,1,1:6,1:6), ouf, dfmt)
         call print_matrix('H2MO', H2MO(1,1,1:6,1:6), ouf, dfmt)
+        if (tstnep) then
+            call print_matrix('H2MOnep', H2MOnep(1,1,1:6,1:6), ouf, dfmt)
+        end if
+    end if
+
+    ! TODO: TEST Neptunus
+    if (tstnep) then 
+        H1MO = H1MOnep
+        H2MO = H2MOnep
     end if
 
     ! Obtain the MO's occupation numbers: the eigenvalues of D^(1)
@@ -190,7 +207,8 @@ program main
     call D2_BBC('BBC3', NONSO, D2BBC3SO)
     call D2_BBC('BBC3M', NONSO, D2BBC3MSO)
 
-    ! Compute the Eee from the reconstructed 2-RDMS
+    ! The check if the constructed approximated 2-RDMs are correct, recompute 
+    ! the Eee from these reconstructed 2-RDMS
     call Eee_D2(D2LSSO, H2SO, EH2D2LS)
     call Eee_D2(D2BBC1SO, H2SO, EH2D2BBC1)
     call Eee_D2(D2BBC2SO, H2SO, EH2D2BBC2)
@@ -228,12 +246,10 @@ program main
         write(ouf,'(a18, " = ", f8.4)') 'MD2_D2SO_D2BBC3MSO', MD2_D2SO_D2BBC3MSO
     end if
 
-
     ! Deallocate arrays
-    deallocate(D1MO)
-    deallocate(H1MO)
-    deallocate(D2MO)
-    deallocate(H2MO)
+    deallocate(D1MO, D1SO, D2MO, D2SO, H1MO, H1SO, H2MO, H2SO)
+    deallocate(NONMO, NONSO)
+    deallocate(D2LSSO, D2BBC1SO, D2BBC2SO, D2BBC3SO, D2BBC3MSO)
     !
     stop
 endprogram main

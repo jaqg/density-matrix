@@ -7,10 +7,10 @@ module declarations
     ! Module to declare variables
     !
     implicit none
-    logical :: tstdbg, diag
+    logical :: tstdbg, tstnep, diag
     integer :: i, j 
     integer :: termwidth, ouf, pmatsize, minkord
-    character(len=80) :: d1fn, d2fn, h1fn, h2fn, dfmt
+    character(len=80) :: d1fn, d2fn, h1fn, h2fn, nepfn, dfmt
     real(kind=8) :: fthres 
     real(kind=8) :: EH1D1, EH2D2, E_exact
     real(kind=8) :: EeeELS, EeeBBC1, EeeBBC2, EeeBBC3, EeeBBC3M
@@ -18,8 +18,9 @@ module declarations
     real(kind=8) :: EELS, EBBC1, EBBC2, EBBC3, EBBC3M
     real(kind=8) :: EBBC1sp, EBBC2sp, EBBC3sp, EBBC3Msp 
     real(kind=8), dimension(:), allocatable :: NONMO, NONSO 
-    real(kind=8), dimension(:,:), allocatable :: D1MO, D1SO, H1MO, H1SO
-    real(kind=8), dimension(:,:,:,:), allocatable :: D2MO, D2SO, H2MO, H2SO
+    real(kind=8), dimension(:,:), allocatable :: D1MO, D1SO, H1MO, H1MOnep, H1SO
+    real(kind=8), dimension(:,:,:,:), allocatable :: D2MO, D2SO, H2MO, H2MOnep, &
+    & H2SO
     real(kind=8) :: EH2D2LS, EH2D2BBC1, EH2D2BBC2, EH2D2BBC3, EH2D2BBC3M
     real(kind=8) :: MD2_D2SO_D2LSSO, MD2_D2SO_D2BBC1SO, MD2_D2SO_D2BBC2SO, &
 &   MD2_D2SO_D2BBC3SO, MD2_D2SO_D2BBC3MSO
@@ -34,6 +35,8 @@ module declarations
         ! Print debug information
         tstdbg = .true.
         ! tstdbg = .false.
+
+        tstnep = .false.
         
         ! floating-point numbers threshold to consider it 0, i.e.
         ! a -> 0 if a < fthres

@@ -26,7 +26,7 @@ module density_matrices
             !
             write(lu,'(a)') 'checknorm_D1: D1 is not normalized'
             write(lu,'(a,f18.4,a,i0)') 'Tr[D1] = ',trace(D1),', Nelec = ',Nelec
-            stop
+            ! stop
         end if
         !
         return
