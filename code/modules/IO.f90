@@ -148,7 +148,13 @@ module io
             read(nlu,*,iostat=ios) kind, lind, iind, jind, xint
             if (ios /= 0) stop 'read_4D_matrix: Error reading file.'
             if (kind.eq.0 .or. lind.eq.0 .or. iind.eq.0 .or. jind.eq.0) exit
+
+            ! Note: the integrals are written from Dalton in chemistry notation
+            ! xint = (ab|cd) -> <ac|bd>
+            ! in this program, they are stored in braket notation
+            ! TODO
             Amat(iind,jind,kind,lind) = xint
+            ! Amat(iind,kind,jind,lind) = xint
         end do
 
         ! Simetrize the 4D tensor

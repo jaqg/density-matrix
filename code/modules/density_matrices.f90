@@ -32,6 +32,40 @@ module density_matrices
         return
     end subroutine checknorm_D1
 
+    subroutine checknorm_D2(D2, Nelec, thres, lu)
+        implicit none
+        real(kind=8), dimension(:,:,:,:), intent(in) :: D2
+        integer, intent(in) :: Nelec, lu
+        real(kind=8), intent(in) :: thres 
+        !
+        integer :: i, j, n 
+        real(kind=8) :: suma, norma
+
+        n = size(D2,1)
+
+        suma = 0.d0
+        do i=1, n
+            do j = 1, n
+                suma = suma + D2(i,j,i,j)
+            end do
+        end do
+
+        norma = dble(nelec * (nelec - 1)) / 2.d0
+
+        if (suma.lt.norma-thres .or. &
+          & suma.gt.norma+thres) then 
+            !
+            write(lu,'(a)') 'checknorm_D2: D2 is not normalized'
+            write(lu,'(a,f12.4,a,f12.4)') 'sum_{pq} D^(2)_{pqpq} = ',suma,', N(N-1)/2 = ',norma
+            ! stop
+        else
+            write(lu,'(a)') 'checknorm_D2: D2 is normalized'
+            write(lu,'(a,f12.4,a,f12.4)') 'sum_{pq} D^(2)_{pqpq} = ',suma,', N(N-1)/2 = ',norma
+        end if
+        !
+        return
+    end subroutine checknorm_D2
+
     subroutine check_SO_ON(ON)
         !
         ! Subroutine to check that ON is in spin-orbital basis, i.e.
@@ -187,10 +221,20 @@ module density_matrices
             do q = 1, n
                 do r = 1, n
                     do s = 1, n
-                        ! alpha-alpha spin-orbitals
+                        ! ! alpha-alpha spin-orbitals
+                        ! H2SO(2*p-1, 2*q-1, 2*r-1, 2*s-1) = H2MO(p, q, r, s)
+                        ! ! beta-beta spin-orbitals
+                        ! H2SO(2*p, 2*q, 2*r, 2*s) = H2MO(p, q, r, s)
+
+                        ! alpha alpha alpha alpha
                         H2SO(2*p-1, 2*q-1, 2*r-1, 2*s-1) = H2MO(p, q, r, s)
-                        ! beta-beta spin-orbitals
+                        ! beta beta beta beta
                         H2SO(2*p, 2*q, 2*r, 2*s) = H2MO(p, q, r, s)
+                        ! alpha alpha beta beta
+                        H2SO(2*p-1, 2*q-1, 2*r, 2*s) = H2MO(p, q, r, s)
+                        ! beta beta alpha alpha 
+                        H2SO(2*p, 2*q, 2*r-1, 2*s-1) = H2MO(p, q, r, s)
+
                         ! mixed alpha-beta -> 0
                     end do
                 end do
@@ -261,7 +305,9 @@ module density_matrices
             do k = 1, n
                 do j = 1, n
                     do i = 1, n
-                        E2 = E2 + H2(i,j,k,l) * D2(i,j,k,l)
+                        ! TODO
+                        E2 = E2 + D2(i,j,k,l) * H2(k,l,i,j)  ! se supone que es asi
+                        ! E2 = E2 + H2(i,j,k,l) * D2(i,j,k,l) ! pero asi da energias mas cercanas a las aproxs
                     end do
                 end do
             end do

@@ -468,7 +468,9 @@ module BBC
         do i = 1, n
             do j = 1, n
                 ni = ON(i) ; nj = ON(j)
-                sum1 = sum1 + ni * nj * H2(i,i,j,j)
+                ! Coulomb term (pp|qq) -> <pq|pq> 
+                ! (since H2 is stored in Dirac notation)
+                sum1 = sum1 + ni * nj * H2(i,j,i,j)
             end do
         end do
 
@@ -476,12 +478,14 @@ module BBC
         sum2 = 0.d0
         do i = 1, n
             do j = 1, n
+                ! Exchange term (pq|qp) -> <pq|qp> 
+                ! (since H2 is stored in Dirac notation)
                 sum2 = sum2 + GBBC(i,j) * H2(i,j,j,i)
             end do
         end do
 
         ! Compute the energy
-        Eee = 2.d0 * sum1 - 0.5d0 * sum2
+        Eee = 2.d0 * sum1 - sum2
 
         !
     end subroutine Eee_BBC_spacial 

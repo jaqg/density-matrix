@@ -44,8 +44,8 @@ program main
 
     ! Print matrices
     if (tstdbg) then 
-        call print_matrix('D1MO', D1MO(1:6,1:6), ouf, dfmt)    
-        call print_matrix('H1MO', H1MO(1:6,1:6), ouf, dfmt)    
+        call print_matrix('D1MO', D1MO(1:10,1:10), ouf, dfmt)    
+        call print_matrix('H1MO', H1MO(1:10,1:10), ouf, dfmt)    
         if (tstnep) then
             call print_matrix('H1MOnep', H1MOnep(1:6,1:6), ouf, dfmt)    
         end if
@@ -70,6 +70,8 @@ program main
         write(ouf,'(a)') 'D1MO is not diagonal. Diagonalizing...'
         call diag_2D_mat(D1MO, .true., NONMO)
     end if
+
+    ! Print the ONs
     if (tstdbg) then 
         call print_vector('MO occupation numbers:', NONMO, 'row', ouf, '(*(f6.2))')
         write(ouf,'(a)') 'Occupied MO orbitals:'
@@ -83,19 +85,16 @@ program main
         write(ouf,*)
         write(ouf,'(a,f6.2)') 'Tr[D1MO] =', trace(D1MO) ; write(ouf,*)
     end if
+
     ! TODO: implementar que imprima Nelec desde DALTON para poder usarlo aqui
     call checknorm_D1(D1MO, 10, fthres, ouf)
+    call checknorm_D2(D2MO, 10, fthres, ouf)
 
     ! Transform D^(1), D^(2), H1, H2 from MO to spin-orbital basis
     call MO_to_SO_D1(D1MO, D1SO)
     call MO_to_SO_D2(D2MO, D2SO)
     call MO_to_SO_H1(H1MO, H1SO)
     call MO_to_SO_H2(H2MO, H2SO)
-
-    ! TODO: eliminar esto
-    ! TEST: haciendo 0 la parte inactiva (en vez de 2) para hacer el calculo solo con
-    ! la parte activa
-    ! D1MO(1,1) = 0.d0 ; D2MO(1,1,1,1) = 0.d0
 
     if (tstdbg) then 
         call print_matrix('D1SO', D1SO(1:6,1:6), ouf, dfmt) 
@@ -128,6 +127,7 @@ program main
 
     ! TODO: implementar que imprima Nelec desde DALTON para poder usarlo aqui
     call checknorm_D1(D1SO, 10, fthres, ouf)
+    call checknorm_D2(D2SO, 10, fthres, ouf)
 
     ! Compute the non-ee part of the energy: tr[D^(1) H^(1)]
     ! call H1D1_energy(D1MO, H1MO, EH1D1)  ! bueno
@@ -142,11 +142,16 @@ program main
     !   - Exact from the D^(2): EeeD2 = 1/2 sum_{pqrs} (pq|rs) D2_{pqrs}
     ! call Eee_D2(D2MO, H2MO, EH2D2)  ! bueno
     call Eee_D2(D2SO, H2SO, EH2D2)  ! test: deberia dar lo mismo
+    if (tstdbg) then 
+          write(ouf,'(a, f10.4, a)') 'EH2D2 = ', EH2D2, 'a.u.' ; write(ouf,*)
+    end if
+
     !   - Extended LS functional: ELS
     ! TODO: pasar H2MO -> H2SO
     ! TODO: comprobar que H2SO y D2SO estan bien
     call Eee_ELS(NONSO, H2SO, EeeELS)  ! BUENO
     ! call Eee_ELS(NONMO, H2MO, EeeELS)  ! TEST
+
     !   - BB functionals: BBC1, BBC3
     call Eee_BBC('BBC1', NONSO, H2SO, EeeBBC1)  ! BUENO
     call Eee_BBC('BBC2', NONSO, H2SO, EeeBBC2)  ! BUENO
@@ -160,14 +165,15 @@ program main
     ! call Eee_BBC('BBC2', NONMO, H2MO, EeeBBC2)  ! TEST
     ! call Eee_BBC('BBC3', NONMO, H2MO, EeeBBC3)  ! TEST
     ! call Eee_BBC('BBC3M', NONMO, H2MO, EeeBBC3M)  ! TEST
+
     !   - BBCn functionals for spacial orbitals
     call Eee_BBC_spacial('BBC1', NONMO/2.d0, H2MO, EeeBBC1sp)  ! BUENO
     call Eee_BBC_spacial('BBC2', NONMO/2.d0, H2MO, EeeBBC2sp)  ! BUENO
     call Eee_BBC_spacial('BBC3', NONMO/2.d0, H2MO, EeeBBC3sp)  ! BUENO
     call Eee_BBC_spacial('BBC3M', NONMO/2.d0, H2MO, EeeBBC3Msp)  ! BUENO
-    !   - PNOF functionals: PNOF5
-    ! call Eee_PNOF(NONSO, 1.d-16)
 
+    ! TODO: PNOF functionals: PNOF5
+    ! call Eee_PNOF(NONSO, 1.d-16)
 
     ! Compute the total energy for each functional
     call energy(EH1D1, EH2D2, E_exact)
