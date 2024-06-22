@@ -2,4 +2,171 @@
 \section{\textcolor{red}{New hypothesis}} % (fold)
 \label{sec:new-hypothesis}
 % ------------------------------
-\textcolor{red}{(\ldots)}
+
+Because of Hohenberg-Kohn theorems, it should be possible to express $E_0$ in
+terms of $\mat{\oedm}$.
+Then, it should be true that $\mat{\tedm}$ can be written as 
+\begin{equation} \label{eq:myaprox-2rdm-1}
+    \tedm_{pqrs} = 
+    \sum_{ijkl} C_{pqrs,ijkl} \oedm_{ij} \oedm_{kl}
+    .
+\end{equation}
+
+In principle, recalling \cref{eq:tedm-spin-representation}, a similar expression
+for $d_{pqrs}$ should also hold
+\begin{equation} \label{eq:myaprox-d-1}
+    d_{pqrs} = 
+    \sum_{ijkl} C_{pqrs,ijkl}^{\prime} \oedm_{ij} \oedm_{kl}
+    .
+\end{equation}
+
+Then, assuming that we choose a basis diagonalizing $\mat{\oedm}$ 
+\begin{equation} \label{eq:myaprox-diag-1rdm}
+    \oedm_{pq} = \nu_p \delta_{pq}
+    ,
+\end{equation}
+such that $d_{pqrs}$ in \cref{eq:myaprox-d-1} is rewritten as
+\begin{equation} \label{eq:myaprox-d-2}
+    d_{pqrs} = 
+    \sum_{ijkl} C_{pqrs,ijkl}^{\prime} \nu_i \nu_k \delta_{ij} \delta_{kl}
+    =
+    \sum_{ik} C_{pqrs,iikk}^{\prime} \nu_i \nu_k
+    .
+\end{equation}
+
+The energy, expanding the $\frac{1}{2} \PBraket{pq | rs}$ factor of
+\cref{eq:GS-energy-1}, reads
+\begin{equation}
+    E_0 =
+    % \sum_{pq} h_{pq} \oedm_{pq} +
+    % \frac{1}{2} \sum_{pqrs} \PBraket{pq | rs}
+    % \left( d_{pqrs} - \oedm_{ps} \delta_{qr} \right)
+    % =
+    \sum_{pq} h_{pq} \oedm_{pq} +
+    \frac{1}{2} \sum_{pqrs} \PBraket{pq | rs} d_{pqrs}
+    - 
+    \frac{1}{2} \sum_{pqrs} \PBraket{pq | rs} \oedm_{ps} \delta_{qr}
+    \right)
+    ,
+\end{equation}
+and with \cref{eq:myaprox-diag-1rdm,eq:myaprox-d-2}
+\begin{equation}
+    E_0 =
+    \sum_{pq} h_{pq} \nu_p \delta_{pq} +
+    \frac{1}{2} \sum_{pqrs} \sum_{ijkl} \PBraket{pq | rs}
+    C_{pqrs,ijkl}^{\prime} \nu_i \nu_k \delta_{ij} \delta_{kl}
+    - 
+    \frac{1}{2} \sum_{pqrs} \PBraket{pq | rs} \nu_p \delta_{ps} \delta_{qr}
+    .
+\end{equation}
+
+Therefore, the energy is given by
+\begin{equation} \label{eq:myaprox-E0-1}
+    E_0 =
+    % \sum_{pq} h_{pq} \nu_p \delta_{pq} +
+    % \frac{1}{2} \sum_{pqrs} \sum_{ijkl} \PBraket{pq | rs}
+    % C_{pqrs,ijkl}^{\prime} \nu_i \nu_k \delta_{ij} \delta_{kl}
+    % - 
+    % \frac{1}{2} \sum_{pqrs} \PBraket{pq | rs} \oedm_{ps} \delta_{qr}
+    % =
+    \sum_{p} h_{pp} \nu_p +
+    \frac{1}{2} \sum_{pqrs} \lambda_{pqrs} \PBraket{pq | rs}
+    - 
+    \frac{1}{2} \sum_{pq} \PBraket{pq | qp} \nu_p
+    ,
+\end{equation}
+where 
+\begin{equation}
+    \lambda_{pqrs} = \sum_{ij} 
+    C_{pqrs,iijj}^{\prime} \nu_i \nu_j
+    .
+\end{equation}
+
+To this point, no approximation has been made. 
+In fact, $\lambda_{pqrs}$ is simply $d_{pqrs}$ in the chosen natural basis.
+
+A possible parametrization of $\lambda$ proposed by Alfredo might be 
+\begin{equation}
+    \lambda_{pqrs} =
+    \alpha_{pq} \alpha_{rs}
+    -
+    \beta_{ps} \beta_{qr}
+    ,
+\end{equation}
+\textcolor{red}{¿$\alpha_{pq} \equiv \fordm_{pq}^{\alpha}$?}
+
+that, in the natural basis reads
+\begin{equation}
+    \lambda_{pqrs} =
+    \mu_{pr} \nu_p \nu_r \delta_{pq} \delta_{rs}
+    -
+    \mu_{pq}^{\prime} \nu_p \nu_q \delta_{ps} \delta_{qr}
+    ,
+\end{equation}
+
+Then, in \cref{eq:myaprox-E0-1}
+\begin{equation}
+    E_0 =
+    % \sum_{p} h_{pp} \nu_p +
+    % \frac{1}{2} \sum_{pqrs} \lambda_{pqrs} \PBraket{pq | rs}
+    % - 
+    % \frac{1}{2} \sum_{pq} \PBraket{pq | qp} \nu_p
+    % =
+    \sum_{p} h_{pp} \nu_p +
+    \frac{1}{2} \sum_{pqrs} 
+    \mu_{pr} \nu_p \nu_r \delta_{pq} \delta_{rs}
+    \PBraket{pq | rs}
+    -
+    \frac{1}{2} \sum_{pqrs} 
+    \mu_{pq}^{\prime} \nu_p \nu_q \delta_{ps} \delta_{qr}
+    \PBraket{pq | rs}
+    -
+    \frac{1}{2} \sum_{pq} \PBraket{pq | qp} \nu_p
+    ,
+\end{equation}
+and
+\begin{equation}
+    E_0 =
+    \sum_{p} h_{pp} \nu_p +
+    \frac{1}{2} \sum_{pq} 
+    \mu_{pq} \nu_p \nu_q 
+    \PBraket{pp | qq}
+    -
+    \frac{1}{2} \sum_{pq} 
+    \mu_{pq}^{\prime} \nu_p \nu_q
+    \PBraket{pq | qp}
+    -
+    \frac{1}{2} \sum_{pq} \PBraket{pq | qp} \nu_p
+    .
+\end{equation}
+
+Therefore, the ground state energy for this parametrization is given by
+\begin{equation}
+    \therefore
+    E_0 =
+    \sum_{p} h_{pp} \nu_p +
+    \frac{1}{2} \sum_{pq} 
+    \nu_p \nu_q
+    \left[ 
+        \mu_{pq} \PBraket{pp | qq}
+        -
+        \mu_{pq}^{\prime} \PBraket{pq | pq}
+    \right]
+    -
+    \frac{1}{2} \sum_{pq} 
+    \PBraket{pq | pq} \nu_p
+    ,
+\end{equation}
+and the 2-RDM by 
+\begin{equation}
+    \therefore
+    \tedm_{pqrs} =
+    \mu_{pr} \nu_p \nu_r \delta_{pq} \delta_{rs}
+    -
+    \mu_{pq}^{\prime} \nu_p \nu_q \delta_{ps} \delta_{qr}
+    -
+    \nu_p \delta_{qr} \delta_{ps}
+    .
+\end{equation}
+
+% TODO: comentar N-representabilidad en base MO

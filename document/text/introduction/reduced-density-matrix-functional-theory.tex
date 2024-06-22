@@ -97,10 +97,14 @@ form\mycite{coleman1963structure} and read:
             .
         \end{equation}
         
-    \item $\fordm$ is assumed to be normalized to a number of electrons, $n$.
+    \item By the Löwdin's normalization convention\mycite{lowdin1955quantum},
+        $\fordm$ is assumed to be normalized to a number of electrons, $n$.
         Therefore, the natural occupancies sum up to $n$  
         \begin{equation} \label{ec:normalization-condition}
-            \sum_{p} n_p = n
+            \trace \left[ \fordm \right] =
+            \sum_{p} \fordm_{pp} =
+            \sum_{p} n_p =
+            n
             .
         \end{equation}
 

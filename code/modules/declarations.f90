@@ -2,54 +2,57 @@
 ! | Author: Jose Antonio Quinonero Gris        |
 ! | Creation date: Tuesday 09:11:31 16/01/2024 |
 ! +--------------------------------------------+
-module declarations 
-    ! 
-    ! Module to declare variables
-    !
-    implicit none
-    logical :: tstdbg, tstnep, diag
-    integer :: i, j 
-    integer :: termwidth, ouf, pmatsize, minkord
-    character(len=80) :: d1fn, d2fn, h1fn, h2fn, nepfn, dfmt
-    real(kind=8) :: fthres 
-    real(kind=8) :: EH1D1, EH2D2, E_exact
-    real(kind=8) :: EeeELS, EeeBBC1, EeeBBC2, EeeBBC3, EeeBBC3M
-    real(kind=8) :: EeeBBC1sp, EeeBBC2sp, EeeBBC3sp, EeeBBC3Msp 
-    real(kind=8) :: EELS, EBBC1, EBBC2, EBBC3, EBBC3M
-    real(kind=8) :: EBBC1sp, EBBC2sp, EBBC3sp, EBBC3Msp 
-    real(kind=8), dimension(:), allocatable :: NONMO, NONSO 
-    real(kind=8), dimension(:,:), allocatable :: D1MO, D1SO, H1MO, H1MOnep, H1SO
-    real(kind=8), dimension(:,:,:,:), allocatable :: D2MO, D2SO, H2MO, H2MOnep, &
-    & H2SO
-    real(kind=8) :: EH2D2LS, EH2D2BBC1, EH2D2BBC2, EH2D2BBC3, EH2D2BBC3M
-    real(kind=8) :: MD2_D2SO_D2LSSO, MD2_D2SO_D2BBC1SO, MD2_D2SO_D2BBC2SO, &
-&   MD2_D2SO_D2BBC3SO, MD2_D2SO_D2BBC3MSO
-    real(kind=8), dimension(:,:,:,:), allocatable :: D2LSSO, D2BBC1SO, &
-&   D2BBC2SO, D2BBC3SO, D2BBC3MSO
-
-    contains
-
-    subroutine parameters
+module declarations
+   ! 
+   ! Module to declare variables
+   !
+   implicit none
+   !
+   logical :: tstdbg
+   !
+   character(len=8) :: stars(3), label
+   character(len=80) :: rfmt, dfmt, intfn, sirifn
+   !
+   integer(kind=8) :: i, j, k, l, n, m
+   integer :: ierr, ouf, intlu, sirilu, termwidth, pmatsize, minkord 
+   integer(kind=8) :: ij, ispin, istate, koff, lsym, ms2, n2orbt, &
+   & nacorb, nactel, nasht, nbast, ncdets, ncmot, nconf, ni, ninorb, nisht, &
+   & nj, nnashx, nnashy, nnorbt, nocct, norbt, nseorb, nsym, nu, numorb, &
+   & nv, nwoph, nwopt, nx, ny, nelec
+   integer(kind=8) :: p,q,r,s,u,v,x,y,uv,xy
+   integer(kind=4) :: norb 
+   !
+   real(kind=8) :: fthres
+   real(kind=8) :: eact, eact1, eact2, siri_eactiv, eina, siri_emcscf, siri_einactiv, erract, &
+   & errina, repnuc, siri_repnuc, xint
+   real(kind=8) :: E_act, E_ina, E_cross, E_elec, E_MCSCF 
+   real(kind=8) :: Eoe_ina, Eee_ina, Eoe_act, Eee_act, Eee_cross, Eoe, Eee
+   !
+   real(kind=8), allocatable, dimension (:,:) :: oneint, den1, H1MO, D1MO
+   real(kind=8), allocatable, dimension (:,:,:,:) :: twoint, rdm2, H2MO, D2MO
+   real(kind=8), allocatable, dimension (:,:) :: fockin
+   real(kind=8), allocatable, dimension (:) :: qmat, scr
+   !
+   contains
+       subroutine parameters
         implicit none
 
         ! Print debug information
-        tstdbg = .true.
-        ! tstdbg = .false.
+        tstdbg = .false.
 
-        tstnep = .false.
-        
         ! floating-point numbers threshold to consider it 0, i.e.
         ! a -> 0 if a < fthres
         fthres = 1.d-10
 
         ! Width of the terminal/file to be written on
-        termwidth = 46
+        termwidth = 60
 
         ! Logic unit of the output file
         ouf = 6
 
         ! D format
         dfmt = '(*(d10.2))'
+        rfmt = '(*(f10.4))'
 
         ! Matrix size to print: print A(1:pmatsize,1:pmatsize)
         pmatsize = 4
@@ -59,6 +62,5 @@ module declarations
 
         return
     end subroutine parameters 
-
-    !
-end module declarations 
+ 
+end module declarations

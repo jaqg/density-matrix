@@ -14,7 +14,279 @@ module density_matrices
     implicit none
     !
     contains
-    
+
+    subroutine calc_casscf_dalton
+        write(ouf,'(a)') 'Energy calculated with Dalton algorithm for Fock matrix:'
+        !
+        !     1) Inactive Fock matrix
+        !        iF(m,n) = h(m,n) + 2 (mn|ii) - (mi|in)
+        !
+        allocate(fockin(norb,norb),stat=ierr)
+        if (ierr .ne. 0) stop 'calc_casscf_dalton: Error in allocation of fockin'
+        !
+        do m = 1,norbt
+            do n = 1,norbt
+                fockin(m,n) = H1MO(m,n)
+                do i = 1,nisht
+                    fockin(m,n) = fockin(m,n) &
+                    &                     + 2.d0*H2MO(m,n,i,i) - H2MO(m,i,i,n)
+                end do
+            end do
+        end do
+        !
+        !     2) Ein = h(i,i) + iF(i,i) 
+        !
+        eina = 0.d0
+        do i = 1,nisht
+            eina = eina + H1MO(i,i) + fockin(i,i)
+        end do
+        errina = abs(eina-siri_einactiv)
+        write(ouf,'(a,2f16.10)') 'Inactive energy, error :',eina,errina
+        !
+        !     3) Cross contribution: Eac1 = D(u,v) iF(u,v)
+        !
+        eact1 = 0.d0
+        do u = 1,nasht
+            nu = nisht + u
+            do v = 1,nasht
+                nv = nisht + v
+                eact1 = eact1 + D1MO(nu,nv) * fockin(nu,nv)
+            end do
+        end do
+        !
+        !     4) Q contribution: 0.5 Q(u,u)
+        !        Q(p,u) = PV(uv,xy) (pv|xy)  (construct only diagonal)
+        !
+        allocate(qmat(nasht),stat=ierr)
+        if (ierr .ne. 0) stop 'Error in allocation of qmat'
+        qmat = 0.d0
+        !
+        do y = 1,nasht
+            ny = nisht + y
+            do x = 1,nasht
+                nx = nisht + x
+                xy = indij(x,y)
+                do v = 1,nasht
+                    nv = nisht + v
+                    do u = 1,nasht
+                        nu = nisht + u
+                        uv = indij(u,v)
+                        !
+                        koff = nnashx*(xy-1) + uv
+                        qmat(u) = qmat(u) + scr(koff)*H2MO(nu,nv,nx,ny)
+                    end do
+                end do
+            end do
+        end do
+        deallocate(scr)
+        !
+        eact2 = 0.d0
+        do u = 1,nasht
+            eact2 = eact2 + qmat(u)
+        end do
+        eact2 = 0.5d0 * eact2
+        !
+        eact   = eact1 + eact2
+        erract = abs(siri_eactiv-eact)
+        write(ouf,'(a,2f16.10)') 'Cross contribution     :',eact1
+        write(ouf,'(a,2f16.10)') 'Qmat contribution      :',eact2
+        write(ouf,'(a,2f16.10,/)') 'Active energy, error   :',eact,erract
+        call flush(ouf)
+    end subroutine calc_casscf_dalton
+
+    subroutine calc_Eoe(D1, H1, nisht, nasht, eina, eact, Eoe)
+        implicit none
+        real(kind=8), dimension(:,:), intent(in) :: D1, H1 
+        integer(kind=8), intent(in) :: nisht, nasht 
+        real(kind=8), intent(out) :: eina, eact, Eoe
+        !
+        integer(kind=8) :: i, j, u, nu, v, nv 
+        !
+        ! Inactive energy
+        !
+        eina = 0.d0
+        do j = 1,nisht
+            do i = 1,nisht
+                eina = eina + D1(i,j) * H1(i,j)
+            end do
+        end do
+        !
+        ! Active energy
+        !
+        eact = 0.d0
+        do v = 1,nasht              ! Actually, this should go to 4)
+            nv = nisht + v           ! But here it is easier to debug
+            do u = 1,nasht
+                nu = nisht + u
+                eact = eact + D1(nu,nv) * H1(nu,nv)
+            end do
+        end do
+
+        Eoe = eina + eact
+
+        !
+    end subroutine calc_Eoe
+
+    subroutine calc_Eee(D2, H2, nisht, nasht, eina, eact, ecross, Eee)
+        implicit none
+        real(kind=8), dimension(:,:,:,:), intent(in) :: D2, H2 
+        integer(kind=8), intent(in) :: nisht, nasht 
+        real(kind=8), intent(out) :: eina, eact, ecross, Eee
+        !
+        integer(kind=8) :: i, j, k, l, u, nu, v, nv, x, nx, y, ny 
+        !
+        ! Inactive energy
+        !
+        eina = 0.d0
+        do l = 1,nisht
+            do k = 1,nisht
+                do j = 1,nisht
+                    do i = 1,nisht
+                        eina = eina + D2(i,j,k,l) * H2(i,j,k,l)
+                    end do
+                end do
+            end do
+        end do
+        !
+        ! Inactive-active energy
+        !
+        ecross = 0.d0
+        do j = 1,nisht
+            do i = 1,nisht
+                do v = 1,nasht
+                    nv = nisht + v
+                    do u = 1,nasht
+                        nu = nisht + u
+                        ecross = ecross + D2MO(nu,nv,i,j) * H2MO(nu,nv,i,j)
+                    end do
+                end do
+            end do
+        end do
+        !
+        do v = 1,nasht
+            nv = nisht + v
+            do i = 1,nisht
+                do j = 1,nisht
+                    do u = 1,nasht
+                        nu = nisht + u
+                        ecross = ecross + D2MO(nu,j,i,nv) * H2MO(nu,j,i,nv)
+                    end do
+                end do
+            end do
+        end do
+        !
+        ! Active energy
+        !
+        eact = 0.d0
+        do y = 1,nasht
+            ny = nisht + y
+            do x = 1,nasht
+                nx = nisht + x
+                do v = 1,nasht
+                    nv = nisht + v
+                    do u = 1,nasht
+                        nu = nisht + u
+                        eact = eact + D2MO(nu,nv,nx,ny)*H2MO(nu,nv,nx,ny)
+                    end do
+                end do
+            end do
+        end do
+
+        Eee = eina + ecross + eact
+
+        !
+    end subroutine calc_Eee
+
+    subroutine calc_casscf_nonsymmetric
+        write(ouf,'(a)') 'Densities algorithm (Alfredo):'
+        !
+        ! Inactive energy
+        !
+        eina = 0.d0
+        do j = 1,nisht
+            do i = 1,nisht
+                eina = eina + D1MO(i,j) * H1MO(i,j)
+            end do
+        end do
+        !
+        do l = 1,nisht
+            do k = 1,nisht
+                do j = 1,nisht
+                    do i = 1,nisht
+                        eina = eina + D2MO(i,j,k,l) * H2MO(i,j,k,l)
+                    end do
+                end do
+            end do
+        end do
+        !
+        errina = abs(eina-siri_einactiv)
+        write(ouf,'(a,2f16.10)') 'Inactive energy, error :',eina,errina
+        call flush(ouf)
+        !
+        !     3) Active-inactive contribution
+        !
+        eact1 = 0.d0
+        do v = 1,nasht              ! Actually, this should go to 4)
+            nv = nisht + v           ! But here it is easier to debug
+            do u = 1,nasht
+                nu = nisht + u
+                eact1 = eact1 + D1MO(nu,nv) * H1MO(nu,nv)
+            end do
+        end do
+        !
+        do j = 1,nisht
+            do i = 1,nisht
+                do v = 1,nasht
+                    nv = nisht + v
+                    do u = 1,nasht
+                        nu = nisht + u
+                        eact1 = eact1 + D2MO(nu,nv,i,j) * H2MO(nu,nv,i,j)
+                    end do
+                end do
+            end do
+        end do
+        !
+        do v = 1,nasht
+            nv = nisht + v
+            do i = 1,nisht
+                do j = 1,nisht
+                    do u = 1,nasht
+                        nu = nisht + u
+                        eact1 = eact1 + D2MO(nu,j,i,nv) * H2MO(nu,j,i,nv)
+                    end do
+                end do
+            end do
+        end do
+        !
+        write(ouf,'(a,2f16.10)') 'act-ina contribution   :',eact1
+        call flush(ouf)
+        !
+        !     4) Active-active contribution
+        !
+        eact2 = 0.d0
+        do y = 1,nasht
+            ny = nisht + y
+            do x = 1,nasht
+                nx = nisht + x
+                do v = 1,nasht
+                    nv = nisht + v
+                    do u = 1,nasht
+                        nu = nisht + u
+                        eact2 = eact2 + D2MO(nu,nv,nx,ny)*H2MO(nu,nv,nx,ny)
+                    end do
+                end do
+            end do
+        end do
+        !
+        write(ouf,'(a,2f16.10)') 'act-act contribution   :',eact2
+        call flush(ouf)
+        !
+        eact   = eact1 + eact2
+        erract = abs(siri_eactiv-eact)
+        write(ouf,'(a,2f16.10)') 'Active energy, error   :',eact,erract
+        call flush(ouf)
+    end subroutine calc_casscf_nonsymmetric
+
     subroutine checknorm_D1(D1, Nelec, thres, lu)
         implicit none
         real(kind=8), dimension(:,:), intent(in) :: D1
@@ -22,11 +294,14 @@ module density_matrices
         real(kind=8), intent(in) :: thres 
         !
         if (trace(D1).lt.dble(Nelec)-thres .or. &
-          & trace(D1).gt.dble(Nelec)+thres) then 
+            & trace(D1).gt.dble(Nelec)+thres) then 
             !
             write(lu,'(a)') 'checknorm_D1: D1 is not normalized'
             write(lu,'(a,f18.4,a,i0)') 'Tr[D1] = ',trace(D1),', Nelec = ',Nelec
-            ! stop
+            stop
+        else
+            write(lu,'(a)') 'checknorm_D1: D1 is normalized'
+            write(lu,'(a,f18.4,a,i0)') 'Tr[D1] = ',trace(D1),', Nelec = ',Nelec
         end if
         !
         return
@@ -53,10 +328,11 @@ module density_matrices
         norma = dble(nelec * (nelec - 1)) / 2.d0
 
         if (suma.lt.norma-thres .or. &
-          & suma.gt.norma+thres) then 
+            & suma.gt.norma+thres) then 
             !
             write(lu,'(a)') 'checknorm_D2: D2 is not normalized'
             write(lu,'(a,f12.4,a,f12.4)') 'sum_{pq} D^(2)_{pqpq} = ',suma,', N(N-1)/2 = ',norma
+            ! TODO: descomentar el stop
             ! stop
         else
             write(lu,'(a)') 'checknorm_D2: D2 is normalized'
@@ -66,6 +342,34 @@ module density_matrices
         return
     end subroutine checknorm_D2
 
+    subroutine symmetrize_D2(D2, D2sym)
+        !
+        ! Subroutine to symmetrize the 2-RDM
+        !
+        implicit none
+        real(kind=8), dimension(:,:,:,:), intent(in) :: D2
+        real(kind=8), dimension(:,:,:,:), allocatable, intent(out) :: D2sym
+        !
+        integer :: i, j, k, l, n, ierr 
+
+        n = size(D2, dim=1)
+        allocate(D2sym(n,n,n,n), stat=ierr)
+        if (ierr .ne. 0) stop 'symmetrize_D2: Error in allocation of D2sym'
+
+        do i = 1, n
+            do j = 1, n
+                do k = 1, n
+                    do l = 1, n
+                        D2sym(i,j,k,l) = 0.5d0 * (D2(i,j,k,l) + D2(j,i,k,l))
+                    end do
+                end do
+            end do
+        end do
+
+        !
+        return
+    end subroutine symmetrize_D2 
+
     subroutine check_SO_ON(ON)
         !
         ! Subroutine to check that ON is in spin-orbital basis, i.e.
@@ -74,13 +378,13 @@ module density_matrices
         implicit none
         real(kind=8), dimension(:), intent(in) :: ON
         integer :: i 
-         
+
         do i = 1, size(ON)
             if (ON(i).gt.1.d0) then
                 stop 'check_SO_ON: Error: ON(i) > 1'
             end if
         end do
-         
+
         return
     end subroutine check_SO_ON 
 
@@ -98,8 +402,8 @@ module density_matrices
         ! Get size of the matrix & asure it is square
         n = size(AMO, dim=1)
         if (n .ne. size(AMO, dim=2)) &
-        & stop 'MO_to_SO_D1: Error: input matrix not square'
-        
+            & stop 'MO_to_SO_D1: Error: input matrix not square'
+
         ! Allocate ASO
         allocate(ASO(2*n, 2*n), stat=ierr)
         if (ierr .ne. 0) stop 'MO_to_SO_D1: Error in allocation of ASO'
@@ -115,7 +419,7 @@ module density_matrices
                 ASO(2*i, 2*j) = 0.5d0 * AMO(i, j)      ! beta-beta
             end do
         end do
-        
+
         !
         return
     end subroutine MO_to_SO_D1 
@@ -134,10 +438,10 @@ module density_matrices
         ! Get size of the matrix & asure it is square
         n = size(AMO, dim=1)
         if (n .ne. size(AMO, dim=2) .or. &
-          & n .ne. size(AMO, dim=3) .or. &
-          & n .ne. size(AMO, dim=4) ) &
-          & stop 'MO_to_SO_D2: Error: input matrix not square'
-        
+            & n .ne. size(AMO, dim=3) .or. &
+            & n .ne. size(AMO, dim=4) ) &
+            & stop 'MO_to_SO_D2: Error: input matrix not square'
+
         ! Allocate ASO
         allocate(ASO(2*n, 2*n, 2*n, 2*n), stat=ierr)
         if (ierr .ne. 0) stop 'MO_to_SO_D2: Error in allocation of ASO'
@@ -157,7 +461,7 @@ module density_matrices
                 end do
             end do
         end do
-        
+
         !
         return
     end subroutine MO_to_SO_D2 
@@ -176,7 +480,7 @@ module density_matrices
         ! Check for inconsistencies in the dimensions
         n = size(H1MO, dim=1)
         if (n.ne.size(H1MO, dim=2)) &
-        & stop 'MO_to_SO_H1: Error: Inconsistent dimensions'
+            & stop 'MO_to_SO_H1: Error: Inconsistent dimensions'
 
         allocate(H1SO(2*n, 2*n), stat=ierr)
         if (ierr .ne. 0) stop 'MO_to_SO_H1: Error in allocation of H1SO'
@@ -209,9 +513,9 @@ module density_matrices
         ! Check for inconsistencies in the dimensions
         n = size(H2MO, dim=1)
         if (n.ne.size(H2MO, dim=2) .or. &
-        &   n.ne.size(H2MO, dim=3) .or. &
-        &   n.ne.size(H2MO, dim=4)) &
-        & stop 'MO_to_SO_H2: Error: Inconsistent dimensions'
+            &   n.ne.size(H2MO, dim=3) .or. &
+            &   n.ne.size(H2MO, dim=4)) &
+            & stop 'MO_to_SO_H2: Error: Inconsistent dimensions'
 
         allocate(H2SO(2*n, 2*n, 2*n, 2*n), stat=ierr)
         if (ierr .ne. 0) stop 'MO_to_SO_H2: Error in allocation of H2SO'
@@ -262,7 +566,7 @@ module density_matrices
         ! Get the dimensions
         n = size(D1,1)
         if (n.ne.size(D1,2) .or. n.ne.size(H1,1) .or. n.ne.size(H1,2)) &
-        & stop 'H1D1_energy: Error: Inconsistent dimensions'
+            & stop 'H1D1_energy: Error: Inconsistent dimensions'
 
         ! Compute the sum
         E1 =  0.d0
@@ -296,7 +600,7 @@ module density_matrices
         n1 = size(D2,1) ; n2 = size(D2,2) ; n3 = size(D2,3) ; n4 = size(D2,4)
         m1 = size(H2,1) ; m2 = size(H2,2) ; m3 = size(H2,3) ; m4 = size(H2,4)
         if (n1.ne.m1 .or. n2.ne.m2 .or. n3.ne.m3 .or. n4.ne.m4) &
-        & stop 'HF_energy: Error: Inconsistent dimensions'
+            & stop 'HF_energy: Error: Inconsistent dimensions'
         n = n1
 
         ! Compute the sum
@@ -315,79 +619,15 @@ module density_matrices
 
         ! Compute the energy
         E2 = 0.5d0 * E2
-        
+
         !
         return
     end subroutine Eee_D2 
 
-    ! subroutine Eee_PNOF(ON, thres)
-    !     implicit none
-    !     real(kind=8), dimension(:), intent(in) :: ON
-    !     real(kind=8), intent(in) :: thres 
-    !     !
-    !     integer :: ierr, i, j, n, occON
-    !     real(kind=8), dimension(:), allocatable :: ONaux, ONred
-    !     real(kind=8), dimension(:,:), allocatable :: pairs
-    !
-    !     !
-    !     ! For PNOF5:
-    !     !
-    !     ! Extract the density matrix only with occupied orbitals, i.e.
-    !     ! D'_ij <- D^(1)_ij > 0
-    !     ! which, for the ON vector read
-    !     ! ON'_i <- ON_i > 0
-    !     ! Get dimensions of D1
-    !     n = size(ON)
-    !     allocate(ONaux(n), stat=ierr)
-    !     if (ierr .ne. 0) stop 'Eee_PNOF: Error in allocation of ONaux'
-    !     ONaux = 0.d0
-    !     occON = 1
-    !     do i = 1, n
-    !         if (ON(i).gt.thres) then
-    !             ONaux(occON) = ON(i)
-    !             occON = occON + 1
-    !         end if
-    !     end do
-    !     ! Store these ON in ON red
-    !     allocate(ONred(2*occON), stat=ierr)
-    !     if (ierr .ne. 0) stop 'Eee_PNOF: Error in allocation of ONred'
-    !     do i = 1, occON
-    !         ONred(i) = ONaux(i)/2.d0
-    !         ONred(2*occON-i+1) = ONaux(i)/2.d0
-    !     end do
-    !
-    !     write(*,*) 'Number of occupied orbitals:', occON
-    !     write(*,*) 'ONred:'
-    !     write(*,*) ONred
-    !     write(*,*) 'sum(ON):', sum(ONred)
-    !
-    !     ! Divide D' into N/2 pairs fulfilling
-    !     ! np + nq = 1 with p,q coupled orbitals in a pair P
-    !     ! for an element of D' find another element such that its sum = 1
-    !     ! and store them in a pair P
-    !     ! remove those orbitals and loop over D' until finding all P pairs
-    !     allocate(pairs(2,occON), stat=ierr)
-    !     if (ierr .ne. 0) stop 'Eee_PNOF: Error in allocation of pairs'
-    !     pairs = 0.d0
-    !     ! each pair P is stored as a column in 'pairs'
-    !     P = 1
-    !     pairs(1,P) = ONred(P)
-    !     pair_indeces = 
-    !     do i = 2, 2*occON
-    !         if (  (ONred(i) + pairs(i,P) > 1.d0 - thres) .or. &
-    !             & (ONred(i) + pairs(i,P) < 1.d0 + thres)) then
-    !             pairs(2,P) = ONred(i)
-    !             P = P + 1
-    !         end if
-    !     end do
-    !     
-    !
-    !     ! Compute EeePNOF5
-    !     !
-    !     return
-    ! end subroutine Eee_PNOF 
-
     subroutine energy(E1, E2, Etot)
+        !
+        ! Subroutine to compute the total energy as a function of E_oe, E_ee:
+        !
         implicit none
         real(kind=8), intent(in) :: E1, E2
         real(kind=8), intent(out) :: Etot
@@ -396,6 +636,86 @@ module density_matrices
         !
         return
     end subroutine energy 
+
+    subroutine IA_energy(D1, D2, H1, H2, ninac, nac, Einac, Eac)
+        !
+        ! Subroutine to compute the inactive and active energies
+        !
+        implicit none
+        real(kind=8), dimension(:,:), intent(in) :: D1, H1
+        real(kind=8), dimension(:,:,:,:), intent(in) :: D2, H2
+        integer, intent(in) :: ninac, nac
+        real(kind=8), intent(out) :: Einac, Eac
+        !
+        integer :: n, ierr 
+        real(kind=8) :: E1inac, E2inac, E1ac, E2ac
+        real(kind=8), dimension(:,:), allocatable :: D1inac, H1inac, D1ac, H1ac 
+        real(kind=8), dimension(:,:,:,:), allocatable :: D2inac, H2inac, D2ac, H2ac 
+
+        !
+        ! Extract the inactive block
+        !
+        allocate(D1inac(ninac,ninac), stat=ierr)
+        if (ierr .ne. 0) stop 'IA_energy: Error in allocation of D1inac'
+        !
+        allocate(H1inac(ninac,ninac), stat=ierr)
+        if (ierr .ne. 0) stop 'IA_energy: Error in allocation of H1inac'
+        !
+        allocate(D2inac(ninac,ninac,ninac,ninac), stat=ierr)
+        if (ierr .ne. 0) stop 'IA_energy: Error in allocation of D2inac'
+        !
+        allocate(H2inac(ninac,ninac,ninac,ninac), stat=ierr)
+        if (ierr .ne. 0) stop 'IA_energy: Error in allocation of H2inac'
+        !
+        D1inac = D1(1:ninac, 1:ninac)
+        H1inac = H1(1:ninac, 1:ninac)
+        D2inac = D2(1:ninac, 1:ninac, 1:ninac, 1:ninac)
+        H2inac = H2(1:ninac, 1:ninac, 1:ninac, 1:ninac)
+
+        !
+        ! Extract the active block
+        !
+        allocate(D1ac(nac,nac), stat=ierr)
+        if (ierr .ne. 0) stop 'IA_energy: Error in allocation of D1ac'
+        !
+        allocate(H1ac(nac,nac), stat=ierr)
+        if (ierr .ne. 0) stop 'IA_energy: Error in allocation of H1ac'
+        !
+        allocate(D2ac(nac,nac,nac,nac), stat=ierr)
+        if (ierr .ne. 0) stop 'IA_energy: Error in allocation of D2ac'
+        !
+        allocate(H2ac(nac,nac,nac,nac), stat=ierr)
+        if (ierr .ne. 0) stop 'IA_energy: Error in allocation of H2ac'
+        !
+        n = ninac + nac
+        D1ac = D1(ninac+1:n, ninac+1:n)
+        H1ac = H1(ninac+1:n, ninac+1:n)
+        D2ac = D2(ninac+1:n, ninac+1:n, ninac+1:n, ninac+1:n)
+        H2ac = H2(ninac+1:n, ninac+1:n, ninac+1:n, ninac+1:n)
+
+        !
+        ! Inactive energy:
+        !
+        ! Compute E_oe
+        call H1D1_energy(D1inac, H1inac, E1inac)
+        ! Compute E_ee
+        call Eee_D2(D2inac, H2inac, E2inac)
+        ! Compute total energy
+        call energy(E1inac, E2inac, Einac)
+
+        !
+        ! Active energy:
+        !
+        ! Compute E_oe
+        call H1D1_energy(D1ac, H1ac, E1ac)
+        ! Compute E_ee
+        call Eee_D2(D2ac, H2ac, E2ac)
+        ! Compute total energy
+        call energy(E1ac, E2ac, Eac)
+
+        !
+        return
+    end subroutine IA_energy
 
     subroutine Minkowski_distance_4D(p, D2, D2p, d)
         !
@@ -427,8 +747,8 @@ module density_matrices
         np3 = size(D2p, dim=3) ; np4 = size(D2p, dim=4)
         n = n1
         if (n.ne.n2 .or. n.ne.n3 .or. n.ne.n4 .or. &
-           &n.ne.np1 .or. n.ne.np2 .or. n.ne.np3 .or. n.ne.np4) &
-        & stop 'ERROR Minkowski_distance_4D: Inconsistent dimensions'
+            &n.ne.np1 .or. n.ne.np2 .or. n.ne.np3 .or. n.ne.np4) &
+            & stop 'ERROR Minkowski_distance_4D: Inconsistent dimensions'
 
         ! Compute the sum
         d = 0.d0
@@ -444,9 +764,40 @@ module density_matrices
 
         ! Compute the distance
         d = d**(1.d0/dble(p))
-        
+
         !
         return
     end subroutine Minkowski_distance_4D 
+
+    subroutine D1_from_D2(D2, nelec, D1)
+        !
+        ! Reconstruct D^(1) form D^(2) as
+        ! D1_{ik} = 2/(N-1) sum_j D2_{ijkj}
+        !
+        implicit none
+        real(kind=8), dimension(:,:,:,:), intent(in) :: D2
+        integer, intent(in) :: nelec 
+        real(kind=8), dimension(:,:), allocatable, intent(out) :: D1
+        !
+        integer :: i, j, k, n, ierr
+        real(kind=8) :: suma 
+
+        n = size(D2, dim=1)
+        allocate(D1(n,n), stat=ierr)
+        if (ierr .ne. 0) stop 'D1_from_D2: Error in allocation of D1'
+
+        suma = 0.d0
+        do i = 1, n
+            do k = 1, n
+                do j = 1, n
+                    suma = suma + D2(i,j,k,j)
+                end do
+                D1(i,k) = 2.d0/dble(nelec-1) * suma
+            end do
+        end do
+
+        !
+        return
+    end subroutine D1_from_D2 
 
 end module density_matrices 
