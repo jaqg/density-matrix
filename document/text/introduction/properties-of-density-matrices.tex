@@ -266,12 +266,12 @@ Then, due to the two-particle nature of the electron interaction functional
 given in \cref{ec:ee-functional}, the contraction of the 2-RDM matrix components,
 $\tedm_{pqrs}$, with two-electron integrals $\PBraket{pq | rs}$, the
 electronic repulsion energy $E_{\text{ee}}$ may be approximated as
-\begin{equation}
+\begin{equation} \label{eq:Eee_from_Gamma}
     E_{\text{ee}} \left[ \fordm \right]
     =
     \frac{1}{2} \sum_{pqrs}
     \sordm_{pqrs}\left[ \left\{ n_t \right\} \right] 
-    \Braket{rs | pq}
+    \Braket{pq | rs}
     ,
 \end{equation}
 where the 2-RDM is formally defined as 
@@ -356,7 +356,7 @@ It can be simply denoted as pair occupations, and fulfill the following conditio
 The $ \mat{T}$ matrix for a state with a single ON vector, $\Ket{k}$, has a 
 straightforward diagonal form and may be constructed directly from the one-
 electron density matrix as
-\begin{equation}
+\begin{equation} \label{eq:T_from_D1s}
     T_{pq,rs}^{\Ket{k}} = D_{pq}^{\Ket{k}} D_{qs}^{\Ket{k}}
     .
 \end{equation}
@@ -364,6 +364,15 @@ electron density matrix as
 % may be obtained directly from the one-electron density matrix.
 Similarly, the one-electron density matrix can be used to obtain the 
 expectation value of any one or two-electron operator.
+
+Also, the 1-RDM can be reconstructed from the 2-RDM by taking the trace of the
+2-RDM over one of the indices, i.e. summing over all the possible remaining
+electrons after selecting one 
+\begin{equation}
+    \oedm_{pq} =
+    \frac{1}{N-1} \sum_{r} \tedm_{prqr}
+    .
+\end{equation}
 
 % This observation is consistent with the picture of an uncorrelated description
 % of the electronic system where the simultaneoys occupations of pairs of spin

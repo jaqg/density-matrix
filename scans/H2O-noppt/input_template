@@ -1,0 +1,6 @@
+# Folder containing the files
+folder
+# Name of the SIRIFC file
+SIRIFC
+# Name of the file containing one- and two-electron integrals
+molecule.fmt
