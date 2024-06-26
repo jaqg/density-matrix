@@ -55,6 +55,8 @@ module matmod
 
         desc_vec = vec
         if (sort) then
+            write(*,'(a)') &
+            & 'WARNING: asure_descending: Vector not in descending order'
             ! Apply the Bubble Sort algorithm
             do i = 1, n-1
                 do j = 1, n-i
@@ -173,8 +175,9 @@ module matmod
         allocate(EVvec_aux(n), stat=ierr)
         if (ierr .ne. 0) stop 'diag_2D_mat: Error in allocation of EVvec_aux'
         
+        ! TODO: implementar la subrutina de jacobi
+
         ! Call the diagonalization subroutine
-        ! checkear dsyevd
         CALL DSYEV( 'V', 'U', n, Aaux, n, EVvec_aux, work, lwork, info )
         if (info.lt.0) then 
             write(*,'(a,i0,a)') 'diag_2D_mat: Error: the ',info, &

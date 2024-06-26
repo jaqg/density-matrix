@@ -4,6 +4,19 @@ module BBC
     implicit none
     contains
 
+    real(kind=8) function kronecker(i,j)
+        implicit none
+        integer, intent(in) :: i,j
+    
+        if (i .eq. j) then
+            kronecker = 1.d0
+        else
+            kronecker = 0.d0
+        end if
+    
+    end function kronecker 
+
+
     function is_weak(np) result(isweak)
         !
         ! Function to check if p is a weakly occupied orbital based on np
@@ -433,20 +446,21 @@ module BBC
         !
     end subroutine Eee_BBC 
 
-    subroutine Eee_BBC_spacial(level, ON, H2, Eee)
+    subroutine calc_Eee_BBC(level,ON,H2,nisht,nasht,eina,eact,ecross,Eee)
         !
         ! Subroutine to compute the Eee for the BBCn approximations in
-        ! the spacial orbital basis with
+        ! the spin-orbital basis with
         ! 0 <= np <= 1 forall p
         !
         implicit none
         character(len=*), intent(in) :: level 
         real(kind=8), dimension(:), intent(in) :: ON
         real(kind=8), dimension(:,:,:,:), intent(in) :: H2
-        real(kind=8), intent(out) :: Eee
+        integer(kind=8), intent(in) :: nisht, nasht 
+        real(kind=8), intent(out) :: eina, eact, ecross, Eee
         !
-        integer :: i, j, n
-        real(kind=8) :: sum1, sum2, ni, nj
+        integer(kind=8) :: n, i, j, u, uu, v, vv
+        real(kind=8) :: ni, nj, nu, nv
         real(kind=8), dimension(:,:), allocatable :: GBBC 
 
         ! Check for inconsistencies in the dimensions
@@ -458,34 +472,200 @@ module BBC
             & stop 'Eee_BBC: Error: Inconsistent dimensions'
 
         ! Check that ON is in spin-orbital basis
-        call check_SO_ON(ON)
+        ! call check_SO_ON(ON)
 
         ! Compute the GBBC matrix
         call calc_GBBC(level, ON, GBBC)
 
-        ! Compute first sum
-        sum1 = 0.d0
-        do i = 1, n
-            do j = 1, n
+        !
+        ! Inactive energy
+        !
+        eina = 0.d0
+        ! First sum
+        do i = 1, nisht
+            do j = 1, nisht
                 ni = ON(i) ; nj = ON(j)
-                ! Coulomb term (pp|qq) -> <pq|pq> 
-                ! (since H2 is stored in Dirac notation)
-                sum1 = sum1 + ni * nj * H2(i,j,i,j)
+                eina = eina + 0.5d0 * ni * nj * H2(i,i,j,j)
+            end do
+        end do
+        ! Second sum
+        do i = 1, nisht
+            do j = 1, nisht
+                ni = ON(i) ; nj = ON(j)
+                eina = eina + 0.5d0 * GBBC(i,j) * H2(i,j,j,i)
             end do
         end do
 
-        ! Compute second sum
-        sum2 = 0.d0
-        do i = 1, n
-            do j = 1, n
-                ! Exchange term (pq|qp) -> <pq|qp> 
-                ! (since H2 is stored in Dirac notation)
-                sum2 = sum2 + GBBC(i,j) * H2(i,j,j,i)
+        !
+        ! Inactive-active energy
+        !
+        ecross = 0.d0
+        ! First sum
+        do i = 1, nisht
+            do u = 1, nasht
+                uu = nisht + u
+                ni = ON(i) ; nu = ON(uu)
+                ecross = ecross + 0.5d0 * ni * nu * H2(i,i,uu,uu)
+            end do
+        end do
+        do u = 1, nasht
+            uu = nisht + u
+            do i = 1, nisht
+                ni = ON(i) ; nu = ON(uu)
+                ecross = ecross + 0.5d0 * nu * ni * H2(uu,uu,i,i)
+            end do
+        end do
+        ! Second sum
+        do i = 1, nisht
+            do u = 1, nasht
+                uu = nisht + u
+                ni = ON(i) ; nu = ON(uu)
+                ecross = ecross + 0.5d0 * GBBC(i,uu) * H2(i,uu,uu,i)
+            end do
+        end do
+        do u = 1, nasht
+            uu = nisht + u
+            do i = 1, nisht
+                ni = ON(i) ; nu = ON(uu)
+                ecross = ecross + 0.5d0 * GBBC(uu,i) * H2(uu,i,i,uu)
+            end do
+        end do
+        !
+        ! Active-active energy
+        !
+        eact = 0.d0
+        ! First sum
+        do u = 1, nasht
+            uu = nisht + u
+            do v = 1, nasht
+                vv = nisht + v
+                nu = ON(uu) ; nv = ON(vv)
+                eact = eact + 0.5d0 * nu * nv * H2(uu,uu,vv,vv)
+            end do
+        end do
+        ! Second sum
+        do u = 1, nasht
+            uu = nisht + u
+            do v = 1, nasht
+                vv = nisht + v
+                nu = ON(uu) ; nv = ON(vv)
+                eact = eact + 0.5d0 * GBBC(uu,vv) * H2(uu,vv,vv,uu)
             end do
         end do
 
         ! Compute the energy
-        Eee = 2.d0 * sum1 - sum2
+        Eee = eina + ecross + eact
+
+        !
+    end subroutine calc_Eee_BBC 
+
+    subroutine Eee_BBC_spacial(level, ON, H2, nisht, nasht, &
+        & eina, eact, ecross, Eee)
+        !
+        ! Subroutine to compute the Eee for the BBCn approximations in
+        ! the spacial orbital basis with
+        ! 0 <= np <= 1 forall p
+        !
+        implicit none
+        character(len=*), intent(in) :: level 
+        real(kind=8), dimension(:), intent(in) :: ON
+        real(kind=8), dimension(:,:,:,:), intent(in) :: H2
+        integer(kind=8), intent(in) :: nisht, nasht 
+        real(kind=8), intent(out) :: eina, eact, ecross, Eee
+        !
+        integer(kind=8) :: i, j, u, uu, v, vv
+        integer :: n
+        real(kind=8) :: ni, nj, nu, nv
+        real(kind=8), dimension(:,:), allocatable :: GBBC 
+
+        ! Check for inconsistencies in the dimensions
+        n = size(ON)
+        if (n.ne.size(H2, dim=1) .or. &
+            &   n.ne.size(H2, dim=2) .or. &
+            &   n.ne.size(H2, dim=3) .or. &
+            &   n.ne.size(H2, dim=4)) &
+            & stop 'Eee_BBC: Error: Inconsistent dimensions'
+
+        ! Compute the GBBC matrix
+        call calc_GBBC(level, ON, GBBC)
+
+        !
+        ! Inactive energy
+        !
+        eina = 0.d0
+        do i = 1, nisht
+            ni = ON(i)
+            do j = 1, nisht
+                nj = ON(j)
+                ! Compute first sum
+                ! Coulomb term (pp|qq) -> <pq|pq> 
+                ! (since H2 is stored in Dirac notation)
+                ! eina = eina + 2.d0 * ni * nj * H2(i,j,i,j)  ! Braket
+                eina = eina + 2.d0 * ni * nj * H2(i,i,j,j)  ! Dirac
+
+                ! Compute second sum
+                ! Exchange term (pq|qp) -> <pq|qp> 
+                ! (since H2 is stored in Dirac notation)
+                eina = eina - GBBC(i,j) * H2(i,j,j,i)
+            end do
+        end do
+
+        !
+        ! Inactive-active energy
+        !
+        ecross = 0.d0
+        do i = 1, nisht
+            ni = ON(i)
+            do u = 1, nasht
+                uu = nisht + u
+                nu = ON(uu)
+
+                ! Coulomb term (pp|qq) -> <pq|pq> 
+                ! ecross = ecross + 2.d0 * ni * nu * H2(i,uu,i,uu)  ! Braket
+                ecross = ecross + 2.d0 * ni * nu * H2(i,i,uu,uu)  ! Dirac
+
+                ! Exchange term (pq|qp) -> <pq|qp> 
+                ecross = ecross - GBBC(i,uu) * H2(i,uu,uu,i)
+            end do
+        end do
+        do u = 1, nasht
+            uu = nisht + u
+            nu = ON(uu)
+            do i = 1, nisht
+                ni = ON(i)
+
+                ! Coulomb term (pp|qq) -> <pq|pq> 
+                ! ecross = ecross + 2.d0 * nu * ni * H2(uu,i,uu,i)  ! Braket
+                ecross = ecross + 2.d0 * nu * ni * H2(u,uu,i,i)  ! Dirac
+
+                ! Exchange term (pq|qp) -> <pq|qp> 
+                ecross = ecross - GBBC(uu,i) * H2(uu,i,i,uu)
+
+            end do
+        end do
+
+        !
+        ! Active-active energy
+        !
+        eact = 0.d0
+        do u = 1, nasht
+            uu = nisht + u
+            nu = ON(uu)
+            do v = 1, nasht
+                vv = nisht + v
+                nv = ON(vv)
+
+                ! Coulomb term (pp|qq) -> <pq|pq> 
+                ! eact = eact + 2.d0 * nu * nv * H2(uu,vv,uu,vv)  ! Braket
+                eact = eact + 2.d0 * nu * nv * H2(uu,uu,vv,vv)  ! Dirac
+
+                ! Exchange term (pq|qp) -> <pq|qp> 
+                eact = eact - GBBC(uu,vv) * H2(uu,vv,vv,uu)
+            end do
+        end do
+
+        ! Compute Eee
+        Eee = eina + ecross + eact
 
         !
     end subroutine Eee_BBC_spacial 
@@ -496,33 +676,93 @@ module BBC
         real(kind=8), dimension(:), intent(in) :: ON
         real(kind=8), dimension(:,:,:,:), allocatable, intent(out) :: D2
         !
-        integer :: p, q, n, ierr
-        real(kind=8) :: np, nq
+        integer :: p, q, r, s, n, ierr
+        real(kind=8) :: np, nr
         real(kind=8), dimension(:,:), allocatable :: GBBC
 
         ! Compute the GBBC matrix
         call calc_GBBC(level, ON, GBBC)
+
+        ! call print_matrix('GBBC', GBBC(1:6,1:6), 6, '(*(f10.4))')
 
         n = size(ON)
         allocate(D2(n,n,n,n), stat=ierr)
         if (ierr .ne. 0) stop 'D2_BBC: Error in allocation of D2'
         D2 = 0.d0
 
-        do q = 1, n
-            do p = 1, n
-                np = ON(p) ; nq = ON(q)
-                if (p.eq.q) then 
-                    D2(p,p,p,p) = np**2 + GBBC(p,p)
-                else
-                    D2(p,q,q,p) = GBBC(p,q)
-                end if
+        ! do q = 1, n
+        !     do p = 1, n
+        !         np = ON(p) ; nq = ON(q)
+        !         if (p.eq.q) then 
+        !             D2(p,p,p,p) = np**2 + GBBC(p,p)
+        !         else
+        !             D2(p,q,q,p) = GBBC(p,q)
+        !         end if
+        !     end do
+        ! end do
+        ! D2 = 0.5d0 * D2  ! ???
+
+        do p = 1, n
+            np = ON(p)
+            do q = 1, n
+                do r = 1, n
+                    nr = ON(r)
+                    do s = 1, n
+                        ! D2(p,q,r,s) = &
+                        ! & 4.d0 * np * nr * kronecker(p,q) * kronecker(r,s) -&
+                        ! & 2.d0 * GBBC(p,q) * kronecker(q,r) * kronecker(p,s)
+                        !
+                        D2(p,q,r,s) = &
+                        & np * nr * kronecker(p,q) * kronecker(r,s) +&
+                        & GBBC(p,q) * kronecker(q,r) * kronecker(p,s)
+                    end do
+                end do
             end do
         end do
-
-        D2 = 0.5d0 * D2
+        D2 = 0.5d0 * D2  ! ???
         
         !
         return
     end subroutine D2_BBC 
+
+    subroutine D2_BBC2(ON, D2)
+        implicit none
+        real(kind=8), dimension(:), intent(out) :: ON
+        real(kind=8), dimension(:,:,:,:), allocatable, intent(out) :: D2
+        !
+        integer :: n, ierr, p, q, r, s
+        real(kind=8) :: np, nq, nr, ns 
+        real(kind=8), dimension(:,:), allocatable :: GBBC
+
+        ! Compute the GBBC matrix
+        call calc_GBBC('BBC2', ON, GBBC)
+
+        n = size(ON)
+        allocate(D2(n,n,n,n), stat=ierr)
+        if (ierr .ne. 0) stop 'D2_BBC1: Error in allocation of D2'
+        D2 = 0.d0
+
+        do p = 1, n
+            np = ON(p)
+            do q = 1, n
+                nq = ON(q)
+                do r = 1, n
+                    nr = ON(r)
+                    do s = 1, n
+                        ns = ON(s)
+                        ! D2(p,q,r,s) = np * nq * kronecker(p,r) * kronecker(q,s)&
+                        ! & -0.5d0 * (np * nq * kronecker(p,s) * kronecker(q,r) +&
+                        ! & np * nq * kronecker(q,r) * kronecker(p,s) )
+
+                        D2(p,q,r,s) = np * nr * kronecker(p,q) * kronecker(r,s)&
+                        & + GBBC(p,q) * kronecker(q,r) * kronecker(p,s)
+                    end do
+                end do
+            end do
+        end do
+        
+        !
+        return
+    end subroutine D2_BBC2
 
 end module BBC

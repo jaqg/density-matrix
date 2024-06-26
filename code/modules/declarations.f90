@@ -8,13 +8,13 @@ module declarations
    !
    implicit none
    !
-   logical :: tstdbg
+   logical :: tstdbg, diag
    !
    character(len=8) :: stars(3), label
    character(len=80) :: rfmt, dfmt, intfn, sirifn
    !
    integer(kind=8) :: i, j, k, l, n, m
-   integer :: ierr, ouf, intlu, sirilu, termwidth, pmatsize, minkord 
+   integer :: ierr, ouf, eolu, epolu, intlu, sirilu, termwidth, pmatsize, minkord 
    integer(kind=8) :: ij, ispin, istate, koff, lsym, ms2, n2orbt, &
    & nacorb, nactel, nasht, nbast, ncdets, ncmot, nconf, ni, ninorb, nisht, &
    & nj, nnashx, nnashy, nnorbt, nocct, norbt, nseorb, nsym, nu, numorb, &
@@ -27,11 +27,23 @@ module declarations
    & errina, repnuc, siri_repnuc, xint
    real(kind=8) :: E_act, E_ina, E_cross, E_elec, E_MCSCF 
    real(kind=8) :: Eoe_ina, Eee_ina, Eoe_act, Eee_act, Eee_cross, Eoe, Eee
+   real(kind=8) :: Eoe_ina_exact, Eee_ina_exact, Eoe_act_exact, Eee_act_exact,&
+   & Eee_cross_exact, E_cross_exact, Eoe_exact, Eee_exact
+   real(kind=8) :: E_LS, E_BBC1, E_BBC2, E_BBC3, E_BBC3M
+   real(kind=8) :: mindis, mindis_LS, mindis_BBC1, mindis_BBC2, mindis_BBC3, &
+   & mindis_BBC3M
    !
-   real(kind=8), allocatable, dimension (:,:) :: oneint, den1, H1MO, D1MO
-   real(kind=8), allocatable, dimension (:,:,:,:) :: twoint, rdm2, H2MO, D2MO
+   real(kind=8), allocatable, dimension (:,:) :: oneint, den1
+   real(kind=8), allocatable, dimension (:,:,:,:) :: twoint, rdm2
    real(kind=8), allocatable, dimension (:,:) :: fockin
    real(kind=8), allocatable, dimension (:) :: qmat, scr
+   real(kind=8), allocatable, dimension (:,:) :: H1MO, D1MO, H1SO, D1SO
+   real(kind=8), allocatable, dimension (:,:,:,:) :: H2MO, D2MO, D2MOsym, &
+   & H2SO, D2SO
+   real(kind=8), allocatable, dimension (:,:,:,:) :: D2LSMO, D2LSSO
+   real(kind=8), allocatable, dimension (:,:,:,:) :: D2BBC1MO, D2BBC1SO, &
+   & D2BBC2MO, D2BBC2SO, D2BBC3MO, D2BBC3SO, D2BBC3MMO, D2BBC3MSO
+   real(kind=8), allocatable, dimension (:) :: NONMO, NONSO
    !
    contains
        subroutine parameters

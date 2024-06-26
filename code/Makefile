@@ -18,9 +18,14 @@ $(TARGET): $(OBJECTS)
 %.o: %.f90
 	$(FC) $(FCFLAGS) -c $< -o $@
 
+test1:$(TARGET)
+	@cp $(TARGET) test1
+	@cd test1
+	@./$(TARGET)
+
 # Clean target
 clean:
 	rm -f $(OBJECTS) $(TARGET)
 
 # Phony targets
-.PHONY: all clean
+.PHONY: all clean test1

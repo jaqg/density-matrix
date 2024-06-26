@@ -134,7 +134,9 @@ module density_matrices
         real(kind=8), intent(out) :: eina, eact, ecross, Eee
         !
         integer(kind=8) :: i, j, k, l, u, nu, v, nv, x, nx, y, ny 
-        !
+
+        ! call print_matrix('D2', D2(1,1,1:4,1:4), ouf, dfmt)
+
         ! Inactive energy
         !
         eina = 0.d0
@@ -196,6 +198,164 @@ module density_matrices
 
         !
     end subroutine calc_Eee
+
+    subroutine calc_Eee_sym(D2, H2, nisht, nasht, eina, eact, ecross, Eee)
+        !
+        ! Symmetric algorithm
+        !
+        implicit none
+        real(kind=8), dimension(:,:,:,:), intent(in) :: D2, H2 
+        integer(kind=8), intent(in) :: nisht, nasht 
+        real(kind=8), intent(out) :: eina, eact, ecross, Eee
+        !
+        integer(kind=8) :: i, j, k, l, u, nu, v, nv, x, nx, y, ny 
+
+        ! Inactive energy
+        !
+        eina = 0.d0
+        do l = 1,nisht
+            do k = 1,nisht
+                do j = 1,nisht
+                    do i = 1,nisht
+                        eina = eina + D2(i,j,k,l) * H2(i,j,k,l)
+                    end do
+                end do
+            end do
+        end do
+        !
+        ! Inactive-active energy
+        !
+        ecross = 0.d0
+        do j = 1,nisht
+            do i = 1,nisht
+                do v = 1,nasht
+                    nv = nisht + v
+                    do u = 1,nasht
+                        nu = nisht + u
+                        ecross = ecross + &
+                        & D2MO(nu,nv,i,j) * H2MO(nu,nv,i,j) + &
+                        & D2MO(i,j,nu,nv) * H2MO(i,j,nu,nv)
+                    end do
+                end do
+            end do
+        end do
+        !
+        do v = 1,nasht
+            nv = nisht + v
+            do i = 1,nisht
+                do j = 1,nisht
+                    do u = 1,nasht
+                        nu = nisht + u
+                        ecross = ecross + &
+                        & D2MO(nu,j,i,nv) * H2MO(nu,j,i,nv) + &
+                        & D2MO(j,nu,i,nv) * H2MO(j,nu,i,nv) + &
+                        & D2MO(nu,j,nv,i) * H2MO(nu,j,nv,i) + &
+                        & D2MO(j,nu,nv,i) * H2MO(j,nu,nv,i)
+                    end do
+                end do
+            end do
+        end do
+        !
+        ! Active energy
+        !
+        eact = 0.d0
+        do y = 1,nasht
+            ny = nisht + y
+            do x = 1,nasht
+                nx = nisht + x
+                do v = 1,nasht
+                    nv = nisht + v
+                    do u = 1,nasht
+                        nu = nisht + u
+                        eact = eact + D2MO(nu,nv,nx,ny)*H2MO(nu,nv,nx,ny)
+                    end do
+                end do
+            end do
+        end do
+
+        Eee = eina + ecross + eact
+
+        !
+    end subroutine calc_Eee_sym
+
+    subroutine calc_Eee_SO(D2, H2, nisht, nasht, eina, eact, ecross, Eee)
+        implicit none
+        real(kind=8), dimension(:,:,:,:), intent(in) :: D2, H2 
+        integer(kind=8), intent(in) :: nisht, nasht 
+        real(kind=8), intent(out) :: eina, eact, ecross, Eee
+        !
+        integer(kind=8) :: nnisht, nnasht 
+        integer(kind=8) :: i, j, k, l, u, nu, v, nv, x, nx, y, ny 
+
+        ! call print_matrix('D2', D2(1,1,1:4,1:4), ouf, dfmt)
+
+        ! For SO basis, the MO orbitals are splitted into alpha, beta. Therefore
+        ! nisht <- 2*nisht ; nasht <- 2*nasht
+        !
+        nnisht = 2 * nisht
+        nnasht = 2 * nasht
+
+        ! Inactive energy
+        !
+        eina = 0.d0
+        do l = 1,nnisht
+            do k = 1,nnisht
+                do j = 1,nnisht
+                    do i = 1,nnisht
+                        eina = eina + D2(i,j,k,l) * H2(i,j,k,l)
+                    end do
+                end do
+            end do
+        end do
+        !
+        ! Inactive-active energy
+        !
+        ecross = 0.d0
+        do j = 1,nnisht
+            do i = 1,nnisht
+                do v = 1,nnasht
+                    nv = nnisht + v
+                    do u = 1,nnasht
+                        nu = nnisht + u
+                        ecross = ecross + D2MO(nu,nv,i,j) * H2MO(nu,nv,i,j)
+                    end do
+                end do
+            end do
+        end do
+        !
+        do v = 1,nnasht
+            nv = nnisht + v
+            do i = 1,nnisht
+                do j = 1,nnisht
+                    do u = 1,nnasht
+                        nu = nnisht + u
+                        ecross = ecross + D2MO(nu,j,i,nv) * H2MO(nu,j,i,nv)
+                    end do
+                end do
+            end do
+        end do
+        !
+        ! Active energy
+        !
+        eact = 0.d0
+        do y = 1,nnasht
+            ny = nnisht + y
+            do x = 1,nnasht
+                nx = nnisht + x
+                do v = 1,nnasht
+                    nv = nnisht + v
+                    do u = 1,nnasht
+                        nu = nnisht + u
+                        eact = eact + D2MO(nu,nv,nx,ny)*H2MO(nu,nv,nx,ny)
+                    end do
+                end do
+            end do
+        end do
+
+        Eee = eina + ecross + eact
+
+        !
+    end subroutine calc_Eee_SO
 
     subroutine calc_casscf_nonsymmetric
         write(ouf,'(a)') 'Densities algorithm (Alfredo):'
@@ -283,25 +443,26 @@ module density_matrices
         !
         eact   = eact1 + eact2
         erract = abs(siri_eactiv-eact)
-        write(ouf,'(a,2f16.10)') 'Active energy, error   :',eact,erract
+        write(ouf,'(a,2f16.10,/)') 'Active energy, error   :',eact,erract
         call flush(ouf)
     end subroutine calc_casscf_nonsymmetric
 
     subroutine checknorm_D1(D1, Nelec, thres, lu)
         implicit none
         real(kind=8), dimension(:,:), intent(in) :: D1
-        integer, intent(in) :: Nelec, lu
+        integer(kind=8), intent(in) :: Nelec
         real(kind=8), intent(in) :: thres 
+        integer, intent(in) :: lu
         !
         if (trace(D1).lt.dble(Nelec)-thres .or. &
             & trace(D1).gt.dble(Nelec)+thres) then 
             !
-            write(lu,'(a)') 'checknorm_D1: D1 is not normalized'
-            write(lu,'(a,f18.4,a,i0)') 'Tr[D1] = ',trace(D1),', Nelec = ',Nelec
+            write(lu,'(a)') 'WARNING: checknorm_D1: D1 is not normalized'
+            write(lu,'(a,f8.4,a,i0,/)') 'Tr[D1] = ',trace(D1),', Nelec = ',Nelec
             stop
         else
             write(lu,'(a)') 'checknorm_D1: D1 is normalized'
-            write(lu,'(a,f18.4,a,i0)') 'Tr[D1] = ',trace(D1),', Nelec = ',Nelec
+            write(lu,'(a,f8.4,a,i0,/)') 'Tr[D1] = ',trace(D1),', Nelec = ',Nelec
         end if
         !
         return
@@ -310,8 +471,9 @@ module density_matrices
     subroutine checknorm_D2(D2, Nelec, thres, lu)
         implicit none
         real(kind=8), dimension(:,:,:,:), intent(in) :: D2
-        integer, intent(in) :: Nelec, lu
+        integer(kind=8), intent(in) :: Nelec
         real(kind=8), intent(in) :: thres 
+        integer, intent(in) :: lu
         !
         integer :: i, j, n 
         real(kind=8) :: suma, norma
@@ -321,7 +483,8 @@ module density_matrices
         suma = 0.d0
         do i=1, n
             do j = 1, n
-                suma = suma + D2(i,j,i,j)
+                ! suma = suma + D2(i,j,i,j)  ! if (H2 in Dirac notation)
+                suma = suma + D2(i,i,j,j)  ! if (H2 in Mulliken notation)
             end do
         end do
 
@@ -330,45 +493,277 @@ module density_matrices
         if (suma.lt.norma-thres .or. &
             & suma.gt.norma+thres) then 
             !
-            write(lu,'(a)') 'checknorm_D2: D2 is not normalized'
-            write(lu,'(a,f12.4,a,f12.4)') 'sum_{pq} D^(2)_{pqpq} = ',suma,', N(N-1)/2 = ',norma
+            write(lu,'(a)') 'WARNING: checknorm_D2: D2 is not normalized'
+            write(lu,'(a,f8.4,a,f8.4,/)') 'sum_{pq} D^(2)_{pqpq} = ',suma,', N(N-1)/2 = ',norma
             ! TODO: descomentar el stop
             ! stop
         else
             write(lu,'(a)') 'checknorm_D2: D2 is normalized'
-            write(lu,'(a,f12.4,a,f12.4)') 'sum_{pq} D^(2)_{pqpq} = ',suma,', N(N-1)/2 = ',norma
+            write(lu,'(a,f8.4,a,f8.4,/)') 'sum_{pq} D^(2)_{pqpq} = ',suma,', N(N-1)/2 = ',norma
         end if
         !
         return
     end subroutine checknorm_D2
 
-    subroutine symmetrize_D2(D2, D2sym)
+    subroutine symmetrize_D2(D2, nisht, nocct, tstdbg, lu)
         !
         ! Subroutine to symmetrize the 2-RDM
         !
         implicit none
-        real(kind=8), dimension(:,:,:,:), intent(in) :: D2
-        real(kind=8), dimension(:,:,:,:), allocatable, intent(out) :: D2sym
+        real(kind=8), dimension(:,:,:,:), intent(inout) :: D2
+        integer(kind=8), intent(in) :: nisht, nocct
+        logical, intent(in) :: tstdbg
+        integer, intent(in)  :: lu 
         !
-        integer :: i, j, k, l, n, ierr 
+        logical :: sym1, sym12, sym2, symtot
+        integer(kind=8) :: i, j, k, l
+        real(kind=8) :: x1, x2 
 
-        n = size(D2, dim=1)
-        allocate(D2sym(n,n,n,n), stat=ierr)
-        if (ierr .ne. 0) stop 'symmetrize_D2: Error in allocation of D2sym'
+        ! D2(j,i,l,k) = D2(i,j,k,l)   ! Hermiticity
+        ! D2(k,l,i,j) = D2(i,j,k,l)   ! Pair exchange
+        ! D2(j,i,k,l) = -D2(i,j,k,l)  ! Antisymmetry for change
+        ! D2(i,j,l,k) = -D2(i,j,k,l)  ! of intern indexes
 
-        do i = 1, n
-            do j = 1, n
-                do k = 1, n
-                    do l = 1, n
-                        D2sym(i,j,k,l) = 0.5d0 * (D2(i,j,k,l) + D2(j,i,k,l))
+        !
+        !     a. Inactive-Inactive
+        !
+        do l = 1,nisht
+            do k = 1,nisht
+                do j = 1,nisht
+                    do i = 1,j-1
+                        x1 = D2(i,j,k,l)
+                        x2 = D2(j,i,k,l)
+                        D2(i,j,k,l) = 0.5d0 * (x1+x2)
+                        D2(j,i,k,l) = 0.5d0 * (x1+x2)
+                    end do
+                end do
+            end do
+        end do
+        !
+        do l = 1,nisht
+            do k = 1,l-1
+                do j = 1,nisht
+                    do i = 1,nisht
+                        x1 = D2(i,j,k,l)
+                        x2 = D2(i,j,l,k)
+                        D2(i,j,k,l) = 0.5d0 * (x1+x2)
+                        D2(i,j,l,k) = 0.5d0 * (x1+x2)
                     end do
                 end do
             end do
         end do
 
+        sym1  = .true.
+        sym2  = .true.
+        sym12 = .true.
+        !
+        do l = 1,nisht
+            do k = 1,nisht
+                do j = 1,nisht
+                    do i = 1,nisht
+                        if (D2(i,j,k,l) .ne. D2(j,i,k,l)) sym1  = .false.
+                        if (D2(i,j,k,l) .ne. D2(i,j,l,k)) sym2  = .false.
+                        if (D2(i,j,k,l) .ne. D2(k,l,i,j)) sym12 = .false.
+                        ! write(6,'(4i3,4f16.10)') i,j,k,l,D2(i,j,k,l),
+                        ! & D2(j,i,k,l),D2(i,j,l,k),D2(k,l,i,j)
+                    end do
+                end do
+            end do
+        end do
+        !
+        if (tstdbg) then 
+            write(lu,'(/,a)') 'Symmetry of inactive-inactive block of D2'
+            write(lu,'(a,l2)') ' i-j  swapping :',sym1
+            write(lu,'(a,l2)') ' k-l  swapping :',sym2
+            write(lu,'(a,l2)') 'ij-kl swapping :',sym12
+        end if
+        !
+        symtot = sym1 .and. sym2 .and. sym12
+        if (.not. symtot) stop 'symmetrize_D2: Gamma_ijkl non-symmetric'
+        !
+        !     b. Active-Inactive Coulomb (uv,ij)
+        !
+        do j = 1,nisht
+            do i = 1,nisht
+                do v = nisht+1,nocct
+                    do u = nisht+1,nocct
+                        x1 = D2(u,v,i,j) 
+                        x2 = D2(i,j,u,v)
+                        D2(u,v,i,j) = 0.5d0 * (x1+x2)
+                        D2(i,j,u,v) = 0.5d0 * (x1+x2)
+                    end do
+                end do
+            end do
+        end do
+        !
+        sym1  = .true.
+        sym2  = .true.
+        sym12 = .true.
+        !
+        do j = 1,nisht
+            do i = 1,nisht
+                do v = nisht+1,nocct
+                    do u = nisht+1,nocct
+                        if (D2(u,v,i,j) .ne. D2(v,u,i,j)) sym1  = .false.
+                        if (D2(u,v,i,j) .ne. D2(u,v,j,i)) sym2  = .false.
+                        if (D2(u,v,i,j) .ne. D2(i,j,u,v)) sym12 = .false.
+                    end do
+                end do
+            end do
+        end do
+        !
+        if (tstdbg) then
+            write(lu,'(/,a)') 'Symmetry of act-inact Coulomb block of D2'
+            write(lu,'(a,l2)') ' u-v  swapping :',sym1
+            write(lu,'(a,l2)') ' i-j  swapping :',sym2
+            write(lu,'(a,l2)') 'uv-ij swapping :',sym12
+        end if
+        !
+        symtot = sym1 .and. sym2 .and. sym12
+        if (.not. symtot) stop 'symmetrize_D2: Gamma_uvij non-symmetric'
+        !
+        !     c. Active-Inactive Exchange (uj,iv)
+        !
+        do v = nisht+1, nocct
+            do i = 1,nisht
+                do j = 1,nisht
+                    do u = nisht+1,nocct
+                        x1 = D2(u,j,i,v)
+                        x2 = D2(j,u,i,v)
+                        D2(u,j,i,v) = 0.5d0 * (x1+x2)
+                        D2(j,u,i,v) = 0.5d0 * (x1+x2)
+                    end do
+                end do
+            end do
+        end do
+        !
+        do v = nisht+1, nocct
+            do i = 1,nisht
+                do j = 1,nisht
+                    do u = nisht+1,nocct
+                        x1 = D2(u,j,i,v)
+                        x2 = D2(u,j,v,i)
+                        D2(u,j,i,v) = 0.5d0 * (x1+x2)
+                        D2(u,j,v,i) = 0.5d0 * (x1+x2)
+                    end do
+                end do
+            end do
+        end do
+        !
+        sym1  = .true.
+        sym2  = .true.
+        sym12 = .true.
+        !
+        do j = 1,nisht
+            do i = 1,nisht
+                do v = nisht+1,nocct
+                    do u = nisht+1,nocct
+                        if (D2(u,v,i,j) .ne. D2(v,u,i,j)) sym1  = .false.
+                        if (D2(u,v,i,j) .ne. D2(u,v,j,i)) sym2  = .false.
+                        if (D2(u,v,i,j) .ne. D2(i,j,u,v)) sym12 = .false.
+                    end do
+                end do
+            end do
+        end do
+        !
+        if (tstdbg) then
+            write(lu,'(/,a)') 'Symmetry of act-inact Exchange block of D2'
+            write(lu,'(a,l2)') ' u-v  swapping :',sym1
+            write(lu,'(a,l2)') ' i-j  swapping :',sym2
+            write(lu,'(a,l2)') 'uv-ij swapping :',sym12
+        end if
+        !
+        symtot = sym1 .and. sym2 .and. sym12
+        if (.not. symtot) stop 'symmetrize_D2: Gamma_ujiv non-symmetric'
+        !
+        !     d. Active-Active
+        !
+        sym1  = .true.
+        sym2  = .true.
+        sym12 = .true.
+        !
+        do y = nisht+1,nocct
+            do x = nisht+1,nocct
+                do v = nisht+1,nocct
+                    do u = nisht+1,nocct
+                        if (D2(u,v,x,y) .ne. D2(v,u,x,y)) sym1  = .false.
+                        if (D2(u,v,x,y) .ne. D2(u,v,y,x)) sym2  = .false.
+                        if (D2(u,v,x,y) .ne. D2(x,y,u,v)) sym12 = .false.
+                    end do
+                end do
+            end do
+        end do
+        !
+        if (tstdbg) then
+            write(lu,'(/,a)') 'Symmetry of active-active block of D2'
+            write(lu,'(a,l2)') ' u-v  swapping :',sym1
+            write(lu,'(a,l2)') ' x-y  swapping :',sym2
+            write(lu,'(a,l2)') 'uv-xy swapping :',sym12
+        end if
+        !
+        symtot = sym1 .and. sym2 .and. sym12
+        if (.not. symtot) stop 'symmetrize_D2: Gamma_uvxy non-symmetric'
+
         !
         return
     end subroutine symmetrize_D2 
+
+    subroutine check_virtorbs_D1(D1, nocct, norbt, ouf)
+        !
+        ! Subroutine to check that all virtual orbitals of D^(1) are zero
+        !
+        implicit none
+        real(kind=8), dimension(:,:), intent(in) :: D1
+        integer(kind=8), intent(in) :: nocct, norbt
+        integer, intent(in) :: ouf 
+        !
+        integer(kind=8) :: i, j
+
+        ! Check D^(1)
+        do j = nocct+1,norbt
+            do i = nocct+1,norbt
+                if (D1(i,j) .ne. 0.d0) then
+                    write(ouf,'(a,1x,i0,",",i0,1x,a)') &
+                    & 'WARNING check_virtorbs: D^(1) with virtual index', i, j,&
+                    'non-zero'
+                    stop
+                end if
+            end do
+        end do
+        !
+        return
+    end subroutine check_virtorbs_D1
+
+    subroutine check_virtorbs_D2(D2, nocct, norbt, ouf)
+        !
+        ! Subroutine to check that all virtual orbitals of D^(2) are zero
+        !
+        implicit none
+        real(kind=8), dimension(:,:,:,:), intent(in) :: D2
+        integer(kind=8), intent(in) :: nocct, norbt
+        integer, intent(in) :: ouf 
+        !
+        integer(kind=8) :: i, j, k, l
+
+        ! Check D^(2)
+        do l = nocct+1,norbt
+            do k = nocct+1,norbt
+                do j = nocct+1,norbt
+                    do i = nocct+1,norbt
+                        if (D2(i,j,k,l) .ne. 0.d0) then
+                            write(ouf,'(a,1x,i0,",",i0,1x,a)') &
+                            &'WARNING check_virtorbs: D^(2) with virtual index',&
+                            & i, j, 'non-zero'
+                            stop
+                        end if
+                    end do
+                end do
+            end do
+        end do
+        
+        !
+        return
+    end subroutine check_virtorbs_D2
 
     subroutine check_SO_ON(ON)
         !
@@ -448,15 +843,19 @@ module density_matrices
         ASO = 0.d0
 
         ! Transform to spin-orbital basis as:
-        ! ASO(ialpha, jalpha, kalpha, lalpha) = 1/2 AMO(i, j, k, l)
-        ! ASO(ibeta, jbeta, kbeta, lbeta) = 1/2 AMO(i, j, k, l)
         ! The rest = 0
         do l = 1, n
             do k = 1, n
                 do j = 1, n
                     do i = 1, n
+                        ! alpha alpha alpha alpha
                         ASO(2*i-1, 2*j-1, 2*k-1, 2*l-1) = 0.5d0 * AMO(i,j,k,l)
+                        ! beta beta beta beta
                         ASO(2*i, 2*j, 2*k, 2*l) = 0.5d0 * AMO(i,j,k,l)
+                        ! alpha alpha beta beta
+                        ASO(2*i-1, 2*j-1, 2*k, 2*l) = 0.5d0 * AMO(i,j,k,l)
+                        ! beta beta alpha alpha
+                        ASO(2*i, 2*j, 2*k-1, 2*l-1) = 0.5d0 * AMO(i,j,k,l)
                     end do
                 end do
             end do
@@ -502,7 +901,7 @@ module density_matrices
     subroutine MO_to_SO_H2(H2MO, H2SO)
         !
         ! Subroutine to transform two-electron integrals in spacial orbital
-        ! basis (pq|rs) to spin-orbital basis <pq|rs>
+        ! basis <pq|rs> to spin-orbital basis <pq|rs>
         !
         implicit none
         real(kind=8), dimension(:,:,:,:), intent(in) :: H2MO
@@ -525,19 +924,15 @@ module density_matrices
             do q = 1, n
                 do r = 1, n
                     do s = 1, n
-                        ! ! alpha-alpha spin-orbitals
-                        ! H2SO(2*p-1, 2*q-1, 2*r-1, 2*s-1) = H2MO(p, q, r, s)
-                        ! ! beta-beta spin-orbitals
-                        ! H2SO(2*p, 2*q, 2*r, 2*s) = H2MO(p, q, r, s)
 
                         ! alpha alpha alpha alpha
                         H2SO(2*p-1, 2*q-1, 2*r-1, 2*s-1) = H2MO(p, q, r, s)
                         ! beta beta beta beta
                         H2SO(2*p, 2*q, 2*r, 2*s) = H2MO(p, q, r, s)
-                        ! alpha alpha beta beta
-                        H2SO(2*p-1, 2*q-1, 2*r, 2*s) = H2MO(p, q, r, s)
-                        ! beta beta alpha alpha 
-                        H2SO(2*p, 2*q, 2*r-1, 2*s-1) = H2MO(p, q, r, s)
+                        ! ! alpha alpha beta beta
+                        ! H2SO(2*p-1, 2*q-1, 2*r, 2*s) = H2MO(p, q, r, s)
+                        ! ! beta beta alpha alpha 
+                        ! H2SO(2*p, 2*q, 2*r-1, 2*s-1) = H2MO(p, q, r, s)
 
                         ! mixed alpha-beta -> 0
                     end do

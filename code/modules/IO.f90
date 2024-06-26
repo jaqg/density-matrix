@@ -193,8 +193,8 @@ module IO
       !
       implicit none
       integer, intent(in) :: intlu
-      integer :: norb
-      real(kind=8) :: repnuc 
+      integer, intent(out) :: norb
+      real(kind=8), intent(out) :: repnuc 
       real(kind=8), dimension(:,:), allocatable, intent(out) :: H1
       real(kind=8), dimension(:,:,:,:), allocatable, intent(out) :: H2
       !
@@ -239,7 +239,6 @@ module IO
       k = -1
       l = -1
       dl1:do
-         ! read(intlu,*,iostat=ios) xint, k, l, i, j
          ! read(intlu,*,iostat=ios) xint, i, j, k, l
          ! if (ios /= 0) stop 'ERROR read_integrals: Error reading file.'
          read(intlu,*) xint, i, j, k, l
@@ -279,7 +278,7 @@ module IO
       read(sirilu) siri_repnuc, siri_einactiv, siri_eactiv, siri_emcscf, istate, ispin,&
       &         nactel, lsym, ms2
       !
-      if (abs(siri_repnuc-repnuc) .gt. 1.0d-8) then
+      if (dabs(siri_repnuc-repnuc) .gt. 1.0d-8) then
          write(ouf,*) 'ERROR: Inconsistency between input and SIRIFC'
          write(ouf,*) 'Nuclear repulsion in input  :',repnuc
          write(ouf,*) 'Nuclear repulsion in SIRIFC :',siri_repnuc
@@ -298,7 +297,8 @@ module IO
       &         nwopt, nwoph, ncdets, ncmot, nnashx, nnashy,&
       &         nnorbt, n2orbt, nsym
       !
-      if (nsym .ne. 1) stop 'Symmetry not implemented yet'
+      write(*,*) 'NSYM SIRIFC: ', nsym
+      ! if (nsym .ne. 1) stop 'Symmetry not implemented yet'
       !
       if (norbt .ne. norb) then
          write(ouf,*) 'ERROR: Inconsistency between input and SIRIFC'
@@ -397,7 +397,7 @@ module IO
          do i = 1,nisht
             do u = 1,nasht
                nu = nisht + u
-               D2MO(nu,i,i,nv) = D2MO(nu,i,i,nv) - D1MO(nu,nv)
+               D2MO(nu,i,i,nv) = -D1MO(nu,nv)
             end do
          end do
       end do
@@ -484,5 +484,71 @@ module IO
       !
       return
    end subroutine print_matrix 
+      
+   subroutine print_energy
+      E_ina = Eoe_ina + Eee_ina
+      E_cross = Eoe_act + Eee_cross
+      E_act = E_cross + Eee_act
+      E_elec = Eoe + Eee
+      E_MCSCF = E_elec + repnuc
+
+      if (tstdbg) then
+         write(ouf,'(a,2f16.10)') 'Eoe_ina, error   :', Eoe_ina, &
+         & dabs(Eoe_ina-Eoe_ina_exact)
+         write(ouf,'(a,2f16.10)') 'Eoe_act, error   :', Eoe_act, &
+         & dabs(Eoe_act-Eoe_act_exact)
+         write(ouf,'(a,2f16.10)') 'Eee_ina, error   :', Eee_ina, &
+         & dabs(Eee_ina-Eee_ina_exact)
+         write(ouf,'(a,2f16.10)') 'Eee_act, error   :', Eee_act, &
+         & dabs(Eee_act-Eee_act_exact)
+         write(ouf,'(a,2f16.10)') 'Eee_cross, error :', Eee_cross, &
+         & dabs(Eee_cross-Eee_cross_exact)
+         write(ouf,'(a,2f16.10)') 'Eoe, error :', Eoe, &
+         & dabs(Eoe-Eoe_exact)
+         write(ouf,'(a,2f16.10)') 'Eee, error :', Eee, &
+         & dabs(Eee-Eee_exact)
+         write(ouf,'("------")')
+         write(ouf,'(a,2f16.10)') 'Inactive energy, error      :', E_ina, &
+         & dabs(E_ina-siri_einactiv)
+         E_cross_exact = Eoe_act_exact + Eee_cross_exact
+         write(ouf,'(a,2f16.10)') 'Act-ina contribution, error :', &
+         & E_cross, dabs(E_cross-E_cross_exact)
+         write(ouf,'(a,2f16.10)') 'Act-act contribution, error :', Eee_act, &
+         dabs(Eee_act-Eee_act_exact)
+         write(ouf,'(a,2f16.10)') 'Active energy, error        :', E_act, &
+         & dabs(siri_eactiv-E_act)
+         write(ouf,'(a,2f16.10,/)') 'MCSCF energy, error         :', E_MCSCF, &
+         & dabs(siri_emcscf-E_MCSCF)
+      else
+         write(ouf,'(a,2f16.10)') 'Inactive energy, error :', E_ina, &
+         & dabs(E_ina-siri_einactiv)
+         write(ouf,'(a,2f16.10)') 'act-ina contribution   :', E_cross
+         write(ouf,'(a,2f16.10)') 'act-act contribution   :', Eee_act 
+         write(ouf,'(a,2f16.10)') 'Active energy, error   :', E_act, &
+         & dabs(siri_eactiv-E_act)
+         write(ouf,'(a,2f16.10,/)') 'MCSCF energy, error    :', E_MCSCF, &
+         & dabs(siri_emcscf-E_MCSCF)
+      end if
+      call flush(ouf)
+   end subroutine print_energy
+
+   subroutine output_energy(lu, label, E_MCSCF, err)
+      implicit none
+      integer, intent(in) :: lu 
+      character(len=*), intent(in) :: label
+      real(kind=8), intent(in) :: E_MCSCF, err
+      !
+      write(lu,'(a9,2f16.10)') label, E_MCSCF, err
+      !
+      return
+   end subroutine output_energy 
+
+   subroutine print_MCSCF_energy
+      E_elec = Eoe + Eee
+      E_MCSCF = E_elec + repnuc
+      write(ouf,'(a,2f16.10)') 'MCSCF energy, error    :', E_MCSCF, &
+      & dabs(siri_emcscf-E_MCSCF)
+      call flush(ouf)
+   end subroutine print_MCSCF_energy
 
 end module IO
