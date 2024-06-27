@@ -178,12 +178,12 @@ There are two cases where the exact forms of $\func{E_{\text{ee}}}{\fordm}$ are 
         There are known cases when this condition is violated\mycite{goedecker1998natural, sheng2013natural, giesbertz2013longrange, 
         cioslowski2000ground}, in which a two-electron functional that depends 
         explicitly on the occupation numbers is defined as
-        \begin{equation}
+        \begin{equation} \label{eq:Eee-LS-functional}
             \tilde{E}_{\text{ee}}^{\text{LS}} \left[ \fordm \right] =
             \frac{1}{2} \sum_{pq}  G_{pq}^{\text{LS}} \Braket{pq | qp},
         \end{equation}
         with 
-        \begin{equation}
+        \begin{equation} \label{eq:GLS}
             G_{pq}^{\text{LS}} =
             \begin{cases}
                 n_p & p = q \\
@@ -236,7 +236,7 @@ correlated electron pair are known.
 The first approximate density matrix functional was developed by Müller\mycite{muller1984explicit}
 and, independently, by Buijse and Baerends \mycite{buijse2002approximate, buijse1991electron}.
 It was later corrected resulting in the BB-corrected (BBC) functionals\mycite{gritsenko2005improved}
-\begin{equation}
+\begin{equation} \label{eq:Eee-BBC-functional}
     E_{\text{ee}}^{\text{BBC}}\left[ \fordm \right] =
     \frac{1}{2} \sum_{pq} n_p n_q \Braket{pp | qq} +
     \frac{1}{2} \sum_{pq} G_{pq}^{\text{BBC}} \Braket{pq | qp}
@@ -245,7 +245,7 @@ It was later corrected resulting in the BB-corrected (BBC) functionals\mycite{gr
 where the $G_{pq}^{\text{BBC}}$ factor of the exchange-correlation functional
 depends on the occupation numbers.
 The first correction reads
-\begin{equation}
+\begin{equation} \label{eq:GBBC1}
     G_{pq}^{\text{BBC1}} = 
     \begin{cases}
         \sqrt{n_p n_q} & p \not= q \wedge p,q \in W, \\
@@ -264,7 +264,7 @@ indicating a need for further repulsive corrections\mycite{gritsenko2005improved
 
 The BBC2 functional improved BBC1 by addressing the interaction between two
 strongly occupied orbitals as
-\begin{equation}
+\begin{equation} \label{eq:GBBC2}
     G_{pq}^{\text{BBC2}} = 
     \begin{cases}
         \sqrt{n_p n_q} & p \not= q \wedge p,q \in W, \\
@@ -277,7 +277,7 @@ In the BBC3 functional, corrections were included for the interaction between a 
 of bonding and antibonding (frontier) spinorbitals.
 Additionally, BBC3 eliminated self-interaction effects from all orbitals except
 the frontier ones.
-\begin{equation}
+\begin{equation} \label{eq:GBBC3}
     G_{pq}^{\text{BBC3}} =
     \begin{cases}
         \sqrt{n_p n_q} &
@@ -321,7 +321,7 @@ The $S$ set is subdivided into
 two subsets: the subset $S_b$ for the degenerate bonding orbitals and the subset
 $S_c$ for the rest. The $W$ set is subdivided into $W_a$ for the degenerate
 antibonding orbitals and $W_h$ for the rest weakly occupied orbitals
-\begin{equation}
+\begin{equation} \label{eq:GBBC3M}
     G_{pq}^{\text{BBC3}} = 
     \begin{cases}
         \sqrt{n_p n_q} & p \not= q \wedge p,q \in W, \\
@@ -333,33 +333,36 @@ antibonding orbitals and $W_h$ for the rest weakly occupied orbitals
 \end{equation}
 where the symbol $\cup$ stands for the union of two sets.
 
-% ---------
-\subsection{Construction of 2-RDM in terms of 1-RDM}
-% seccion 2.2 Pernal
-% ---------
+% % ---------
+% \subsection{Construction of 2-RDM in terms of 1-RDM}
+% % seccion 2.2 Pernal
+% % ---------
+%
+% % There is a variety of
+% % conditions to be imposed on the 2-RDM which may aid in its
+% % construction\mycite{cioslowski2002systematic}
+%
+% Assuming the cumulant expansion of 2-RDM\mycite{staroverov2002optimization} which
+% consists of writing $\sordm$ as the antisymmetrized product of $\fordm$ and
+% the cumulant part, $\lambda$, being a functional of $\fordm$ 
+% \begin{equation}
+%     \sordm_{pqrs} =
+%     n_p n_q \left( \delta_{pr} \delta_{qs} - \delta_{ps} \delta_{qr} \right)
+%     + \lambda_{pqrs} \left[ \fordm \right]
+%     ,
+% \end{equation}
+% one-electron density matrix functionals can be developed by finding
+% approximations for the cumulant part imposing known conditions which the exact
+% cumulant satisfies.
+%
+% \textcolor{red}{(\ldots)}
+%
+% \textcolor{red}{Duda: pairs of coupled orbitals para implementar PNOF$i$}
+%
+% \textcolor{red}{Duda: qué funcionales más?}
 
-% There is a variety of
-% conditions to be imposed on the 2-RDM which may aid in its
-% construction\mycite{cioslowski2002systematic}
-
-Assuming the cumulant expansion of 2-RDM\mycite{staroverov2002optimization} which
-consists of writing $\sordm$ as the antisymmetrized product of $\fordm$ and
-the cumulant part, $\lambda$, being a functional of $\fordm$ 
-\begin{equation}
-    \sordm_{pqrs} =
-    n_p n_q \left( \delta_{pr} \delta_{qs} - \delta_{ps} \delta_{qr} \right)
-    + \lambda_{pqrs} \left[ \fordm \right]
-    ,
-\end{equation}
-one-electron density matrix functionals can be developed by finding
-approximations for the cumulant part imposing known conditions which the exact
-cumulant satisfies.
-
-\textcolor{red}{(\ldots)}
-
-\textcolor{red}{Duda: pairs of coupled orbitals para implementar PNOF$i$}
-
-\textcolor{red}{Duda: qué funcionales más?}
+% TODO: comentar el funcional PNOF y coom se reduce a BBCn por lo que no ha
+% sido implementado
 
 %% Functionals PNOFi by Piris
 % Reconstructionf the 2-RDM in terms of 1-RDM implies the following equality

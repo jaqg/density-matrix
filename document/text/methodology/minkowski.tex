@@ -1,0 +1,27 @@
+% ---------
+\subsection{Minkowski distance}
+% ---------
+Also, a second metric is computed to directly compare the approximated 2-RDMs.
+Taking one element of one 2-RDM as a point in the high-dimensional 4D space,
+the Minkowski distance can be computed between a point in the 4D space given by the
+exact 2-RDM and a point by the approximated 2-RDM.
+
+The Minkowski distance (metric) of order $p$ for an approximated 2-RDM,
+$ \mat{\tilde{\sordm}}$, with respect to the exact 2-RDM, $ \mat{\sordm}$,
+is given by 
+\begin{equation}
+    d \left( \mat{\sordm} , \mat{\tilde{\sordm}} \right) =
+    \left(
+        \sum_{pqrs} \left| \sordm_{pqrs} - \tilde{\sordm}_{pqrs} \right|^p
+    \right)^{\frac{1}{p}}
+    ,
+\end{equation}
+which reduces to the Manhattan distance for $p=1$, to the Euclidean distance
+for $p=2$ and, in the limit, to the Chebyshev distance for $p \to \infty$.
+
+Therefore, the Minkowski distance is a direct metric to test any approximated
+2-RDM, resulting in a good approximation if $d \to 0$, and a bad approximation
+for larger $d$'s.
+In this sense, this metric has no value if only one approximated 2-RDM is tested,
+as this distance has to be compared with other distances in order to establish
+the quality of the approximation.

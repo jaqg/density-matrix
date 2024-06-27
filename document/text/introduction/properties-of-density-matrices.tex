@@ -103,9 +103,23 @@ In the second quantization formalism, the electronic molecular Hamiltonian in
 the spin-orbital basis is given by
 \begin{equation}
     \hat{H} =
+    \sum_{\sigma} 
+    \sum_{pq} h_{pq}^{\sigma \sigma} a_{p \sigma}^{\dagger} a_{q \sigma}
+    +
+    \frac{1}{2} \sum_{\sigma \sigma^{\prime}} \sum_{pqrs} 
+    \Braket{p\sigma r \sigma^{\prime} | q\sigma s \sigma^{\prime}}
+    a_{p \sigma}^{\dagger} a_{r \sigma^{\prime}}^{\dagger} a_{s \sigma^{\prime}} a_{q \sigma}
+    ,
+\end{equation}
+where $\sigma$ refers to the spin components $\alpha, \beta$.
+
+For the sake of simplicity, spin components are omitted for the moment.
+Then, the electronic molecular Hamiltonian is written as
+\begin{equation}
+    \hat{H} =
     \sum_{pq} h_{pq} a_p^{\dagger} a_q
     +
-    \frac{1}{2} \sum_{pqrs} \PBraket{pr | qs} a_p^{\dagger} a_q^{\dagger} a_s a_r
+    \frac{1}{2} \sum_{pqrs} \PBraket{pq | rs} a_p^{\dagger} a_q^{\dagger} a_s a_r
     .
 \end{equation}
 
@@ -258,7 +272,20 @@ as
 \begin{equation} \label{eq:GS-energy-2}
     E_0 =
     \sum_{pq} h_{pq} \oedm_{pq} + \frac{1}{2} \sum_{pqrs}
-    \PBraket{pq | rs} \tedm_{pqrs}
+    \tedm_{pqrs} \PBraket{pq | rs}
+    ,
+\end{equation}
+and written explicitly with the spin components as
+\begin{equation}
+    E_0 = 
+    \sum_{\sigma}  \sum_{pq} 
+    % h_{p \sigma,q \sigma} \oedm_{p \sigma,q \sigma}
+    h_{pq}^{\sigma \sigma} \fordm_{pq}^{\sigma \sigma}
+    +
+    \sum_{\sigma \sigma^{\prime}} \sum_{pqrs}
+    % \tedm_{p \sigma, q \sigma^{\prime}, r \sigma, s \sigma^{\prime}}
+    \sordm_{pqrs}^{\sigma \sigma^{\prime} \sigma \sigma^{\prime}}
+    \Braket{\psi_{p \sigma} \psi_{r \sigma^{\prime}} | \psi_{q \sigma} \psi_{s \sigma^{\prime}}}
     .
 \end{equation}
 
@@ -368,7 +395,7 @@ expectation value of any one or two-electron operator.
 Also, the 1-RDM can be reconstructed from the 2-RDM by taking the trace of the
 2-RDM over one of the indices, i.e. summing over all the possible remaining
 electrons after selecting one 
-\begin{equation}
+\begin{equation} \label{eq:1rdm-from-2rdm}
     \oedm_{pq} =
     \frac{1}{N-1} \sum_{r} \tedm_{prqr}
     .

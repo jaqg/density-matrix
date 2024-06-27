@@ -1,0 +1,49 @@
+% ---------
+\subsection{Approximated 2-RDMs}
+% ---------
+
+The expression for the approximated 2-RDMs can be recovered, recalling
+\cref{eq:Eee_from_Gamma}, from the expressions for the given approximated
+electron-electron interaction functional.
+
+\textcolor{red}{TODO: revisar indices para que esten en base a integrales en
+notacion Mulliken para respetar simetria con integrales}
+
+For the LS functional, \cref{eq:Eee-LS-functional} can be rewritten as 
+\begin{equation}
+    E_{\text{ee}}^{\text{LS}} =
+    % \frac{1}{2} \sum_{pqrs} G_{pq}^{\text{LS}} \Braket{pq | qp}
+    \frac{1}{2} \sum_{pqrs} G_{pq}^{\text{LS}}
+    \delta_{pr} \delta_{qs} \Braket{pq | rs} 
+    ,
+\end{equation}
+and, by comparing it with \cref{eq:Eee_from_Gamma}, the approximated 2-RDM
+for the LS approximation is directly recovered as 
+\begin{equation}
+    \sordm_{pqrs}^{\text{LS}} =
+    G_{pq}^{\text{LS}}
+    \delta_{pr} \delta_{qs}
+    .
+\end{equation}
+where $G_{pq}^{\text{LS}}$ is given by \cref{eq:GLS}.
+
+The BBC functional given in \cref{eq:Eee-BBC-functional} can also be rewritten as
+\begin{equation}
+    E_{\text{ee}}^{\text{BBC}}\left[ \fordm \right] =
+    % \frac{1}{2} \sum_{pq} n_p n_q \Braket{pp | qq} +
+    % \frac{1}{2} \sum_{pq} G_{pq}^{\text{BBC}} \Braket{pq | qp}
+    \frac{1}{2} \sum_{pqrs} \left( 
+        n_p n_q \delta_{pq} \delta_{rs} +
+        G_{pq}^{\text{BBC}} \delta_{qr} \delta_{ps}
+    \right) \Braket{pq | rs}
+    ,
+\end{equation}
+resulting in the approximated 2-RDM
+\begin{equation}
+    \sordm_{pqrs}^{\text{BBC}} =
+    n_p n_q \delta_{pq} \delta_{rs} +
+    G_{pq}^{\text{BBC}} \delta_{qr} \delta_{ps}
+    ,
+\end{equation}
+with $G_{pq}^{\text{BBC}}$ given by \cref{eq:GBBC1,eq:GBBC2,eq:GBBC3,eq:GBBC3M}
+for BBC1, BBC2, BBC3 and BBC3M, respectively.

@@ -199,7 +199,7 @@ and the 2-RDM, recalling \cref{eq:tedm-spin-representation}, by
 
 This new parametrization for $\mat{\tedm}$ has to be optimized in order for
 $\mat{\tedm}$ to be $N$-representable which, in the molecular
-orbital basis, correspond to
+orbital (MO) basis, correspond to
 \begin{itemize}
     \item Occupation numbers, $\nu_p$, are nonnegative and not greater than 2 
     \begin{equation}
@@ -220,12 +220,13 @@ orbital basis, correspond to
         \begin{equation}
             \mat{\tedm} \succeq 0 \Leftrightarrow \Braket{\Psi | \tedm | \Psi} \ge 0,
         \end{equation}
-        the eigenvalues of $\mat{\tedm}$ must be possitive
+        and the eigenvalues of $\mat{\tedm}$ must be possitive
 
 \end{itemize}
 
 There are more complex conditions, as the two- and three-index conditions\mycite{garrod1964reduction}.
-Here, the main definitions for the two-index conditions are given as\mycite{verstichel2012variational}:
+Here, the main definitions for the two-index conditions\mycite{verstichel2012variational}
+are given as:
 \begin{itemize}
     \item The $\mathcal{I}$ condition: the probability of finding a 
         two-particle pair is larger than zero.
@@ -239,7 +240,7 @@ Here, the main definitions for the two-index conditions are given as\mycite{vers
             \Braket{\Psi_i | a_{\alpha} a_{\beta} 
             a_{\delta}^{\dagger} a_{\gamma}^{\dagger} | \Psi_i},
         \end{equation}
-        which can be rewritten as the followin linear matrix mapping 
+        which can be rewritten as the following linear matrix mapping 
         \begin{equation}
             \mathcal{Q}\left( \sordm \right)_{\alpha\beta;\gamma\delta} =
             \delta_{\alpha\gamma}\delta_{\beta\delta} - 
@@ -268,13 +269,13 @@ Here, the main definitions for the two-index conditions are given as\mycite{vers
         which can be rewritten using anticommutation relations as
         \begin{equation}
             \mathcal{G}_1\left( \sordm \right)_{\alpha\beta;\gamma\delta} =
-            \delta_{\beta \delta} \fordm_{\alpha \gamma} - \sordm_{\alpha \delta ; \gamma \beta}.
+            \delta_{\beta \delta} \fordm_{\alpha \gamma} - \sordm_{\alpha \delta ; \gamma \beta}
             .
         \end{equation}
 
-        The combined conditions $\mathcal{IQG_1}$ are known as the standard
+        The combined conditions $\mathcal{IQG}_1$ are known as the standard
         two-index conditions, which already lead to very good approximations
-        form some systems.
+        for some systems.
 
     \item The $\mathcal{G}_2$ condition: the probability of finding a 
         hole-particle pair must be positive
@@ -303,10 +304,21 @@ $\mathcal{G^{\prime}} \mathcal{T}_2^{\prime}$, and non-standard conditions\mycit
 
 
 This optimization would, idially, be done formally.
+One approach is to decompose the 2-RDM $\sordm_{pqrs}$ or, for simplicity, the
+packed matrix $\tilde{\sordm}_{pq,rs}$ with composite indexes $pq, rs$.
+The objective is to define $\mu, \mu^{\prime}$ such that the $N$-representability
+conditions are satisfied.
+Any higher-order singular value decomposition (HOSVD) method as, for example,
+the Tucker decomposition\mycite{hitchcock1927expression, tucker1966mathematical}
+could be used to decompose $\mat{\sordm}$
+or, simply, any singular value decomposition (SVD) method as the Cholesky
+decomposition\mycite{1924note} for $\mat{\tilde{\sordm}}$.
+
 However, it can be done variationally such that the variational parameters
 $\mu,\mu^{\prime}$ minimize the energy.
 This method, refered as v2DM, can be formally defined as a semidesemidefinite
-programming following the $N$-representability constraints\mycite{verstichel2012variational}.
+programming (SDP) problem following the $N$-representability 
+constraints\mycite{verstichel2012variational}.
 
 Also, it can be done finding a function 
 $Q\left( \nu_p, \nu_q, \nu_r, \nu_s \right)$ for the factors $\mu,\mu^{\prime}$
