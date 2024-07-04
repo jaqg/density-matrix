@@ -5,8 +5,8 @@
 The one-electron integrals matrix, $h_{pq}$, is extracted from the 
 \inline{AOONEINT} file with the \inline{ONEHAMIL} label from the Dalton
 software\mycite{aidas2014dalton}.
-Leaving the technical parts behind, the lower triangular is readen in the atomic
-orbital (AO) basis packed by symmetry, and later umpacked to
+Leaving the technical parts behind, the lower triangular is read in the atomic
+orbital (AO) basis packed by symmetry, and later unpacked to
 obtain the full matrix and symmetrized as $h_{ji} = h_{ij}$.
 It is converted from atomic orbital basis, $\tilde{h}_{ab}$, to the molecular
 orbital basis, $h_{ij}$, as 
@@ -19,8 +19,7 @@ where $ \mat{C}$ is the MO coefficients matrix.
 
 The two-electron integrals matrix, $ \PBraket{pq | rs}$, is extracted from the
 \inline{MOTWOINT} with the \inline{MOLTWOEL} label already in the MO basis and
-written in the Mulliken (chemistry) notation, with the equivalence
-$ \PBraket{ij | kl} \equiv \Braket{ik | jl}$ in the Dirac notation.
+written in the Mulliken (chemistry) notation.
 Similarly, it is unpacked to full dimension and symmetrized considering the
 8-fold symmetry
 \begin{equation} \label{eq:spac-int-8fold}
@@ -38,8 +37,8 @@ Similarly, it is unpacked to full dimension and symmetrized considering the
 Then, along other data, the density matrices $\mat{\oedm}$ and $\mat{\tedm}$ are
 extracted from the interface \inline{SIRIFC} file similarly to the integrals
 matrices.
-Once symmytrized, since the density matrices are already in the (molecular)
-spacial orbitals, they are refered to as $\mat{\fordm}$ and $\mat{\sordm}$.
+Once symmetrized, since the density matrices are already in the (molecular)
+spacial orbitals, they are referred to as $\mat{\fordm}$ and $\mat{\sordm}$.
 
 For the CASSCF calculations, the complete 1-RDM is constructed by block matrices
 corresponding to each -inactive, active, virtual- subspace
@@ -70,7 +69,7 @@ where $ \mat{I}$ is the identity matrix.
 Then, $ \mat{\fordm}^{\text{i-i}}$ is already symmetric.
 
 The active-active block matrix is the one obtained from Dalton which is,
-similarly to $\mat{h}$, symmytrized as 
+similarly to $\mat{h}$, symmetrized as 
 $\oedm_{ji} = \oedm_{ij} \equiv \fordm_{ij}^{\text{a-a}}$.
 
 Since the virtual orbitals are not occupied, both the diagonal virtual-virtual
@@ -83,7 +82,7 @@ matrices are zero
     ,
 \end{equation}
 and, also, the inactive-active block matrix is zero assuming that there is no
-direct correlation betweem inactive and active orbitals 
+direct correlation between inactive and active orbitals 
 \begin{equation}
     \mat{\fordm}^{\text{i-a}} = 0.
 \end{equation}
@@ -99,22 +98,43 @@ Therefore, the complete 1-RDM given in \cref{eq:complete-cas-1rdm-1} reads
     .
 \end{equation}
 
+In principle, $ \mat{\fordm}$ is already diagonal, as $ \mat{\fordm}^{\text{a-a}}$
+is already diagonalized in Dalton.
+To generalize, a Jacobi diagonalization routine is implemented to diagonalize
+$ \mat{\fordm}$ if it is not diagonal. 
+But, an unitary transformation of the integral matrices with the eigenvectors
+in order to work with the natural orbitals basis has not been implemented yet.
+Then, in addition to the symmetry restrictions, the normalization condition
+(\cref{ec:normalization-condition}) is assured to be fulfilled.
+
 Analogously, the complete 2-RDM must be constructed and symmetrized
 to be consistent with the 8-fold symmetry of the
-two-electron integrals (see \cref{eq:spac-int-8fold}).
+two-electron integrals (see \cref{eq:spac-int-8fold})
+\begin{equation} \label{eq:sym-2rdm}
+    \sordm_{\alpha \beta \gamma \delta } = 
+    \sordm_{\alpha \beta \delta \gamma } = 
+    \sordm_{\beta \alpha \gamma \delta } = 
+    \sordm_{\beta \alpha \delta \gamma } = 
+    \sordm_{\gamma \delta \alpha \beta } = 
+    \sordm_{\gamma \delta \beta \alpha } = 
+    \sordm_{\delta \gamma \alpha \beta } = 
+    \sordm_{\delta \gamma \beta \alpha }
+    .
+\end{equation}
+
 It must fulfill the following symmetry conditions
 \begin{align}
     \label{eq:sym-cond-1-2rdm}
-    \sordm_{\beta\alpha\gamma\delta} = \sordm_{\alpha\beta\gamma\delta},\ \ & \text{$\alpha$-$\beta$ swapping,}  \\
+    \sordm_{\beta\alpha\gamma\delta} = \sordm_{\alpha\beta\gamma\delta},\ \ & \alpha \leftrightarrow \beta ,\\
     \label{eq:sym-cond-2-2rdm}
-    \sordm_{\beta\alpha\delta\gamma} = \sordm_{\alpha\beta\gamma\delta},\ \ & \text{$\gamma$-$\delta$ swapping,} \\         
+    \sordm_{\beta\alpha\delta\gamma} = \sordm_{\alpha\beta\gamma\delta},\ \ & \gamma \leftrightarrow \delta ,\\         
     \label{eq:sym-cond-3-2rdm}
-    \sordm_{\gamma\delta\alpha\beta} = \sordm_{\alpha\beta\gamma\delta},\ \ & \text{$\alpha\beta$-$\gamma \delta$ swapping,} 
+    \sordm_{\gamma\delta\alpha\beta} = \sordm_{\alpha\beta\gamma\delta},\ \ & \alpha\beta \leftrightarrow \gamma \delta , 
 \end{align}
 for any index $\alpha, \beta, \gamma, \delta$.
 To simplify the formulation, the definitions for the non-zero elements are
 directly given\mycite{maradzike2017analytic}, where inactive orbitals are
-inndexed with $i,j,k,l$ and active orbitals with $t,u,v,w$.
+indexed with $i,j,k,l$ and active orbitals with $t,u,v,w$.
 
 The elements of the 2-RDM involving only inactive orbitals are given by 
 \begin{equation}
@@ -128,8 +148,8 @@ which are then symmetrized as
     \frac{1}{2} \left( \tedm_{ijkl} + \tedm_{jikl} \right)
     ,
 \end{equation}
-fulfilling \cref{eq:sym-cond-1-2rdm,eq:sym-cond-2-2rdm,eq:sym-cond-3-2rdm},
-$\sord_{jikl} = \sordm_{jilk} = \sordm_{lkij} = \sordm_{ijkl}$.
+fulfilling \cref{eq:sym-cond-1-2rdm,eq:sym-cond-2-2rdm,eq:sym-cond-3-2rdm}, 
+$\sordm_{jikl} = \sordm_{jilk} = \sordm_{lkij} = \sordm_{ijkl}$.
 
 The elements of the 2-RDM involving only active orbitals are obtained from Dalton,
 where a packed matrix $\tilde{D}_{tu,vw}^{(2)}$ with composite indexes $tu,vw$ is
@@ -187,3 +207,7 @@ $\sordm_{utij} = \sordm_{tuji} = \sordm_{ijtu} = \sordm_{tuij}$.
 The 2 and $-1$ factors for the Coulumb term, $\sordm_{ijtu}$ (\cref{eq:coulomb-term-2rdm}),
 and exchange, $\sordm_{iutj}$ (\cref{eq:exchange-term-2rdm}), differ in this
 case from the 1, $-\frac{1}{2}$ factors given by Maradzike\mycite{maradzike2017analytic}.
+
+In addition to the symmetry restrictions, the normalization conditions in
+\cref{ec:normalization-condition,ec:normalization-condition-2RDM} are assured
+to be fulfilled.

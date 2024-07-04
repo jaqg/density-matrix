@@ -1,0 +1,161 @@
+% ------------------------------
+\section{Conclusions and future perspectives} % (fold)
+\label{sec:conclusions}
+% ------------------------------
+In this thesis, the application of Reduced Density Matrix Functional Theory 
+(RDMFT) for electronic structure calculations has been extensively explored.
+The primary goal was to create a working environment that enables the 
+following optimization of the possible new parameterization proposed in this
+work.
+
+Several key findings emerged from this study:
+\begin{enumerate}[label={}]
+    \item \textit{First.} Validation of approximations:
+        Stablished approximations for the electron repulsion functional in terms of 
+        the two-particle reduced density matrix (2-RDM) have been validated.
+        These approximations have shown promise in accurately capturing 
+        electron correlation effects in small sized systems, as in this case,
+        \ch{H2O}.
+    \item \textit{Second.} Possible new parameterization:
+        A possible new parameterization of the 2-RDM was proposed, providing 
+        possible approaches and algorithms for a future optimization.
+    \item \textit{Third.} Computational implementation:
+        The methodologies proposed were implemented and tested at
+        various theory levels, and is extensible to other systems
+        simply changing the Dalton input.
+        Their feasibility and effectiveness in practical applications was
+        demonstrated.
+\end{enumerate}
+
+Reduced Density Matrix Functional Theory presents a promising improvement
+in computational cost to wavefunction-based methods.
+Therefore, the study of reduced density matrices and their applications
+presents multiple avenues for future research.
+One of the promising directions is the development of new approximations
+and improvement of existing approximations for the electron repulsion functional,
+specially for its application to larger systems.
+
+The development of more precise approximated reduced 
+density matrices and efficient methods directly repercute in accuratly describing
+electronic properties, which has significant implications in fields such as
+computational chemistry and solid-state physics. 
+% The ability to accurately describe the energy and properties of complex 
+% electronic systems can enhance the design of materials and molecules with 
+% desired properties, such as more efficient catalysts or materials with 
+% specific electronic characteristics
+
+There are a vast of interdisciplinary applications of RDMFT, such as
+to molecular biology with the study of quantum-level interactions in biomolecules.
+Along those practical applications, RDMFT is used in theoretical physics
+to provide new insights into the nature of electronic interactions in strongly
+correlated systems.
+
+The principal advantage of using reduced density matrices over classical
+wavefunction methods lies in their ability to capture electronic correlation 
+without an explicit representation of the 
+full many-body wavefunction, which removes exponential grow with the number of 
+electrons and orbitals.
+The 2-RDM carries all the relevant information if one is interested in
+expectation values of one- and two-particle operators, which is almost always
+the case.
+Therefore, the 2-RDM is a much more compact and economic storage of
+information than the $N$-particle wave function.
+This reduction in complexity could make such methods computationally feasible
+for larger systems and provide a more efficient means of handling electron
+correlation effects.
+By using functionals of the reduced density matrices, RDMFT can offer a 
+balance between accuracy and computational feasibility, making it a powerful 
+tool for studying complex electronic systems.
+
+One of the main challenges is that the 2-RDM has to obey complicated
+$N$-representability conditions in order to correspond its formal definition
+(\cref{eq:sordm-coordinate-representation}), while the wave function only has
+to be antisymmetric and normalized to unity.
+This results in a high computational complexity problem associated with accurate
+approximations of reduced density matrices.
+Additionally, one of the main downsides of current methods is their 
+application primarily to small systems, for which approximated functionals
+have been parametrized.
+This limitation arises due to the exponential increase in computational 
+resources required as the system size grows, specially for the 2-RDM as it
+is constructed as a 4-dimensional tensor.
+For larger systems, the computational cost becomes prohibitive because the 
+number of possible electronic configurations increases dramatically.
+
+However, with advances in quantum computing and machine learning algorithms,
+there is a significant opportunity to overcome these limitations.
+For example, the optimization of parametrization factors, such as $\mu$ and
+$\mu^{\prime}$ in \cref{eq:AQ-approximation}, with type-algorithms as those
+proposed in this work involve expensive methods and algorithms as matrix and
+tensor decompositions and diagonalization.
+Therefore, the integration of this variational-type methods in quantum computing,
+which is a currently developing area, would overcome this problems. 
+Also, the integration of machine learning techniques to this kind of 
+parametrizations and optimizations could improve the cost and, more importantly,
+the application to larger and more complex systems.
+% The integration of machine learning techniques could enable the prediction of
+% electronic properties more quickly and at a lower computational cost
+
+Over the past few decades, there has been extensive theoretical development 
+around reduced density matrices.
+This includes the formulation and refinement of the contracted Schrödinger 
+equations (CSE), which offer a framework for approximating the many-body 
+problem by considering only the RDMs of interest.
+% The CSEs have been pivotal in advancing our understanding and computational 
+% approaches to electronic correlation in quantum systems.
+
+While this document has primarily focused on the 1-RDM and 2-RDM due to their 
+importance, physical significance and relatively simpler formal definitions,
+there have been substantial theoretical advancements concerning higher-order
+reduced density matrices, such as the 3-RDM and 4-RDM, which are of the most
+practical interest.
+Also, analogously to the reconstruction of the 1-RDM from the 2-RDM given in
+\cref{eq:1rdm-from-2rdm}, lower-order RDMs can be reconstructed from higher-order
+ones by tracing over a dimension.
+These higher-order RDMs provide even more detailed information about 
+electronic interactions but come with increased complexity in both definition 
+and computational demand.
+Exploring these higher-order RDMs can potentially lead to more accurate 
+descriptions of electronic systems and new insights into many-body quantum 
+phenomena.
+
+The primary future vision for this work is for the potentially new 
+approximation proposed in this document to be verified and optimized. 
+By achieving this, the program is intended to be enhanced, generalized, and 
+made more efficient, ultimately seeking its possible integration with existing 
+software such as Dalton.
+
+Additionally, since no time-dependence has been considered in this work, 
+an important extension would be the development and application to Time-Dependent
+Reduced Density Matrix Functional Theory (TDRDMFT), which is a relatively 
+young extension of RDMFT and represent a significant future research direction.
+TDRDMFT can provide insights into the dynamic behavior of 
+electronic systems under various external perturbations, enhancing our 
+understanding of time-dependent processes in complex quantum systems with
+the advantage of RDMFT.
+
+Looking forward, several future research directions have been identified:
+\begin{itemize}
+    \item Time-Dependent Extensions:
+        Extending the current methodologies to Time-Dependent Reduced Density 
+        Matrix Functional Theory (TDRDMFT) could provide valuable insights 
+        into dynamic processes in electronic systems.
+    \item Theoretical Advancements:
+        Optimization of the proposed parametrization and testing.
+    \item Integration with Existing Software:
+        Integration of the program with existing software such as Dalton.
+\end{itemize}
+
+In conclusion, this thesis provides a comprehensive framework for employing 
+reduced density matrice in electronic structure calculations, highlighting both
+its potential and the challenges that need to be addressed.
+The field of Reduced Density Matrix Functional Theory and RDM approximations is
+full of opportunities and challenges.
+It is essential to continue improving existing 
+approximations and methodologies and exploring new techniques that can overcome current limitations.
+With the convergence of different disciplines and the use of emerging 
+technologies, the future of this field promises to be exciting and full of 
+innovative discoveries.
+The advancements made here lay the groundwork for further study of the possible
+new approximation proposed in this work, and for future studies in the theory.
+

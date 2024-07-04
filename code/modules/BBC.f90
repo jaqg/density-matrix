@@ -677,7 +677,7 @@ module BBC
         real(kind=8), dimension(:,:,:,:), allocatable, intent(out) :: D2
         !
         integer :: p, q, r, s, n, ierr
-        real(kind=8) :: np, nr
+        real(kind=8) :: np, nq, nr
         real(kind=8), dimension(:,:), allocatable :: GBBC
 
         ! Compute the GBBC matrix
@@ -705,6 +705,7 @@ module BBC
         do p = 1, n
             np = ON(p)
             do q = 1, n
+                nq = ON(q)
                 do r = 1, n
                     nr = ON(r)
                     do s = 1, n
@@ -712,8 +713,14 @@ module BBC
                         ! & 4.d0 * np * nr * kronecker(p,q) * kronecker(r,s) -&
                         ! & 2.d0 * GBBC(p,q) * kronecker(q,r) * kronecker(p,s)
                         !
+                        ! In Dirac notation
+                        ! D2(p,q,r,s) = &
+                        ! & np * nr * kronecker(p,q) * kronecker(r,s) +&
+                        ! & GBBC(p,q) * kronecker(q,r) * kronecker(p,s)
+                        !
+                        ! In Mulliken notation
                         D2(p,q,r,s) = &
-                        & np * nr * kronecker(p,q) * kronecker(r,s) +&
+                        & np * nq * kronecker(p,r) * kronecker(q,s) +&
                         & GBBC(p,q) * kronecker(q,r) * kronecker(p,s)
                     end do
                 end do

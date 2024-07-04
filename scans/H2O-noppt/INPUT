@@ -1,6 +1,6 @@
 # Folder containing the files
-data
+data-MCSCF-ccpVDZ/
 # Name of the SIRIFC file
-H2O-1-MCSCF-SIRIFC
+H2O-8-MCSCF-SIRIFC
 # Name of the file containing one- and two-electron integrals
-H2O-1-MCSCF-integrals
+H2O-8-MCSCF-integrals

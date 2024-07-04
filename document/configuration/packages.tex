@@ -1,7 +1,7 @@
 %
 % --- Formato de página ---
 %
-\usepackage[a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
 \usepackage{lscape}
 \usepackage{multicol}
 \usepackage{fancyhdr}
@@ -11,9 +11,9 @@
 % \singlespace      % Interlineado normal
 % \onehalfspace       % Interlineado de 1.5
 % \doublespace      % Interlineado doble
-\spacing{1.3}     % Interlineado personalizado
 % \renewcommand{\baselinestretch}{1.5} % Interlinieado de 1.5
 \usepackage{afterpage}
+\usepackage{appendix}
 
 \newcommand\blankpage{%
     \null
@@ -92,6 +92,13 @@
 % --- Programming/Code ---
 %
 \usepackage{verbatimbox} % Centrar código con verbatim
+\usepackage{algorithm} % paquete para pseudocodigo
+\usepackage[noend]{algpseudocode} % quita cierre de entornos
+% \usepackage{algpseudocode}
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+ 
 %
 % --- Referencias ---
 %

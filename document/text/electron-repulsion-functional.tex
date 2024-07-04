@@ -9,7 +9,7 @@ is an explicit function of the occupation numbers and the natural spin-orbitals.
 % subsection Electron-electron functionals (end)
 There are two cases where the exact forms of $\func{E_{\text{ee}}}{\fordm}$ are known:
 \begin{enumerate}
-    \item \textbf{$n$-electron noninteracting systems}: the 1-RDM corresponding
+    \item \textbf{$\boldsymbol{n}$-electron noninteracting systems}: the 1-RDM corresponding
         to a single determinant wavefunction is idempotent, which implies integer
         (0 or 1) values of the natural occupation numbers 
         \begin{equation}
@@ -22,6 +22,7 @@ There are two cases where the exact forms of $\func{E_{\text{ee}}}{\fordm}$ are 
 
         In this case, a 2-RDM is defined for a general wavefunction, $\Psi$, as 
         \begin{equation}
+            \resizebox{\textwidth}{!}{$
             \sordm \left( \mat{x}_1, \mat{x}_2, \mat{x}_1\myprime, \mat{x}_2\myprime \right)
             =
             n\left( n - 1 \right) \idotsint
@@ -29,6 +30,7 @@ There are two cases where the exact forms of $\func{E_{\text{ee}}}{\fordm}$ are 
             \Psi^{*} \left( \mat{x}_1\myprime, \mat{x}_2\myprime, \mat{x}_3, \ldots,  \mat{x}_n \right)
             \dd{ \mat{x}_3} \cdots \dd{ \mat{x}_n}
             ,
+        $}
         \end{equation}
         which is explicitly expressible in terms of 1-RDM if the wavefunction takes
         the form of a Slater determinant 
@@ -45,7 +47,7 @@ There are two cases where the exact forms of $\func{E_{\text{ee}}}{\fordm}$ are 
 
         The electron interaction functional corresponding to such a
         noninteracting 2-RDM reads 
-        \begin{equation}
+        \begin{equation} \label{eq:Eee-HF}
             \func{E_{\text{ee}}^{\text{HF}}}{\fordm} =
             \func{E_{\text{H}}}{\fordm} + \func{E_{\text{x}}}{\fordm}
             ,
@@ -58,7 +60,7 @@ There are two cases where the exact forms of $\func{E_{\text{ee}}}{\fordm}$ are 
         from functional optimization\mycite{lieb1981variational}.
         The Hartree functional, $E_{\text{H}}$, describes the classical
         part of electron interaction 
-        \begin{equation}
+        \begin{equation} \label{eq:Eee-H}
             \func{E_{\text{H}}}{\fordm} = \frac{1}{2} \iint
             \frac{
                 \fordm \left( \mat{x}, \mat{x} \right)
@@ -68,7 +70,7 @@ There are two cases where the exact forms of $\func{E_{\text{ee}}}{\fordm}$ are 
             ,
         \end{equation}
         whereas the exchange functional, $E_{\text{x}}$, reads 
-        \begin{equation}
+        \begin{equation} \label{eq:Eee-x}
             \func{E_{\text{x}}}{\fordm} = -\frac{1}{2} \iint
             \frac{
                 \fordm \left( \mat{x}, \mat{x}\myprime \right)
@@ -98,7 +100,7 @@ There are two cases where the exact forms of $\func{E_{\text{ee}}}{\fordm}$ are 
         natural spin-orbitals, $\left\{ \varphi_p \right\}$, the entire dependence of
         $E_{\text{ee}}$ on $\varphi_p$ is included in two-electron integrals.
 
-    \item \textbf{Two-electron closed-shell system}: an interacting two-electron
+    \item \textbf{Two-electron closed-shell system}: interacting two-electron
         species.
 
         % (see sec 2.1 of Pernal)
@@ -112,15 +114,17 @@ There are two cases where the exact forms of $\func{E_{\text{ee}}}{\fordm}$ are 
         spin-orbitals that share spatial parts 
         \begin{equation}
             \psi^{\text{LS}} =
-            \sum_{p} c_p \left| \varphi_p \varphi_{\bar{p}} \right|
+            \sum_{p} c_p \left| \varphi_{p \sigma} \varphi_{p \sigma^{\prime}} \right|
             ,
         \end{equation}
         % where $p$ and $\bar{p}$ are spin-orbitals of the opposite spin and
         % $\left| \varphi_p \varphi_{\bar{p}} \right|$ denotes a normalized
         % Slater determinant.
-        where $\left| \varphi_p \varphi_{\bar{p}} \right|$ indicates a 
-        normalized Slater determinant and $p$ and $\bar{p}$ are
-        spin-orbitals of opposite spin.
+        where $\left| \varphi_{p \sigma} \varphi_{p \sigma^{\prime}} \right|$
+        indicates a 
+        normalized Slater determinant and $p \sigma$ and $p \sigma^{\prime}$ are
+        spin-orbitals of opposite spin $\sigma = \alpha, \beta$ with 
+        $\sigma^{\prime} \not= \sigma$.
         The normalization of $\psi^{\text{LS}}$ imposes
         that $\displaystyle\sum_{p} c_p^{2} = 1$.
 
@@ -145,7 +149,7 @@ There are two cases where the exact forms of $\func{E_{\text{ee}}}{\fordm}$ are 
         assuming that the coefficients corresponding to spin-orbitals of opposite
         spins and same spatial parts are equal.
 
-        By minimizing the energy with respecto to $\left\{ c_p \right\}$ and
+        By minimizing the energy with respect to $\left\{ c_p \right\}$ and
         $\left\{ \varphi_p \right\}$, an exact electron interaction density
         matrix functional can be immediately written as 
         \begin{equation} \label{eq:LS-functional}
@@ -187,13 +191,14 @@ There are two cases where the exact forms of $\func{E_{\text{ee}}}{\fordm}$ are 
             G_{pq}^{\text{LS}} =
             \begin{cases}
                 n_p & p = q \\
-                - \sqrt{n_p n_q} & p = 1,\ q > 1\ \mathrm{or}\ p>1,\ q=1 \\
+                - \sqrt{n_p n_q} & \left( p = 1,\ q > 1 \right) \vee \left( p>1,\ q=1 \right) \\
                 \sqrt{n_p n_q} & \text{otherwise}
             \end{cases}
             ,
         \end{equation}
         which, although not always fully equivalent to the exact LS functional
         given in \cref{eq:LS-functional}, is a good approximation.
+        The symbol $\vee$ stands for the logical \textit{or}.
 
         % Also, the LS functional was extended for the more general closed-shell
         % $n$ (even) electron ansatz involving all determinants arising from
@@ -230,6 +235,7 @@ correlated electron pair are known.
 
 % ------------------------------
 \subsection{Approximations for $E_{\text{ee}}$} % (fold)
+\label{sec:approximated-Eee}
 % ------------------------------
 
 % subsection \subsection{Approximations for $E_{\text{ee}}$} % (fold)
@@ -274,7 +280,7 @@ strongly occupied orbitals as
 \end{equation}
 
 In the BBC3 functional, corrections were included for the interaction between a pair 
-of bonding and antibonding (frontier) spinorbitals.
+of bonding and antibonding (frontier) spin-orbitals.
 Additionally, BBC3 eliminated self-interaction effects from all orbitals except
 the frontier ones.
 \begin{equation} \label{eq:GBBC3}
@@ -303,7 +309,6 @@ the frontier ones.
     \end{cases}
 \end{equation}
 where $p \in F_W$ refers to a weakly occupied frontier orbital.
-The symbol $\vee$ stands for the logical \textit{or}.
 
 Over the practical difficulty of the need to select bonding and antibonding
 orbitals, BBC3 accounts for both dynamic and static correlation, providing 
@@ -322,7 +327,7 @@ two subsets: the subset $S_b$ for the degenerate bonding orbitals and the subset
 $S_c$ for the rest. The $W$ set is subdivided into $W_a$ for the degenerate
 antibonding orbitals and $W_h$ for the rest weakly occupied orbitals
 \begin{equation} \label{eq:GBBC3M}
-    G_{pq}^{\text{BBC3}} = 
+    G_{pq}^{\text{BBC3M}} = 
     \begin{cases}
         \sqrt{n_p n_q} & p \not= q \wedge p,q \in W, \\
         -n_p n_q & p \not= q \wedge p,q \in S, \\
@@ -334,7 +339,7 @@ antibonding orbitals and $W_h$ for the rest weakly occupied orbitals
 where the symbol $\cup$ stands for the union of two sets.
 
 % % ---------
-% \subsection{Construction of 2-RDM in terms of 1-RDM}
+\subsection{Cumulant expansion of the 2-RDM}
 % % seccion 2.2 Pernal
 % % ---------
 %
@@ -342,30 +347,32 @@ where the symbol $\cup$ stands for the union of two sets.
 % % conditions to be imposed on the 2-RDM which may aid in its
 % % construction\mycite{cioslowski2002systematic}
 %
-% Assuming the cumulant expansion of 2-RDM\mycite{staroverov2002optimization} which
-% consists of writing $\sordm$ as the antisymmetrized product of $\fordm$ and
-% the cumulant part, $\lambda$, being a functional of $\fordm$ 
-% \begin{equation}
-%     \sordm_{pqrs} =
-%     n_p n_q \left( \delta_{pr} \delta_{qs} - \delta_{ps} \delta_{qr} \right)
-%     + \lambda_{pqrs} \left[ \fordm \right]
-%     ,
-% \end{equation}
-% one-electron density matrix functionals can be developed by finding
-% approximations for the cumulant part imposing known conditions which the exact
-% cumulant satisfies.
-%
-% \textcolor{red}{(\ldots)}
-%
-% \textcolor{red}{Duda: pairs of coupled orbitals para implementar PNOF$i$}
-%
-% \textcolor{red}{Duda: qué funcionales más?}
+The 2-RDM can be constructed in terms of the 1-RDM assuming the cumulant
+expansion of 2-RDM\mycite{staroverov2002optimization}, which
+consists of writing $\sordm$ as the antisymmetrized product of $\fordm$ and
+the cumulant part, $\lambda$, being a functional of $\fordm$ 
+\begin{equation}
+    \sordm_{pqrs} =
+    n_p n_q \left( \delta_{pr} \delta_{qs} - \delta_{ps} \delta_{qr} \right)
+    + \lambda_{pqrs} \left[ \fordm \right]
+    ,
+\end{equation}
+resulting in the following expression for the correlation functional 
+\begin{equation}
+    E_{\text{c}} \left[ \fordm \right]
+    =
+    \frac{1}{2} \sum_{pqrs} 
+    \lambda_{pqrs} \left[ \fordm \right]
+    \Braket{rs | pq}
+    ,
+\end{equation}
+from which $E_{\text{ee}}$ is obtained with \cref{eq:Eee-HF}.
 
-% TODO: comentar el funcional PNOF y coom se reduce a BBCn por lo que no ha
-% sido implementado
+This way, 1-RDM functionals can be developed by finding
+approximations for $ \lambda$ imposing known conditions which the exact
+cumulant satisfies.
 
-%% Functionals PNOFi by Piris
-% Reconstructionf the 2-RDM in terms of 1-RDM implies the following equality
+% Reconstruction of the 2-RDM in terms of 1-RDM implies the following equality
 % conditions satisfied by the $n$-representable 2-RDM are imposed
 % \begin{enumerate}
 %     \item Hermicity 
@@ -383,25 +390,9 @@ where the symbol $\cup$ stands for the union of two sets.
 %         \sum_{q} \sordm_{pqrq} = \left( n - 1 \right) n_p \delta_{pr},
 %     \end{equation}
 % \end{enumerate}
-% % ---------
-% \subsection{Approximate functionals}
-% % ---------
-% % Pag 130 del Pernal
-% In the development of approximate functionals, it is convenient to search for
-% approximations to the exchange-correlation term, $E_{\text{xc}}$, defined as
-% \begin{equation} \label{ec:xc-functional}
-%     \func{E_{\text{xc}}}{\fordm} =
-%     \func{E_{\text{ee}}}{\fordm} - \func{E_{\text{H}}}{\fordm}
-%     ,
-% \end{equation}
-% which can be decomposed into an exchange part (given in \cref{ec:xc-functional})
-% and the correlation functional, $E_{\text{c}}$ 
-% \begin{equation}
-%     \func{E_{\text{c}}}{\fordm} =
-%     \func{E_{\text{xc}}}{\fordm} - \func{E_{\text{x}}}{\fordm}
-%     .
-% \end{equation}
-%
-% \textcolor{red}{(\ldots)}
 
-% Summary & outlook sec 6 Pernal
+Piris and Ugalde followed this approach and proposed a series of natural orbital
+functionals known as PNOF$i$ $\left( i=1-6 \right)$
+\mycite{https://doi.org/10.1002/qua.20858,piris2007dispersion,piris2010communications,piris2010communication,piris2011natural,piris2014interacting}
+by finding approximations to $\lambda$ in terms of the natural occupation numbers
+\mycite{piris2014perspective,piris2013natural}.

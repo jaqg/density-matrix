@@ -7,7 +7,7 @@ An idempotent first-order reduced density matrix (1-RDM) is variationally
 optimized in the Hartree-Fock (HF) method\mycite{kollmar2004structure}.
 
 The 1-RDM is determined by the natural orbitals and their occupation
-numbers\mycite{lowdin1955quantuma}, leading to denote the corresponding energy
+numbers\mycite{lowdin1955quantum}, leading to denote the corresponding energy
 functional as density matrix functional (DMF) or natural orbital functional (NOF).
 This is explained in detail in the following sections.
 
@@ -18,7 +18,8 @@ This is explained in detail in the following sections.
 % NOTAS SACADAS DEL PERNAL
 % mirar tb seccion 1.7.3 del Hergakel
 In the coordinate representation of first quantization,
-the \textit{first-order reduced density matrix} (1-RDM), $\fordm$, is defined
+the \textit{first-order reduced density matrix} (1-RDM), also called
+\textit{one-particle reduced density matrix}, $\fordm$, is defined
 for an $n$-electron wavefunction, $\Psi$, as
 \begin{equation} \label{eq:fordm-coordinate-representation}
     \fordm \left( \mat{x}_1, \mat{x}_1\myprime \right) =
@@ -28,7 +29,8 @@ for an $n$-electron wavefunction, $\Psi$, as
     \dd{ \mat{x}_2} \cdots \dd{ \mat{x}_n}
     ,
 \end{equation}
-and the \textit{second-order reduced density matrix} (2-RDM), $\sordm$, as 
+and the \textit{second-order reduced density matrix} (2-RDM), or
+\textit{two-particle reduced density matrix}, $\sordm$, as 
 \begin{equation} \label{eq:sordm-coordinate-representation}
     \sordm \left( \mat{x}_1, \mat{x}_2, \mat{x}_1\myprime, \mat{x}_2\myprime \right)
     =
@@ -77,7 +79,7 @@ spin-orbitals, $\left\{ \varphi_p \right\}$.
 % and $a,b,c,d$ to arbitrary one-eletron functions.
 % Also, atomic units are employed throughout the document.
 By convention, natural spin-orbitals are denoted by the indices $p$, $q$, $r$, and $s$, 
-and arbitrary one-eletron functions by the indices $a$, $b$, $c$, and $d$. 
+and arbitrary one-electron functions by the indices $a$, $b$, $c$, and $d$. 
 
 % Some properties of the natural spin-orbitals and occupation numbers, known as the 
 % $n$-representability conditions, are:
@@ -92,6 +94,7 @@ form\mycite{coleman1963structure} and read:
             \int
             \varphi_p^{*} \left( \mat{x} \right)
             \varphi_q \left( \mat{x} \right)
+            \dd{ \mat{x}}
             = \delta_{pq}
             \quad \forall_{p,q} 
             .
@@ -108,7 +111,7 @@ form\mycite{coleman1963structure} and read:
             .
         \end{equation}
 
-    \item Occupation number, $n_p$, is nonnegative and not grater than 1 
+    \item The occupation number, $n_p$, is nonnegative and not grater than 1 
     \begin{equation} \label{ec:occ-number-condition}
         0 \leq n_p \leq 1 \quad \forall_{p}
         .

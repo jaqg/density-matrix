@@ -1,0 +1,68 @@
+% =============================================================================
+% --- TEMA: METROPOLIS ---
+% =============================================================================
+\usetheme[
+    sectionpage=none,              % none, simple, progressbar
+    subsectionpage=none,           % none, simple, progressbar
+    numbering=fraction,            % none, counter, fraction
+    progressbar=frametitle,        % none, head, frametitle, foot
+    block=fill,                    % transparent, fill
+    background=light,              % light, dark
+    titleformat=regular,           % regular, smallcaps, allsmallcaps, allcaps
+    titleformat title=smallcaps,     % regular, smallcaps, allsmallcaps, allcaps
+    titleformat subtitle=regular,  % regular, smallcaps, allsmallcaps, allcaps
+    titleformat section=smallcaps,   % regular, smallcaps, allsmallcaps, allcaps
+    titleformat frame=smallcaps     % regular, smallcaps, allsmallcaps, allcaps
+]{metropolis}
+% =============================================================================
+%
+% =============================================================================
+% --- FUENTES ---
+% =============================================================================
+\usefonttheme{professionalfonts} % required for mathspec
+\usepackage{mathspec}
+%
+% --- mas delgada ---
+%
+% \setsansfont[BoldFont={Fira Sans}, Numbers={OldStyle}]{Fira Sans Light}
+% \setmathsfont(Digits)[Numbers={Lining, Proportional}]{Fira Sans Light}
+%
+% --- o mas gruesa (para proyectores de mala calidad) ---
+%
+\setsansfont[BoldFont={Fira Sans SemiBold}, Numbers={OldStyle}]{Fira Sans Book}
+\setmathsfont(Digits)[Numbers={Lining, Proportional}]{Fira Sans Light}
+% =============================================================================
+%
+% =============================================================================
+% --- COLORES Y FORMATO ---
+% =============================================================================
+\definecolor{blue1}{HTML}{5989cf}    % setting main color to be used
+\definecolor{blue2}{HTML}{cde4ff}     % setting sub color to be used
+\definecolor{mycyan}{HTML}{CBE5EA}     % setting sub color to be used
+\definecolor{mycyan2}{HTML}{dcdde2}     % setting sub color to be used
+\definecolor{mymint}{HTML}{DAF7A6}     % setting sub color to be used
+%
+\definecolor{myred}{RGB}{237, 23, 31}
+\definecolor{myblue}{RGB}{18, 124, 163}
+\definecolor{graforange}{RGB}{230, 159, 0}
+\definecolor{grafblue}{RGB}{86, 180, 233}
+
+% \setbeamercolor{normal text}{fg=white, bg=}
+% \setbeamercolor{alerted text}{fg=white, bg=}
+% \setbeamercolor{example text}{fg=white, bg=}
+
+% \setbeamercolor{progress bar}{ ... }
+% \setbeamercolor{title separator}{ ... }
+% \setbeamercolor{progress bar in head/foot}{ ... }
+% \setbeamercolor{progress bar in section page}{ ... }
+
+% \setbeamercolor{palette primary}{fg=black,bg=white}
+% \setbeamercolor{background canvas}{parent=palette primary}
+% \setbeamercolor{progress bar}{use=palette primary,fg=red}
+
+% \setbeamersize{text margin left=1em,text margin right=1em}
+
+\useoutertheme{metropolis}
+\useinnertheme{metropolis}
+\usefonttheme{metropolis}
+% \usecolortheme{seahorse}

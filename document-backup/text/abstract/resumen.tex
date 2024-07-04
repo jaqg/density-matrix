@@ -1,0 +1,63 @@
+% ------
+\section*{Resumen}
+% ------
+En este Trabajo Fin de Máster, la aplicación de la Teoría del Funcional de la
+Matriz de Densidad Reducida (RDMFT, por sus siglas en inglés) en el contexto de
+los cálculos de estructura electrónica es explorada.
+Se estudia la viabilidad y precisión resultantes del uso de las
+matrices densidad reducidas de primer orden (1-RDM) y segundo orden (2-RDM)
+en lugar de la función de onda en los métodos tradicionales.
+Tanto las RDMs exactas, calculadas a partir de su definición formal, como 
+distintas RDMs aproximadas son estudiadas.
+El objetivo es crear un entorno de trabajo que permita la optimización y 
+verificación de una potencialmente nueva parametrización de la 2-RDM propuesta
+por nuestro grupo y desarrollada en este documento.
+
+% Una ventaja significativa de la RDMFT frente a los métodos convencionales
+% basados en la función de onda es la eficiencia con la que los efectos de
+% correlación estáticos son considerados, haciendo a la RDMFT una teoría prometedora
+% en el tratamiento de sistemas con efectos de correlación estática notables.
+Una ventaja significativa de la RDMFT frente a los métodos convencionales
+basados en la función de onda es su capacidad para manejar eficazmente los 
+efectos de correlación estática, lo que la convierte en un enfoque prometedor 
+para sistemas donde estos efectos son pronunciados.
+Además, el  uso de RDMs simplifica el tratamiento
+del término de energía cinética y evita la necesidad de introducir un
+sistema ficticio no-interactuante, como se requiere en la Teoría del Funcional de la
+Densidad (DFT).
+
+A pesar de su potencial, la aplicación de la RDMFT está actualmente limitada a 
+sistemas pequeños debido a su complejidad computacional.
+Esta limitación se deriva de la naturaleza compleja
+de las RDMs de orden superior y de garantizar su
+$N$-representabilidad.
+
+Futuras líneas de investigación incluyen extender estas metodologías 
+a la Teoría del Funcional de la Matriz de Densidad 
+Reducida Dependiente del Tiempo (TDRDMFT), lo que 
+permitiría el estudio de procesos dinámicos en sistemas electrónicos.
+Además, se han realizado avances teóricos significativos en las últimas décadas,
+particularmente con el desarrollo de las ecuaciones de Schrödinger contraídas y 
+RDMs de orden superior, que prometen mejorar aún más 
+la aplicabilidad y robustez de la RDMFT.
+
+En conclusión, este trabajo proporciona un marco comprensivo para emplear la 
+RDMFT en cálculos de estructura electrónica, demostrando sus ventajas 
+y desafíos que deben abordarse para una aplicación más amplia.
+
+\vspace{0.3cm}
+\textbf{Objetivos:}
+\begin{enumerate}[label={}]
+    \item \textit{Primero:} Crear un programa integrado con el software Dalton 
+        para la obtención de RDMs exactas.
+    \item \textit{Segundo:} Validar algunas de las aproximaciones disponibles
+        para el funcional de repulsión electrónica en términos de la 2-RDM.
+    \item \textit{Tercero:} Desarrollar la hipótesis de una posible nueva 
+        aproximación y proponer posibles métodos de parametrización y optimización.
+    \item \textit{Cuarto:} Crear un entorno de trabajo para la construcción, prueba y 
+        estudio profundo de la 2-RDM, con el cálculo de propiedades derivadas 
+        de la RDM, como la energía, comparables con la literatura y/o otros cálculos, 
+        y métricas directas, como la distancia de Minkowski, para 
+        la comparación directa de RDMs.
+\end{enumerate}
+

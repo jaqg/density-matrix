@@ -1,5 +1,5 @@
 % ------------------------------
-\section{\textcolor{red}{A possible new approximation}} % (fold)
+\section{A possible parametrization of the 2-RDM} % (fold)
 \label{sec:new-hypothesis}
 % ------------------------------
 
@@ -85,7 +85,7 @@ where
 To this point, no approximation has been made. 
 In fact, $\lambda_{pqrs}$ is simply $d_{pqrs}$ in the chosen natural basis.
 
-A possible parametrization of $\mat{\lambda}$, proposed by Alfredo, is given as follows.
+A possible parametrization of $\mat{\lambda}$, proposed by our group, is given as follows.
 
 Looking at \cref{eq:myaprox-d-1}, in
 which $ \mat{\tedm}$ is given by products
@@ -185,7 +185,7 @@ Therefore, the ground state energy for this parametrization is given by
     ,
 \end{equation}
 and the 2-RDM, recalling \cref{eq:tedm-spin-representation}, by 
-\begin{equation}
+\begin{equation} \label{eq:AQ-approximation}
     \therefore
     \tedm_{pqrs} =
     % \lambda_{pqrs} - \delta_{qr} D_{ps} =
@@ -199,131 +199,118 @@ and the 2-RDM, recalling \cref{eq:tedm-spin-representation}, by
 
 This new parametrization for $\mat{\tedm}$ has to be optimized in order for
 $\mat{\tedm}$ to be $N$-representable which, in the molecular
-orbital (MO) basis, correspond to
+orbital (MO) basis, correspond -at least- to
 \begin{itemize}
     \item Occupation numbers, $\nu_p$, are nonnegative and not greater than 2 
-    \begin{equation}
-        0 \le \nu_p \le 2\ \forall p,
-    \end{equation}
+        \begin{equation}
+            0 \le \nu_p \le 2\ \forall p,
+        \end{equation}
 
     \item The normalization condition must be fulfilled, such that 
-    \begin{equation}
-        \sum_{i} \nu_i = n,
-    \end{equation}
-    and 
-    \begin{equation}
-        \sum_{ij} \tedm_{ijij} = n\left( n-1 \right), 
-    \end{equation}
+        \begin{equation} \label{eq:MO-norm-cond-1}
+            \sum_{i} \nu_i = n,
+        \end{equation}
+        and 
+        \begin{equation} \label{ec:normalization-condition-2RDM}
+            \sum_{ij} \tedm_{ijij} = \frac{n\left( n-1 \right)}{2}, 
+        \end{equation}
 
     \item $\mat{\tedm}$ must be positive-semidefinite, i.e. the quadratic form
-        $\mat{v^{\dagger} \tedm v}$ must be possitive for any vector $\mat{v}$
+        $\mat{v^{\dagger} \tedm v}$ must be positive for any vector $\mat{v}$
         \begin{equation}
-            \mat{\tedm} \succeq 0 \Leftrightarrow \Braket{\Psi | \tedm | \Psi} \ge 0,
+            \mat{\tedm} \succeq 0 \Leftrightarrow \Braket{\Psi | \mat{\tedm} | \Psi} \ge 0,
         \end{equation}
-        and the eigenvalues of $\mat{\tedm}$ must be possitive
+        and the eigenvalues of $\mat{\tedm}$ must be positive
 
 \end{itemize}
+More conditions as $\mathcal{I} \mathcal{Q} \mathcal{G}_1$ could be
+considered for a better optimization.
 
-There are more complex conditions, as the two- and three-index conditions\mycite{garrod1964reduction}.
-Here, the main definitions for the two-index conditions\mycite{verstichel2012variational}
-are given as:
-\begin{itemize}
-    \item The $\mathcal{I}$ condition: the probability of finding a 
-        two-particle pair is larger than zero.
+This optimization would, ideally, be done formally.
+The objective is to define $\mu, \mu^{\prime}$ such that the energy is minimized
+while the $N$-representability conditions are satisfied.
+One approach is to decompose the 2-RDM $\sordm_{pqrs}$ using any higher-order
+singular value decomposition (HOSVD) method as, for example,
+the Tucker decomposition\mycite{hitchcock1927expression, tucker1966mathematical}.
+Also, the packed matrix $\tilde{\sordm}_{pq,rs}$ with composite indexes $pq, rs$
+can be decomposed with any singular value decomposition (SVD) method as the Cholesky
+decomposition\mycite{1924note}.
 
-    \item The $\mathcal{Q}$ condition: the probability of finding a two-hole
-        pair has to be larger than zero 
-        \begin{equation}
-            \mathcal{Q} \succeq 0, \quad
-            \mathcal{Q}_{\alpha \beta;\gamma \delta} =
-            \sum_{i} \omega_i 
-            \Braket{\Psi_i | a_{\alpha} a_{\beta} 
-            a_{\delta}^{\dagger} a_{\gamma}^{\dagger} | \Psi_i},
-        \end{equation}
-        which can be rewritten as the following linear matrix mapping 
-        \begin{equation}
-            \mathcal{Q}\left( \sordm \right)_{\alpha\beta;\gamma\delta} =
-            \delta_{\alpha\gamma}\delta_{\beta\delta} - 
-            \delta_{\beta\gamma}\delta_{\alpha\delta} + 
-            \sordm_{\alpha\beta;\gamma\delta} - 
-            \left(
-                \delta_{\alpha\gamma}\fordm_{\beta\delta} - 
-                \delta_{\alpha\delta}\fordm_{\beta\gamma} - 
-                \delta_{\beta\gamma}\fordm_{\alpha\delta} + 
-                \delta_{\beta\delta}\fordm_{\alpha\gamma}
-            \right)
-            ,
-        \end{equation}
-        which, together with the $\mathcal{I}$ condition, already insures the 
-        Pauli principle.
-
-    \item The $\mathcal{G}_1$ condition: the probability of finding a 
-        particle-hole pair must be larger than zero
-        \begin{equation}
-            \mathcal{G}_1 \succeq 0, \quad
-            \left( \mathcal{Q}_1 \right)_{\alpha \beta;\gamma \delta} =
-            \sum_{i} \omega_i 
-            \Braket{\Psi_i | a_{\alpha}^{\dagger} a_{\beta} 
-            a_{\delta}^{\dagger} a_{\gamma} | \Psi_i},
-        \end{equation}
-        which can be rewritten using anticommutation relations as
-        \begin{equation}
-            \mathcal{G}_1\left( \sordm \right)_{\alpha\beta;\gamma\delta} =
-            \delta_{\beta \delta} \fordm_{\alpha \gamma} - \sordm_{\alpha \delta ; \gamma \beta}
-            .
-        \end{equation}
-
-        The combined conditions $\mathcal{IQG}_1$ are known as the standard
-        two-index conditions, which already lead to very good approximations
-        for some systems.
-
-    \item The $\mathcal{G}_2$ condition: the probability of finding a 
-        hole-particle pair must be positive
-        \begin{equation}
-            \mathcal{G}_2 \succeq 0, \quad
-            \left( \mathcal{Q}_2 \right)_{\alpha \beta;\gamma \delta} =
-            \sum_{i} \omega_i 
-            \Braket{\Psi_i | a_{\alpha} a_{\beta}^{\dagger} 
-            a_{\delta} a_{\gamma}^{\dagger} | \Psi_i},
-        \end{equation}
-        as a function of $\sordm$
-        \begin{equation}
-            \mathcal{G}_2\left( \sordm \right)_{\alpha\beta;\gamma\delta} =
-            \delta_{\alpha \beta } \delta_{\gamma \delta} - 
-            \delta_{\alpha \beta } \fordm_{\gamma \delta} - 
-            \delta_{\gamma \delta } \fordm_{\alpha \beta} +
-            \delta_{\alpha \gamma } \fordm_{\beta \delta} -
-            \sordm_{\alpha \delta ; \gamma \beta}
-            .
-        \end{equation}
-\end{itemize}
-
-There are stronger conditions as the three-index conditions $\mathcal{T}_1 \mathcal{T}_2 \mathcal{T}_3$,
-the primed conditions\mycite{garrod1964reduction,mazziotti2007reduced,mazziotti2006variational}
-$\mathcal{G^{\prime}} \mathcal{T}_2^{\prime}$, and non-standard conditions\mycite{verstichel2012variational}.
-
-
-This optimization would, idially, be done formally.
-One approach is to decompose the 2-RDM $\sordm_{pqrs}$ or, for simplicity, the
-packed matrix $\tilde{\sordm}_{pq,rs}$ with composite indexes $pq, rs$.
-The objective is to define $\mu, \mu^{\prime}$ such that the $N$-representability
-conditions are satisfied.
-Any higher-order singular value decomposition (HOSVD) method as, for example,
-the Tucker decomposition\mycite{hitchcock1927expression, tucker1966mathematical}
-could be used to decompose $\mat{\sordm}$
-or, simply, any singular value decomposition (SVD) method as the Cholesky
-decomposition\mycite{1924note} for $\mat{\tilde{\sordm}}$.
-
-However, it can be done variationally such that the variational parameters
-$\mu,\mu^{\prime}$ minimize the energy.
-This method, refered as v2DM, can be formally defined as a semidesemidefinite
+The optimization can be done variationally taking $\mu,\mu^{\prime}$ as variational
+parameters, which can be formally defined as a semidefinite
 programming (SDP) problem following the $N$-representability 
-constraints\mycite{verstichel2012variational}.
+constraints.
+Although another formulation has been used in this document, the optimization
+problem is, basically, the v2DM problem\mycite{verstichel2012variational}.
 
-Also, it can be done finding a function 
+Therefore, the algorithm \cref{al:2rdm-opt} is proposed.
+For a given set of orbitals, a 2-RDM is obtained with \cref{eq:AQ-approximation}
+for the $\mu, \nu$ parameters, along with the MO coefficients, $C$.
+Then
+\begin{enumerate}
+    \item $\mu, \nu$ are optimized such that the 2-RDM is constrained
+        to the nomalization conditions \cref{eq:MO-norm-cond-1,ec:normalization-condition-2RDM}.
+
+    \item Purification.
+
+        Since, to this point, the $N$-representability conditions are not
+        fulfilled, the 2-RDM is decomposed with the Cholesky decomposition
+        algorithm until a block with negative diagonal elements is found,
+        which correspond to the negative semidefinite block of 2-RDM.
+        Therefore, the rest correspond to a new positive semidefinite 2-RDM,
+        which must be re-scaled and normalized.
+
+        The 2-RDM is not positive semidefinite in the MO basis.
+        Therefore, the purification process could very probably be more
+        effective in the spin-orbital basis.
+
+    \item Reoptimize the orbitals with the rest of $\mu, \nu$ fixed.
+\end{enumerate}
+
+\begin{algorithm}
+    \caption{2-RDM optimization algorithm.}\label{al:2rdm-opt}
+    \begin{algorithmic}[1]
+        \Require $n$, $\mu$, $\nu$, $ \mat{C}_{\text{MO}}$
+        % \Ensure $output$
+
+        \For {$\mu_p \in \left\{ \mu \right\}$, $\nu_p \in \left\{ \nu \right\}$}
+        \While {$\hat{\sordm} \not= n\left( n-1 \right) /2$ }
+        \State Build $ \mat{\sordm}$ with $\mu_p$, $\nu_p$
+        \State Compute the norm $ \hat{\sordm} = \sum_{ij} \sordm_{ijij} $
+        \State Vary $\mu_p$, $\nu_p$ constrained to $ \nu_p + \sum_{i \not= p} \nu_i = n$
+        \EndWhile
+        \State Decompose 
+        $\mat{\sordm} = \mat{L} \mat{L}^{T} \implies \sordm_{ij,kl} = \sum_{J} L_{ij}^{J} L_{kl}^{J}$
+        by Cholesky:
+        \For {$J=1$, \inline{range(}$\mat{\sordm}$\inline{)}}
+        \State Compute $L_{ij}^{J} = \sordm_{ij,J}^{\left( J-1 \right)} \left( \sordm_{J,J}^{\left( J-1 \right)} \right)^{-1 /2}$
+        \State Update $ \mat{\sordm}^{\left( J \right)} = \mat{\sordm}^{\left( J-1 \right)} - \mat{L}^{J} \left( \mat{L}^{J} \right)^{T}$
+        \If {$\sordm_{J+1,J+1}^{\left( J \right)}$ < 0}
+        \State Reorder $ \mat{\sordm}^{\left( J \right)}$ to move
+        $\sordm_{J+1,J+1}^{\left( J \right)}$ into the next diagonal
+        element
+        \EndIf
+        \EndFor
+        \State Extract the positive semidifinte block of $ \mat{\sordm}$, $ \mat{\tilde{\sordm}}$
+        \State Scale $ \mat{\tilde{\sordm}}$ to full dimension and re-normalize, $ \mat{\sordm} \leftarrow \mat{\tilde{\sordm}}$
+        \State Re-optimize $ \mat{C}_{\text{MO}}$ with fixed 
+        $\mu_i \in \left\{ \mu \right\}\ \forall_{i \not= p}$
+        and
+        $\nu_i \in \left\{ \nu \right\}\ \forall_{i \not= p}$
+        \EndFor
+
+        \State \textbf{return} $ \mat{\sordm}$
+    \end{algorithmic}
+\end{algorithm}
+
+Basically, it results in a HF-like optimization.
+
+
+Also, it can be solved finding a function 
 $Q\left( \nu_p, \nu_q, \nu_r, \nu_s \right)$ for the factors $\mu,\mu^{\prime}$
 depending on occupation numbers using, for example,
 a Padé approximant or any other approximant.
+
 A general Padé approximant of order $\left[ m / n \right]$ around a point 
 $x=\nu_p \nu_q \nu_r \nu_s$ is the rational function 
 \begin{equation}
@@ -338,9 +325,32 @@ $x=\nu_p \nu_q \nu_r \nu_s$ is the rational function
     }{
         1 + b_1 \nu_p \nu_q \nu_r \nu_s + \cdots + b_n \nu_p^{n} \nu_q^{n} \nu_r^{n} \nu_s^{n}
     }
-    .
+    ,
 \end{equation}
-This approach has already been used to find a fully empirically function by Marques
-and Lathiotakis (ML)\mycite{marques2008empirical} using a Padé approximant
-depending on a variable $x = n_p n_q$.
+which is the best approximation to $Q$ near $x$ of a given order, as
+the approximant's power series agrees with the power series of the function
+it is approximating.
 
+This approach has already been used to find a fully empirical function by Marques
+and Lathiotakis (ML)\mycite{marques2008empirical} using a $[1/ 1]$ Padé approximant
+depending on a variable $x = n_p n_q$
+\begin{equation}
+    f^{\text{ML}}\left( n_j, n_k \right) =
+    x
+    \frac{
+        a_0 + a_1 x
+    }{
+        1 + b_1 x
+    }
+    ,
+\end{equation}
+where the parameters $a_1$ and $b_1$ are optimized to minimize the energy.
+The function is multiplied by $x$ to ensure that the
+contribution of completely empty states $\left( n_j = 0 \right)$ to the
+exchange-correlation energy is zero.
+The functional is also forced to $f^{\text{ML}}\left( 1 \right) = 1$ by
+setting $a_0 = 1 + b_1 - a_1$ to recover the Hartree-Fock limit in the
+case of an idempotent density matrix.
+
+A similar algorithm to \cref{al:2rdm-opt} could be use to optimize
+$a_1$ and $b_1$.

@@ -1,0 +1,10 @@
+BASIS
+cc-pVDZ
+ Water using the cc-pVDZ basis
+ Using automatic symmetry detection.
+Atomtypes=2
+Charge=8.0 Atoms=1
+O 0.00000000    0.37558843   -0.14534628
+Charge=1.0 Atoms=2
+H_a 0.00000000    0.78383672   -0.43402142
+H_b 0.00000000   -0.03265986   -0.43402142

@@ -9,7 +9,7 @@ exact 2-RDM and a point by the approximated 2-RDM.
 The Minkowski distance (metric) of order $p$ for an approximated 2-RDM,
 $ \mat{\tilde{\sordm}}$, with respect to the exact 2-RDM, $ \mat{\sordm}$,
 is given by 
-\begin{equation}
+\begin{equation} \label{eq:minkowski-distance}
     d \left( \mat{\sordm} , \mat{\tilde{\sordm}} \right) =
     \left(
         \sum_{pqrs} \left| \sordm_{pqrs} - \tilde{\sordm}_{pqrs} \right|^p
@@ -18,10 +18,34 @@ is given by
 \end{equation}
 which reduces to the Manhattan distance for $p=1$, to the Euclidean distance
 for $p=2$ and, in the limit, to the Chebyshev distance for $p \to \infty$.
+In practice, several orders should be tried for each case, looking for the
+order that results in largest differences between the distances that are
+being compared.
+
+Similarly to the energy, the Minkowski distance can be splitted into
+inactive, active and cross contributions by adjusting the indexes 
+\begin{equation}
+    d \left( \mat{\sordm} , \mat{\tilde{\sordm}} \right) =
+    d_{\text{ina}} + d_{\text{i-a}} + d_{\text{act}} =
+    \left(
+        \sum_{ijkl}^{n_{\text{io}}} \left| \Delta \sordm_{ijkl} \right|^p
+    \right)^{\frac{1}{p}}
+    +
+    \left(
+        \sum_{ij}^{n_{\text{io}}} \sum_{tu}^{n_{\text{ao}}} \left| \Delta \sordm_{ijtu} \right|^p
+    \right)^{\frac{1}{p}}
+    +
+    \left(
+        \sum_{tuvw}^{n_{\text{ao}}} \left| \Delta \sordm_{tuvw} \right|^p
+    \right)^{\frac{1}{p}}
+    ,
+\end{equation}
+in order to have a better understanding of each block.
 
 Therefore, the Minkowski distance is a direct metric to test any approximated
-2-RDM, resulting in a good approximation if $d \to 0$, and a bad approximation
+2-RDM, resulting in a similar 2-RDM if $d \to 0$, and a non-similar 2-RDM
 for larger $d$'s.
 In this sense, this metric has no value if only one approximated 2-RDM is tested,
 as this distance has to be compared with other distances in order to establish
 the quality of the approximation.
+Also, it is not a direct metric of the performance of a 2-RDM.

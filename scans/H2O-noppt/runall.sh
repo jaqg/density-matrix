@@ -4,11 +4,11 @@
 # | Creation date: Tuesday 19:12:57 25/06/2024 |
 # +--------------------------------------------+
 
-# Verify that three arguments are provided
-# if [ "$#" -ne 3 ]; then
-#     echo "Usage: $0 molecule n level"
-#     exit 1
-# fi
+Verify that three arguments are provided
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 data_folder"
+    exit 1
+fi
 
 # Get the arguments
 # molecule="$1"
@@ -17,7 +17,8 @@
 molecule="H2O"
 n=8
 level="MCSCF"
-data_folder="data"
+# data_folder="data"
+data_folder="$1"
 
 # Verify that n is a positive integer
 if ! [[ "$n" =~ ^[0-9]+$ ]]; then
@@ -62,7 +63,7 @@ for i in $(seq 1 "$n"); do
         
         # Extract energies, errors and minkowski distances from plot_data
         energies=$(grep "E (Ha) :" plot_data | awk '{print $4, $5, $6, $7, $8}')
-        errors=$(grep "ΔE (Ha):" plot_data | awk '{print $3, $4, $5, $6, $7}')
+        errors=$(grep "ΔE (Ha):" plot_data | awk '{print $3, $4, $5, $6, $7}' | sed 's/D/e/g')
         minkowski=$(grep "Mink. d:" plot_data | awk '{print $3, $4, $5, $6, $7}')
 
         # Append the extracted data to the respective files with the index i
@@ -75,3 +76,6 @@ for i in $(seq 1 "$n"); do
     echo "Successfull execution for ${molecule}-${i}-${level}."
 done
 
+cp all_energies  "$data_folder"
+cp all_errors    "$data_folder"
+cp all_minkowski "$data_folder"

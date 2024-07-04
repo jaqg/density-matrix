@@ -1,0 +1,24 @@
+% ------------------------------
+\section{Methodology \& calculations} % (fold)
+\label{sec:methodology-calculations}
+% ------------------------------
+The objective is to create a program to test the approximations described in
+this document.
+The intention is to establish a testing environment for future parametrization 
+of the proposed approximation discussed in the previous section.
+
+The entire program can be found on 
+\href{https://github.com/jaqg/density-matrix}{Github}.
+The user must be warned that the program is still in development and, at this
+point, not intended to be efficient.
+
+The testing is performed by comparing properties dependent of the
+RDMs with Complete Active Space Self-Consistent Field (CASSCF),
+Møller-Plesset perturbation theory of second order (MP2) and
+Full Configuration Interaction (FCI) calculations.
+In this case, the ground state energy and the Minkowski distance, which serves
+as a direct metric for the approximated 2-RDMs.
+
+It should be noted that, since the part of the program specified in this section
+is donde in MO basis, both integrals and density matrices are expressed in
+Mulliken notation (see \cref{eq:mulliken-notation}).

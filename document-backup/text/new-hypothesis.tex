@@ -1,0 +1,358 @@
+% ------------------------------
+\section{A possible parametrization of the 2-RDM} % (fold)
+\label{sec:new-hypothesis}
+% ------------------------------
+
+Because of Hohenberg-Kohn theorems, it should be possible to express $E_0$ in
+terms of $\mat{\oedm}$.
+Then, it should be true that $\mat{\tedm}$ can be written as 
+\begin{equation} \label{eq:myaprox-2rdm-1}
+    \tedm_{pqrs} = 
+    \sum_{ijkl} C_{pqrs,ijkl} \oedm_{ij} \oedm_{kl}
+    ,
+\end{equation}
+for a given coefficient $C_{pqrs,ijkl}$.
+
+In principle, recalling \cref{eq:tedm-spin-representation}, a similar expression
+for $d_{pqrs}$ should also hold
+\begin{equation} \label{eq:myaprox-d-1}
+    d_{pqrs} = 
+    \sum_{ijkl} C_{pqrs,ijkl}^{\prime} \oedm_{ij} \oedm_{kl}
+    .
+\end{equation}
+
+Then, assuming that we choose a basis diagonalizing $\mat{\oedm}$ 
+\begin{equation} \label{eq:myaprox-diag-1rdm}
+    \oedm_{pq} = \nu_p \delta_{pq}
+    ,
+\end{equation}
+such that $d_{pqrs}$ in \cref{eq:myaprox-d-1} is rewritten as
+\begin{equation} \label{eq:myaprox-d-2}
+    d_{pqrs} = 
+    \sum_{ijkl} C_{pqrs,ijkl}^{\prime} \nu_i \nu_k \delta_{ij} \delta_{kl}
+    =
+    \sum_{ik} C_{pqrs,iikk}^{\prime} \nu_i \nu_k
+    .
+\end{equation}
+
+The energy, expanding the $\frac{1}{2} \PBraket{pq | rs}$ factor of
+\cref{eq:GS-energy-1}, reads
+\begin{equation}
+    E_0 =
+    % \sum_{pq} h_{pq} \oedm_{pq} +
+    % \frac{1}{2} \sum_{pqrs} \PBraket{pq | rs}
+    % \left( d_{pqrs} - \oedm_{ps} \delta_{qr} \right)
+    % =
+    \sum_{pq} h_{pq} \oedm_{pq} +
+    \frac{1}{2} \sum_{pqrs} \PBraket{pq | rs} d_{pqrs}
+    - 
+    \frac{1}{2} \sum_{pqrs} \PBraket{pq | rs} \oedm_{ps} \delta_{qr}
+    ,
+\end{equation}
+and with \cref{eq:myaprox-diag-1rdm,eq:myaprox-d-2}
+\begin{equation}
+    E_0 =
+    \sum_{pq} h_{pq} \nu_p \delta_{pq} +
+    \frac{1}{2} \sum_{pqrs} \sum_{ijkl} \PBraket{pq | rs}
+    C_{pqrs,ijkl}^{\prime} \nu_i \nu_k \delta_{ij} \delta_{kl}
+    - 
+    \frac{1}{2} \sum_{pqrs} \PBraket{pq | rs} \nu_p \delta_{ps} \delta_{qr}
+    .
+\end{equation}
+
+Therefore, the energy is given by
+\begin{equation} \label{eq:myaprox-E0-1}
+    E_0 =
+    % \sum_{pq} h_{pq} \nu_p \delta_{pq} +
+    % \frac{1}{2} \sum_{pqrs} \sum_{ijkl} \PBraket{pq | rs}
+    % C_{pqrs,ijkl}^{\prime} \nu_i \nu_k \delta_{ij} \delta_{kl}
+    % - 
+    % \frac{1}{2} \sum_{pqrs} \PBraket{pq | rs} \oedm_{ps} \delta_{qr}
+    % =
+    \sum_{p} h_{pp} \nu_p +
+    \frac{1}{2} \sum_{pqrs} \lambda_{pqrs} \PBraket{pq | rs}
+    - 
+    \frac{1}{2} \sum_{pq} \PBraket{pq | qp} \nu_p
+    ,
+\end{equation}
+where 
+\begin{equation}
+    \lambda_{pqrs} = \sum_{ij} 
+    C_{pqrs,iijj}^{\prime} \nu_i \nu_j
+    .
+\end{equation}
+
+To this point, no approximation has been made. 
+In fact, $\lambda_{pqrs}$ is simply $d_{pqrs}$ in the chosen natural basis.
+
+A possible parametrization of $\mat{\lambda}$, proposed by our group, is given as follows.
+
+Looking at \cref{eq:myaprox-d-1}, in
+which $ \mat{\tedm}$ is given by products
+of $ \mat{\oedm}$'s, and knowing that the electron-electron interaction energy is
+directly given by the product of $ \mat{\tedm}$ and the two-electron integrals
+(see \cref{eq:Eee_from_Gamma}),
+this energy functional could be splitted into Coulomb $ \PBraket{pp | qq}$ and
+Exchange $ \PBraket{pq | qp}$ contributions.
+And, so for, $\mat{\lambda}$ 
+\begin{equation}
+    \lambda_{pqrs} \PBraket{pq | rs}
+    \leftarrow
+    \tilde{\lambda}_{pqrs} \PBraket{pp | qq}
+    +
+    \tilde{\lambda}_{pqrs} \PBraket{pq | qp}
+    .
+\end{equation}
+
+Then, a possible parametrization for $\mat{\lambda}$ might be 
+\begin{equation}
+    \lambda_{pqrs} =
+    \alpha_{pqrs}
+    -
+    \beta_{pqrs}
+    ,
+\end{equation}
+where $\alpha_{pqrs}$ refer to type products of two $ \mat{\oedm}$ for the
+Coulomb contribution with given $\mu$ factors
+\begin{equation}
+    \alpha_{pqrs} = \mu_{pq} \oedm_{pq} \mu_{rs} \oedm_{rs} ,
+\end{equation} 
+and $\beta_{pqrs}$ to the exchange contributions
+\begin{equation}
+    \beta_{pqrs} = \mu_{ps}^{\prime} \oedm_{ps} \mu_{rq}^{\prime} \oedm_{rq}.
+\end{equation} 
+
+Therefore, in the natural basis, $ \mat{\lambda}$ reads
+\begin{equation}
+    \lambda_{pqrs} =
+    \mu_{pr} \nu_p \nu_r \delta_{pq} \delta_{rs}
+    -
+    \mu_{pq}^{\prime} \nu_p \nu_q \delta_{ps} \delta_{qr}
+    .
+\end{equation}
+
+Then, in \cref{eq:myaprox-E0-1}
+\begin{equation}
+    E_0 =
+    % \sum_{p} h_{pp} \nu_p +
+    % \frac{1}{2} \sum_{pqrs} \lambda_{pqrs} \PBraket{pq | rs}
+    % - 
+    % \frac{1}{2} \sum_{pq} \PBraket{pq | qp} \nu_p
+    % =
+    \sum_{p} h_{pp} \nu_p +
+    \frac{1}{2} \sum_{pqrs} 
+    \mu_{pr} \nu_p \nu_r \delta_{pq} \delta_{rs}
+    \PBraket{pq | rs}
+    -
+    \frac{1}{2} \sum_{pqrs} 
+    \mu_{pq}^{\prime} \nu_p \nu_q \delta_{ps} \delta_{qr}
+    \PBraket{pq | rs}
+    -
+    \frac{1}{2} \sum_{pq} \PBraket{pq | qp} \nu_p
+    ,
+\end{equation}
+and
+\begin{equation}
+    E_0 =
+    \sum_{p} h_{pp} \nu_p +
+    \frac{1}{2} \sum_{pq} 
+    \mu_{pq} \nu_p \nu_q 
+    \PBraket{pp | qq}
+    -
+    \frac{1}{2} \sum_{pq} 
+    \mu_{pq}^{\prime} \nu_p \nu_q
+    \PBraket{pq | qp}
+    -
+    \frac{1}{2} \sum_{pq} \PBraket{pq | qp} \nu_p
+    .
+\end{equation}
+
+Therefore, the ground state energy for this parametrization is given by
+\begin{equation}
+    \therefore
+    E_0 =
+    \sum_{p} h_{pp} \nu_p +
+    \frac{1}{2} \sum_{pq} 
+    \nu_p \nu_q
+    \left[ 
+        \mu_{pq} \PBraket{pp | qq}
+        -
+        \mu_{pq}^{\prime} \PBraket{pq | pq}
+    \right]
+    -
+    \frac{1}{2} \sum_{pq} 
+    \PBraket{pq | pq} \nu_p
+    ,
+\end{equation}
+and the 2-RDM, recalling \cref{eq:tedm-spin-representation}, by 
+\begin{equation} \label{eq:AQ-approximation}
+    \therefore
+    \tedm_{pqrs} =
+    % \lambda_{pqrs} - \delta_{qr} D_{ps} =
+    \mu_{pr} \nu_p \nu_r \delta_{pq} \delta_{rs}
+    -
+    \mu_{pq}^{\prime} \nu_p \nu_q \delta_{ps} \delta_{qr}
+    -
+    \nu_p \delta_{qr} \delta_{ps}
+    .
+\end{equation}
+
+This new parametrization for $\mat{\tedm}$ has to be optimized in order for
+$\mat{\tedm}$ to be $N$-representable which, in the molecular
+orbital (MO) basis, correspond -at least- to
+\begin{itemize}
+    \item Occupation numbers, $\nu_p$, are nonnegative and not greater than 2 
+        \begin{equation}
+            0 \le \nu_p \le 2\ \forall p,
+        \end{equation}
+
+    \item The normalization condition must be fulfilled, such that 
+        \begin{equation} \label{eq:MO-norm-cond-1}
+            \sum_{i} \nu_i = n,
+        \end{equation}
+        and 
+        \begin{equation} \label{ec:normalization-condition-2RDM}
+            \sum_{ij} \tedm_{ijij} = \frac{n\left( n-1 \right)}{2}, 
+        \end{equation}
+
+    \item $\mat{\tedm}$ must be positive-semidefinite, i.e. the quadratic form
+        $\mat{v^{\dagger} \tedm v}$ must be positive for any vector $\mat{v}$
+        \begin{equation}
+            \mat{\tedm} \succeq 0 \Leftrightarrow \Braket{\Psi | \mat{\tedm} | \Psi} \ge 0,
+        \end{equation}
+        and the eigenvalues of $\mat{\tedm}$ must be positive
+
+\end{itemize}
+More conditions as $\mathcal{I} \mathcal{Q} \mathcal{G}_1$ could be
+considered for a better optimization.
+
+This optimization would, ideally, be done formally.
+The objective is to define $\mu, \mu^{\prime}$ such that the energy is minimized
+while the $N$-representability conditions are satisfied.
+One approach is to decompose the 2-RDM $\sordm_{pqrs}$ using any higher-order
+singular value decomposition (HOSVD) method as, for example,
+the Tucker decomposition\mycite{hitchcock1927expression, tucker1966mathematical}.
+Also, the packed matrix $\tilde{\sordm}_{pq,rs}$ with composite indexes $pq, rs$
+can be decomposed with any singular value decomposition (SVD) method as the Cholesky
+decomposition\mycite{1924note}.
+
+The optimization can be done variationally taking $\mu,\mu^{\prime}$ as variational
+parameters, which can be formally defined as a semidesemidefinite
+programming (SDP) problem following the $N$-representability 
+constraints.
+Although another formulation has been used in this document, the optimization
+problem is, basically, the v2DM problem\mycite{verstichel2012variational}.
+
+Therefore, the algorithm \cref{al:2rdm-opt} is proposed.
+For a given set of orbitals, a 2-RDM is obtained with \cref{eq:AQ-approximation}
+for the $\mu, \nu$ parameters, along with the MO coefficients, $C$.
+Then
+\begin{enumerate}
+    \item $\mu, \nu$ are optimized such that the 2-RDM is constrained
+        to the nomalization conditions \cref{eq:MO-norm-cond-1,ec:normalization-condition-2RDM}.
+
+    \item Purification.
+
+        Since, to this point, the $N$-representability conditions are not
+        fulfilled, the 2-RDM is decomposed with the Cholesky decomposition
+        algorithm until a block with negative diagonal elements is found,
+        which correspond to the negative semidefinite block of 2-RDM.
+        Therefore, the rest correspond to a new positive semidefinite 2-RDM,
+        which must be re-scaled and normalized.
+
+        \begin{comentario}
+        The 2-RDM is not possitive semidefinite in the MO basis.
+        Therefore, the purification process could very probabbly be more
+        effective in the spin-orbital basis.
+        \end{comentario}
+
+    \item Reoptimize the orbitals with the rest of $\mu, \nu$ fixed.
+\end{enumerate}
+
+\begin{algorithm}
+    \caption{2-RDM optimization algorithm.}\label{al:2rdm-opt}
+    \begin{algorithmic}[1]
+        \Require $n$, $\mu$, $\nu$, $ \mat{C}_{\text{MO}}$
+        % \Ensure $output$
+
+        \For {$\mu_p \in \left\{ \mu \right\}$, $\nu_p \in \left\{ \nu \right\}$}
+        \While {$\hat{\sordm} \not= n\left( n-1 \right) /2$ }
+        \State Build $ \mat{\sordm}$ with $\mu_p$, $\nu_p$
+        \State Compute the norm $ \hat{\sordm} = \sum_{ij} \sordm_{ijij} $
+        \State Vary $\mu_p$, $\nu_p$ constrained to $ \nu_p + \sum_{i \not= p} \nu_i = n$
+        \EndWhile
+        \State Decompose 
+        $\mat{\sordm} = \mat{L} \mat{L}^{T} \implies \sordm_{ij,kl} = \sum_{J} L_{ij}^{J} L_{kl}^{J}$
+        by Cholesky:
+        \For {$J=1$, \inline{range(}$\mat{\sordm}$\inline{)}}
+        \State Compute $L_{ij}^{J} = \sordm_{ij,J}^{\left( J-1 \right)} \left( \sordm_{J,J}^{\left( J-1 \right)} \right)^{-1 /2}$
+        \State Update $ \mat{\sordm}^{\left( J \right)} = \mat{\sordm}^{\left( J-1 \right)} - \mat{L}^{J} \left( \mat{L}^{J} \right)^{T}$
+        \If {$\sordm_{J+1,J+1}^{\left( J \right)}$ < 0}
+        \State Reorder $ \mat{\sordm}^{\left( J \right)}$ to move
+        $\sordm_{J+1,J+1}^{\left( J \right)}$ into the next diagonal
+        element
+        \EndIf
+        \EndFor
+        \State Extract the positive semidifinte block of $ \mat{\sordm}$, $ \mat{\tilde{\sordm}}$
+        \State Scale $ \mat{\tilde{\sordm}}$ to full dimension and re-normalize, $ \mat{\sordm} \leftarrow \mat{\tilde{\sordm}}$
+        \State Re-optimize $ \mat{C}_{\text{MO}}$ with fixed 
+        $\mu_i \in \left\{ \mu \right\}\ \forall_{i \not= p}$
+        and
+        $\nu_i \in \left\{ \nu \right\}\ \forall_{i \not= p}$
+        \EndFor
+
+        \State \textbf{return} $ \mat{\sordm}$
+    \end{algorithmic}
+\end{algorithm}
+
+Basically, it results in a HF-like optimization.
+
+
+Also, it can be solved finding a function 
+$Q\left( \nu_p, \nu_q, \nu_r, \nu_s \right)$ for the factors $\mu,\mu^{\prime}$
+depending on occupation numbers using, for example,
+a Padé approximant or any other approximant.
+
+A general Padé approximant of order $\left[ m / n \right]$ around a point 
+$x=\nu_p \nu_q \nu_r \nu_s$ is the rational function 
+\begin{equation}
+    Q\left( \nu_p, \nu_q, \nu_r, \nu_s \right) =
+    \frac{
+        \sum_{j = 0}^{m} a_j \nu_p^{j} \nu_q^{j} \nu_r^{j} \nu_s^{j}
+    }{
+        1 + \sum_{k=1}^{n} b_k \nu_p^{k} \nu_q^{k} \nu_r^{k} \nu_s^{k}
+    } =
+    \frac{
+        a_0 + a_1 \nu_p \nu_q \nu_r \nu_s + \cdots + a_m \nu_p^{m} \nu_q^{m} \nu_r^{m} \nu_s^{m}
+    }{
+        1 + b_1 \nu_p \nu_q \nu_r \nu_s + \cdots + b_n \nu_p^{n} \nu_q^{n} \nu_r^{n} \nu_s^{n}
+    }
+    ,
+\end{equation}
+which is the best approximation to $Q$ near $x$ of a given order, as
+the approximant's power series agrees with the power series of the function
+it is approximating.
+
+This approach has already been used to find a fully empirical function by Marques
+and Lathiotakis (ML)\mycite{marques2008empirical} using a $[1/ 1]$ Padé approximant
+depending on a variable $x = n_p n_q$
+\begin{equation}
+    f^{\text{ML}}\left( n_j, n_k \right) =
+    x
+    \frac{
+        a_0 + a_1 x
+    }{
+        1 + b_1 x
+    }
+    ,
+\end{equation}
+where the parameters $a_1$ and $b_1$ are optimized to minimize the energy.
+The function is multiplied by $x$ to ensure that the
+contribution of completely empty states $\left( n_j = 0 \right)$ to the
+exchange-correlation energy is zero.
+The functional is also forced to $f^{\text{ML}}\left( 1 \right) = 1$ by
+setting $a_0 = 1 + b_1 - a_1$ to recover the Hartree-Fock limit in the
+case of an idempotent density matrix.
+
+A similar algorithm to \cref{al:2rdm-opt} could be use to optimize
+$a_1$ and $b_1$.
