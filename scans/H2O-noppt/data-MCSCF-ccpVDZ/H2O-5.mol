@@ -1,8 +1,8 @@
 BASIS
 cc-pVDZ
- Water using the 6-31G** basis
- Using automatic symmetry detection.
-Atomtypes=2
+Test agua
+.................
+Atomtypes=2 Charge=0 Angstroms NoSymmetry
 Charge=8.0 Atoms=1
 O 0.00000000   -1.25740472    1.00935427
 Charge=1.0 Atoms=2
