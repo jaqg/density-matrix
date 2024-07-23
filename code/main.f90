@@ -66,6 +66,7 @@ program RDMFT
       call diag_2D_mat(D1MO, .true., NONMO)
       write(ouf,'(a,/)') 'Extracting ONs...'
       call extract_diag(D1MO, NONMO)
+      ! TODO: transform integrals to the same basis
    end if
    if (tstdbg) then 
       write(ouf,'(a)') 'Occupied MO orbitals:'
@@ -92,6 +93,8 @@ program RDMFT
    write(ouf,'(a)') 'Energy calculated with gamma, Gamma (nonsymmetric):'
    call calc_Eoe(D1MO, H1MO, nisht, nasht, Eoe_ina, Eoe_act, Eoe)
    call calc_Eee(D2MO, H2MO, nisht, nasht, Eee_ina, Eee_act, Eee_cross, Eee)
+
+   ! Store exact results
    Eoe_ina_exact = Eoe_ina 
    Eoe_act_exact = Eoe_act 
    Eee_ina_exact = Eee_ina 
@@ -99,6 +102,7 @@ program RDMFT
    Eee_cross_exact = Eee_cross 
    Eoe_exact = Eoe
    Eee_exact = Eee
+
    call print_energy
    call output_energy(eolu, 'SIRI', siri_emcscf, 0.d0)
    call output_energy(eolu, 'D1D2', E_MCSCF, dabs(siri_emcscf-E_MCSCF))
@@ -111,18 +115,22 @@ program RDMFT
    ! |                          SYMMETRIZE MATRICES                          |
    ! +-----------------------------------------------------------------------+
    call section(ouf, 'Symmetrizing 2-RDM', ' ', termwidth)
+
+   ! Symmetrize & check the 2-RDM
    D2MOsym = D2MO
    call symmetrize_D2(D2MOsym, nisht, nocct, tstdbg, ouf)
    call check_virtorbs_D2(D2MOsym, nocct, norbt, ouf)
+
    if (tstdbg) then 
       write(ouf,*)
       call print_matrix('D2MO', D2MO(1,1,1:pmatsize,1:pmatsize), ouf, dfmt)
       call print_matrix('D2MOsym',D2MOsym(1,1,1:pmatsize,1:pmatsize),ouf,dfmt)
    end if
-   ! TODO
-   ! D2MO = D2MOsym
 
+   ! Calculate the number of electrons
    nelec = nactel + 2*nisht
+
+   ! Check the normalization conditions
    call checknorm_D1(D1MO, nelec, fthres, ouf)
    call checknorm_D2(D2MOsym, nelec, fthres, ouf)
    
@@ -134,72 +142,6 @@ program RDMFT
    write(ouf,'(a)') 'Energy calculated with gamma, Gamma (symmetrized):'
    call calc_Eee_sym(D2MOsym, H2MO, nisht, nasht, Eee_ina, Eee_act, Eee_cross, Eee)
    call print_energy
-
-   ! +-----------------------------------------------------------------------+
-   ! |               BBCn APPROXIMATION in SPACIAL ORBITALS                  |
-   ! +-----------------------------------------------------------------------+
-   call section(ouf, '(Müller) Buijse-Baerends corrected (BBCn)', ' ', termwidth)
-
-   !
-   ! Using spacial orbitals
-   !
-   write(ouf,'(a)') '--Spacial orbitals'
-
-   write(ouf,'(a)') 'BBC1 :'
-   call Eee_BBC_spacial('BBC1', NONMO/2.d0, H2MO, nisht, nasht, &
-   & Eee_ina, Eee_act, Eee_cross, Eee)
-   call print_energy
-   call output_energy(eolu, 'BBC1spac', E_MCSCF, dabs(siri_emcscf-E_MCSCF))
-
-   write(ouf,'(a)') 'BBC2 :'
-   call Eee_BBC_spacial('BBC2', NONMO/2.d0, H2MO, nisht, nasht, &
-   & Eee_ina, Eee_act, Eee_cross, Eee)
-   call print_energy
-   call output_energy(eolu, 'BBC2spac', E_MCSCF, dabs(siri_emcscf-E_MCSCF))
-
-   write(ouf,'(a)') 'BBC3 :'
-   call Eee_BBC_spacial('BBC3', NONMO/2.d0, H2MO, nisht, nasht, &
-   & Eee_ina, Eee_act, Eee_cross, Eee)
-   call print_energy
-   call output_energy(eolu, 'BBC3spac', E_MCSCF, dabs(siri_emcscf-E_MCSCF))
-
-   write(ouf,'(a)') 'BBC3M:'
-   call Eee_BBC_spacial('BBC3M', NONMO/2.d0, H2MO, nisht, nasht, &
-   & Eee_ina, Eee_act, Eee_cross, Eee)
-   call print_energy
-   call output_energy(eolu, 'BBC3Mspac', E_MCSCF, dabs(siri_emcscf-E_MCSCF))
-   write(ouf,*)
-
-   ! +-----------------------------------------------------------------------+
-   ! |                        PRUEBA                                      |
-   ! +-----------------------------------------------------------------------+
-   call section(ouf, 'PRUEBA', ' ', termwidth)
-   ! write(ouf,*) (2.d0 * NONMO(1)**2 - NONMO(1)) * H2MO(1,1,1,1)
-
-   write(ouf,'(a)') 'LS'
-   call calc_Eee_LS(NONMO, H2MO, nisht, nasht, &
-   & Eee_ina, Eee_act, Eee_cross, Eee)
-   call print_energy
-   write(ouf,'(a)') 'BBC1'
-   call calc_Eee_BBC('BBC1', NONMO, H2MO, nisht, nasht, &
-   & Eee_ina, Eee_act, Eee_cross, Eee)
-   call print_energy
-   call output_energy(eolu, 'BBC1', E_MCSCF, dabs(siri_emcscf-E_MCSCF))
-   write(ouf,'(a)') 'BBC2'
-   call calc_Eee_BBC('BBC2', NONMO, H2MO, nisht, nasht, &
-   & Eee_ina, Eee_act, Eee_cross, Eee)
-   call print_energy
-   call output_energy(eolu, 'BBC2', E_MCSCF, dabs(siri_emcscf-E_MCSCF))
-   write(ouf,'(a)') 'BBC3'
-   call calc_Eee_BBC('BBC3', NONMO, H2MO, nisht, nasht, &
-   & Eee_ina, Eee_act, Eee_cross, Eee)
-   call print_energy
-   call output_energy(eolu, 'BBC3', E_MCSCF, dabs(siri_emcscf-E_MCSCF))
-   write(ouf,'(a)') 'BBC3M'
-   call calc_Eee_BBC('BBC3M', NONMO, H2MO, nisht, nasht, &
-   & Eee_ina, Eee_act, Eee_cross, Eee)
-   call print_energy
-   call output_energy(eolu, 'BBC3M', E_MCSCF, dabs(siri_emcscf-E_MCSCF))
 
    ! +-----------------------------------------------------------------------+
    ! |                        APPROXIMATED 2RDMS                             |
@@ -282,11 +224,6 @@ program RDMFT
    ! LS
    !
    write(ouf,'(a)') '-- LS:'
-   ! D2LSMO(1,1,1,1) = 5.d0
-   ! D2LSMO(3,3,3,3) = 5.d0
-   ! D2LSMO(4,4,4,4) = 5.d0
-   ! D2LSMO(5,5,5,5) = 5.d0
-   ! D2LSMO(6,6,6,6) = 5.d0
    call calc_Eee(D2LSMO, H2MO, nisht, nasht, Eee_ina, Eee_act, Eee_cross, Eee)
    E_LS = Eee + Eoe + repnuc
    call print_energy
@@ -401,139 +338,12 @@ program RDMFT
    ! end if
 
    ! +-----------------------------------------------------------------------+
-   ! |                  BBCn APPROXIMATION in SPIN-ORBITALS                  |
+   ! |                        OPTIMIZATION ALGORITHM                         |
    ! +-----------------------------------------------------------------------+
-   !
-   ! Using spin orbitals
-   !
-   ! write(ouf,'(a)') 'Spin orbitals'
-   !
-   ! call calc_Eee_BBC('BBC1', NONSO, H2SO, nisht, nasht, &
-   ! & Eee_ina, Eee_act, Eee_cross, Eee)
-   ! write(ouf,'(a)') 'BBC1:' ; call print_energy
-   ! !
-   ! call calc_Eee_BBC('BBC2', NONSO, H2SO, nisht, nasht, &
-   ! & Eee_ina, Eee_act, Eee_cross, Eee)
-   ! write(ouf,'(a)') 'BBC2:' ; call print_energy
-   ! !
-   ! call calc_Eee_BBC('BBC3', NONSO, H2SO, nisht, nasht, &
-   ! & Eee_ina, Eee_act, Eee_cross, Eee)
-   ! write(ouf,'(a)') 'BBC3:' ; call print_energy
-   ! !
-   ! call calc_Eee_BBC('BBC3M', NONSO, H2SO, nisht, nasht, &
-   ! & Eee_ina, Eee_act, Eee_cross, Eee)
-   ! write(ouf,'(a)') 'BBC3M:' ; call print_energy
-   ! !
-   ! !
-   ! ! OLD SUBROUTINES
-   ! !
-   ! call Eee_BBC('BBC1', NONSO, H2SO, Eee)
-   ! !
-   ! E_elec = Eoe + Eee
-   ! E_MCSCF = E_elec + repnuc
-   ! write(ouf,'(a,2f16.10)') 'BBC1 MCSCF energy, error    :', E_MCSCF, &
-   ! & dabs(siri_emcscf-E_MCSCF)
-   ! call flush(ouf)
-   !
-   ! call Eee_BBC('BBC2', NONSO, H2SO, Eee)
-   ! !
-   ! E_elec = Eoe + Eee
-   ! E_MCSCF = E_elec + repnuc
-   ! write(ouf,'(a,2f16.10)') 'BBC2 MCSCF energy, error    :', E_MCSCF, &
-   ! & dabs(siri_emcscf-E_MCSCF)
-   !
-   ! call Eee_BBC('BBC3', NONSO, H2SO, Eee)
-   ! !
-   ! E_elec = Eoe + Eee
-   ! E_MCSCF = E_elec + repnuc
-   ! write(ouf,'(a,2f16.10)') 'BBC3 MCSCF energy, error    :', E_MCSCF, &
-   ! & dabs(siri_emcscf-E_MCSCF)
-   !
-   ! call Eee_BBC('BBC3M', NONSO, H2SO, Eee)
-   ! !
-   ! E_elec = Eoe + Eee
-   ! E_MCSCF = E_elec + repnuc
-   ! write(ouf,'(a,2f16.10)') 'BBC3M MCSCF energy, error    :', E_MCSCF, &
-   ! & dabs(siri_emcscf-E_MCSCF)
-   !
-!
-!
-!    ! +-----------------------------------------------------------------------+
-!    ! |                            LS 2-RDM MATRIX                            |
-!    ! +-----------------------------------------------------------------------+
-!    call section(ouf, 'LS approximated 2-RDMs', ' ', termwidth)
-!
-!    call D2_LS(NONMO, D2LSMO)
-!    call D2_LS(NONSO, D2LSSO)
-!
-!    write(ouf,'(a)') 'Energy calculated LS D^(2):'
-!    write(ouf,'(a)') 'D2LSMO:'
-!    call calc_Eee(D2LSMO, H2MO, nisht, nasht, Eee_ina, Eee_act, Eee_cross, Eee)
-!    call print_energy
-!    write(ouf,'(a)') 'D2LSSO:'
-!    call calc_Eee_SO(D2LSSO, H2SO, nisht, nasht, Eee_ina, Eee_act, Eee_cross, Eee)
-!    call print_energy
-!
-!    ! +-----------------------------------------------------------------------+
-!    ! |                            BBCn 2-RDM MATRIX                          |
-!    ! +-----------------------------------------------------------------------+
-!    call section(ouf, 'BBCn approximated 2-RDMs', ' ', termwidth)
-!
-!    call D2_BBC('BBC1', NONMO, D2BBC1MO)
-!    call D2_BBC('BBC2', NONMO, D2BBC2MO)
-!    ! call D2_BBC2(NONMO, D2BBC2MO)  ! TODO
-!    call D2_BBC('BBC3', NONMO, D2BBC3MO)
-!    call D2_BBC('BBC3M', NONMO, D2BBC3MMO)
-!    !
-!    call D2_BBC('BBC1', NONSO, D2BBC1SO)
-!    call D2_BBC('BBC2', NONSO, D2BBC2SO)
-!    call D2_BBC('BBC3', NONSO, D2BBC3SO)
-!    call D2_BBC('BBC3M', NONSO, D2BBC3MSO)
-!    !
-!    ! Energies
-!    !
-!    write(ouf,'(a)') '--Energy calculated with BBCn D^(2):'
-!    write(ouf,'(a)') 'BBC1SO:'
-!    call calc_Eee(D2BBC1SO, H2SO, nisht, nasht, Eee_ina, Eee_act, Eee_cross, Eee)
-!    call print_energy
-!
-!    write(ouf,'(a)') 'BBC1MO:'
-!    call calc_Eee(D2BBC1MO, H2MO, nisht, nasht, Eee_ina, Eee_act, Eee_cross, Eee)
-!    call print_energy
-!    !
-!    write(ouf,'(a)') 'BBC2:'
-!    call calc_Eee(D2BBC2MO, H2MO, nisht, nasht, Eee_ina, Eee_act, Eee_cross, Eee)
-!    call print_energy
-!    !
-!    write(ouf,'(a)') 'BBC3:'
-!    call calc_Eee(D2BBC3MO, H2MO, nisht, nasht, Eee_ina, Eee_act, Eee_cross, Eee)
-!    call print_energy
-!    !
-!    write(ouf,'(a)') 'BBC3M:'
-!    call calc_Eee(D2BBC3MMO, H2MO, nisht, nasht, Eee_ina, Eee_act, Eee_cross, Eee)
-!    call print_energy
-!
-!
-!    ! +-----------------------------------------------------------------------+
-!    ! |                          LS APPROXIMATION                             |
-!    ! +-----------------------------------------------------------------------+
-!    ! call section(ouf, 'Löwdin-Shull (LS)', ' ', termwidth)
-!
-!    ! Calculate energy
-!    ! call  calc_Eee_LS(NONSO, H2SO, nisht, nasht, &
-!    ! &                 Eee_ina, Eee_act, Eee_cross, Eee)
-!    ! call print_energy
-!    !
-!    ! ! Calculate energy
-!    ! call Eee_LS(NONSO, H2SO, Eee)
-!    ! E_elec = Eoe + Eee
-!    ! E_MCSCF = E_elec + repnuc
-!    ! !
-!    ! write(ouf,'(a)') 'LS Energy calculated with gamma:'
-!    ! write(ouf,'(a,2f16.10,/)') 'MCSCF energy, error    :', E_MCSCF, &
-!    ! & dabs(siri_emcscf-E_MCSCF)
-!    ! call flush(ouf)
-!    
+
+   ! +-----------------------------------------------------------------------+
+   ! |                                   END                                 |
+   ! +-----------------------------------------------------------------------+
    call qclose(eolu, 'ENERGIES')
    !
    stop
