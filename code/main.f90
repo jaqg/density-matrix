@@ -188,7 +188,7 @@ program RDMFT
    end if
 
    ! +-----------------------------------------------------------------------+
-   ! |                          MINKOWSKI DISTANCE                            |
+   ! |                         MINKOWSKI DISTANCE                            |
    ! +-----------------------------------------------------------------------+
    call section(ouf, 'Minkowski distance for the approximated 2-RDMs', ' ', termwidth)
 
