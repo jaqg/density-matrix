@@ -472,7 +472,7 @@ module BBC
             & stop 'Eee_BBC: Error: Inconsistent dimensions'
 
         ! Check that ON is in spin-orbital basis
-        ! call check_SO_ON(ON)
+        call check_SO_ON(ON)
 
         ! Compute the GBBC matrix
         call calc_GBBC(level, ON, GBBC)

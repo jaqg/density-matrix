@@ -47,33 +47,30 @@ module declarations
    real(kind=8) :: test 
    !
    contains
-       subroutine parameters
-        implicit none
+   subroutine parameters
+      implicit none
 
-        ! Print debug information
-        tstdbg = .false.
+      ! Print debug information
+      tstdbg = .false.
 
-        ! floating-point numbers threshold to consider it 0, i.e.
-        ! a -> 0 if a < fthres
-        fthres = 1.d-10
+      ! floating-point numbers threshold to consider it 0, i.e.
+      ! a -> 0 if a < fthres
+      fthres = 1.d-10
 
-        ! Width of the terminal/file to be written on
-        termwidth = 60
+      ! Width of the terminal/file to be written on
+      termwidth = 60
 
-        ! Logic unit of the output file
-        ouf = 6
+      ! D format
+      dfmt = '(*(d10.2))'
+      rfmt = '(*(f10.4))'
 
-        ! D format
-        dfmt = '(*(d10.2))'
-        rfmt = '(*(f10.4))'
+      ! Matrix size to print: print A(1:pmatsize,1:pmatsize)
+      pmatsize = 4
 
-        ! Matrix size to print: print A(1:pmatsize,1:pmatsize)
-        pmatsize = 4
+      ! Minkowski metric order, p
+      minkord = 4
 
-        ! Minkowski metric order, p
-        minkord = 4
-
-        return
-    end subroutine parameters 
+      return
+   end subroutine parameters 
  
 end module declarations

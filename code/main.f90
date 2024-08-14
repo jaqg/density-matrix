@@ -15,6 +15,10 @@ program RDMFT
    ! |                         START OF THE PROGRAM                          |
    ! +-----------------------------------------------------------------------+
 
+   ! Logic unit of the output file
+   ! ouf = 6  ! Outout to the screen
+   call qopen('OUTPUT', 'formatted', 'sequential', ouf)  ! Output to file
+
    ! Initialize the parameters
    call parameters
 
@@ -512,7 +516,24 @@ program RDMFT
    ! +-----------------------------------------------------------------------+
    ! |                                   END                                 |
    ! +-----------------------------------------------------------------------+
+   ! Close output files
    call qclose(eolu, 'ENERGIES')
+
+   ! Print ending message
+   if (ouf.ne.6) then 
+      call separator(ouf, '=', termwidth)
+      write(ouf,'(/,a)') 'Program finished successfully.'
+      write(ouf,'(a)') 'Bye!'
+      call qclose(ouf, 'OUTPUT')
+
+      ! And print the message also to the screen
+      write(6,'(a)') 'Program finished successfully.'
+      write(6,'(a)') 'Bye!'
+   else
+      write(ouf,'(a)') 'Program finished successfully.'
+      write(ouf,'(a)') 'Bye!'
+   end if
+
    !
    stop
 end program RDMFT

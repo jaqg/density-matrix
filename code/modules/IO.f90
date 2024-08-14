@@ -229,7 +229,7 @@ module IO
       &         nwopt, nwoph, ncdets, ncmot, nnashx, nnashy,&
       &         nnorbt, n2orbt, nsym
       !
-      write(*,*) 'NSYM SIRIFC: ', nsym
+      ! write(*,*) 'NSYM SIRIFC: ', nsym
       ! if (nsym .ne. 1) stop 'Symmetry not implemented yet'
       !
       if (norbt .ne. norb) then

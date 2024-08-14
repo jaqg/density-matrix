@@ -1,0 +1,251 @@
++==========================================================+
+|                     Density Matrices                     |
++==========================================================+
+Reading input...
+
++----------------------------------------------------------+
+              Reading integrals file & SIRIFC               
++----------------------------------------------------------+
+Data from SIRIFC:
+Nuclear repulsion :      9.17910623
+Inactive energy   :    -61.31131946
+Active energy     :    -24.01530223
+MCSCF energy      :    -76.14751546
+
+D1MO is already diagonal. Extracting ONs...
+
++----------------------------------------------------------+
+             Calculating CASSCF (nonsymmetric)              
++----------------------------------------------------------+
+Energy calculated with Dalton algorithm for Fock matrix:
+Inactive energy, error :  -61.3113194585    0.0000000000
+Cross contribution     :  -41.4746759576
+Qmat contribution      :   17.4593737257
+Active energy, error   :  -24.0153022319    0.0000000000
+
+Energy calculated with gamma, Gamma (nonsymmetric):
+Inactive energy, error :  -61.3113194585    0.0000000000
+act-ina contribution   :  -41.4746759576
+act-act contribution   :   17.4593737257
+Active energy, error   :  -24.0153022319    0.0000000000
+MCSCF energy, error    :  -76.1475154626    0.0000000000
+
++----------------------------------------------------------+
+                     Symmetrizing 2-RDM                     
++----------------------------------------------------------+
+checknorm_D1: D1 is normalized
+Tr[D1] =  10.0000, Nelec = 10
+
+checknorm_D2: D2 is normalized
+sum_{pq} D^(2)_{pqpq} =  45.0000, N(N-1)/2 =  45.0000
+
++----------------------------------------------------------+
+               Calculating CASSCF (symmetric)               
++----------------------------------------------------------+
+Energy calculated with gamma, Gamma (symmetrized):
+Inactive energy, error :  -61.3113194585    0.0000000000
+act-ina contribution   :  -41.4746759576
+act-act contribution   :   17.4593737257
+Active energy, error   :  -24.0153022319    0.0000000000
+MCSCF energy, error    :  -76.1475154626    0.0000000000
+
++----------------------------------------------------------+
+                    Approximated 2-RDms                     
++----------------------------------------------------------+
+>> Approximated 2-RDms and normalization check for:
+-- LS:
+WARNING: checknorm_D2: D2 is not normalized
+sum_{pq} D^(2)_{pqpq} =   5.0000, N(N-1)/2 =  45.0000
+
+-- BBC1:
+WARNING: checknorm_D2: D2 is not normalized
+sum_{pq} D^(2)_{pqpq} =   4.8476, N(N-1)/2 =  45.0000
+
+-- BBC2:
+WARNING: checknorm_D2: D2 is not normalized
+sum_{pq} D^(2)_{pqpq} =   4.8476, N(N-1)/2 =  45.0000
+
+-- BBC3:
+WARNING: checknorm_D2: D2 is not normalized
+sum_{pq} D^(2)_{pqpq} =   0.0393, N(N-1)/2 =  45.0000
+
+-- BBC3M:
+WARNING: checknorm_D2: D2 is not normalized
+sum_{pq} D^(2)_{pqpq} =   4.8476, N(N-1)/2 =  45.0000
+
++----------------------------------------------------------+
+       Minkowski distance for the approximated 2-RDMs       
++----------------------------------------------------------+
+>> Minkowski metric (distance) of order 4:
+LS   :  5.9216
+BBC1 :  6.4478
+BBC2 :  6.5476
+BBC3 :  6.5518
+BBC3M:  7.5567
+
++----------------------------------------------------------+
+             Energies with approximated 2-RDMs              
++----------------------------------------------------------+
+>> Energy from the approximated 2-RDM for:
+-- LS:
+Inactive energy, error :  -61.3113194585    0.0000000000
+act-ina contribution   :  -41.4746759576
+act-act contribution   :   17.4593737257
+Active energy, error   :  -24.0153022319    0.0000000000
+MCSCF energy, error    :  -76.1475154626    0.0000000000
+
+-- BBC1:
+Inactive energy, error :  -61.3113194585    0.0000000000
+act-ina contribution   :  -41.4746759576
+act-act contribution   :   17.4593737257
+Active energy, error   :  -24.0153022319    0.0000000000
+MCSCF energy, error    :  -76.1475154626    0.0000000000
+
+-- BBC2:
+Inactive energy, error :  -61.3113194585    0.0000000000
+act-ina contribution   :  -41.4746759576
+act-act contribution   :   17.4593737257
+Active energy, error   :  -24.0153022319    0.0000000000
+MCSCF energy, error    :  -76.1475154626    0.0000000000
+
+-- BBC3:
+Inactive energy, error :  -66.0530171954    4.7416977369
+act-ina contribution   :  -41.4746759576
+act-act contribution   :   17.4593737257
+Active energy, error   :  -24.0153022319    0.0000000000
+MCSCF energy, error    :  -80.8892131995    4.7416977369
+
+-- BBC3M:
+Inactive energy, error :  -61.3113194585    0.0000000000
+act-ina contribution   :  -41.4746759576
+act-act contribution   :   17.4593737257
+Active energy, error   :  -24.0153022319    0.0000000000
+MCSCF energy, error    :  -76.1475154626    0.0000000000
+
++----------------------------------------------------------+
+                Change to spin-orbital basis                
++----------------------------------------------------------+
+checknorm_D1: D1 is normalized
+Tr[D1] =  10.0000, Nelec = 10
+
+checknorm_D2: D2 is normalized
+sum_{pq} D^(2)_{pqpq} =  45.0000, N(N-1)/2 =  45.0000
+
+D1SO is already diagonal. Extracting ONs...
+
++----------------------------------------------------------+
+                     Energy in SO basis                     
++----------------------------------------------------------+
+>> Energy functionals in SO basis for:
+-- LS:
+Inactive energy, error :  -61.3113194585    0.0000000000
+act-ina contribution   :  -56.9457127995
+act-act contribution   :    4.1450627315
+Active energy, error   :  -52.8006500680   28.7853478361
+MCSCF energy, error    : -104.9328632987   28.7853478361
+
+-- BBC1:
+Inactive energy, error :  -66.0530171954    4.7416977369
+act-ina contribution   :  -49.3918819463
+act-act contribution   :    6.6686884276
+Active energy, error   :  -42.7231935187   18.7078912868
+MCSCF energy, error    :  -99.5971044863   23.4495890237
+
+-- BBC2:
+Inactive energy, error :  -66.0530171954    4.7416977369
+act-ina contribution   :  -49.3907255666
+act-act contribution   :    6.6777758408
+Active energy, error   :  -42.7129497259   18.6976474940
+MCSCF energy, error    :  -99.5868606934   23.4393452308
+
+-- BBC3:
+Inactive energy, error :  -66.0530171954    4.7416977369
+act-ina contribution   :  -49.3530766543
+act-act contribution   :    6.9447848594
+Active energy, error   :  -42.4082917949   18.3929895630
+MCSCF energy, error    :  -99.2822027624   23.1346872999
+
+-- BBC3M:
+Inactive energy, error :  -66.0530171954    4.7416977369
+act-ina contribution   :  -49.3530766543
+act-act contribution   :    5.8723373885
+Active energy, error   :  -43.4807392658   19.4654370339
+MCSCF energy, error    : -100.3546502333   24.2071347707
+
++----------------------------------------------------------+
+                   SO Approximated 2-RDms                   
++----------------------------------------------------------+
+>> Approximated 2-RDms and normalization check for:
+-- LS:
+WARNING: checknorm_D2: D2 is not normalized
+sum_{pq} D^(2)_{pqpq} =   5.0000, N(N-1)/2 =  45.0000
+
+-- BBC1:
+WARNING: checknorm_D2: D2 is not normalized
+sum_{pq} D^(2)_{pqpq} =  -0.0762, N(N-1)/2 =  45.0000
+
+-- BBC2:
+WARNING: checknorm_D2: D2 is not normalized
+sum_{pq} D^(2)_{pqpq} =  -0.0762, N(N-1)/2 =  45.0000
+
+-- BBC3:
+WARNING: checknorm_D2: D2 is not normalized
+sum_{pq} D^(2)_{pqpq} =   0.0389, N(N-1)/2 =  45.0000
+
+-- BBC3M:
+WARNING: checknorm_D2: D2 is not normalized
+sum_{pq} D^(2)_{pqpq} =  -0.0381, N(N-1)/2 =  45.0000
+
++----------------------------------------------------------+
+     Minkowski distance for the approximated SO 2-RDMs      
++----------------------------------------------------------+
+>> Minkowski metric (distance) of order 4:
+LS   :  3.6428
+BBC1 :  3.5625
+BBC2 :  3.5619
+BBC3 :  3.5618
+BBC3M:  3.6740
+
++----------------------------------------------------------+
+            Energies with approximated SO 2-RDMs            
++----------------------------------------------------------+
+>> Energy from the approximated 2-RDM for:
+-- LS:
+Inactive energy, error :  -61.3113194585    0.0000000000
+act-ina contribution   :  -41.8215844475
+act-act contribution   :    9.3065879827
+Active energy, error   :  -32.5149964647    8.4996942328
+MCSCF energy, error    :  -84.6472096954    8.4996942329
+
+-- BBC1:
+Inactive energy, error :  -66.0530171954    4.7416977369
+act-ina contribution   :  -41.8215844475
+act-act contribution   :    9.3065879827
+Active energy, error   :  -32.5149964647    8.4996942328
+MCSCF energy, error    :  -89.3889074323   13.2413919697
+
+-- BBC2:
+Inactive energy, error :  -66.0530171954    4.7416977369
+act-ina contribution   :  -41.8215844475
+act-act contribution   :    9.3065879827
+Active energy, error   :  -32.5149964647    8.4996942328
+MCSCF energy, error    :  -89.3889074323   13.2413919697
+
+-- BBC3:
+Inactive energy, error :  -66.0530171954    4.7416977369
+act-ina contribution   :  -41.8215844475
+act-act contribution   :    9.3065879827
+Active energy, error   :  -32.5149964647    8.4996942328
+MCSCF energy, error    :  -89.3889074323   13.2413919697
+
+-- BBC3M:
+Inactive energy, error :  -66.0530171954    4.7416977369
+act-ina contribution   :  -41.8215844475
+act-act contribution   :    9.3065879827
+Active energy, error   :  -32.5149964647    8.4996942328
+MCSCF energy, error    :  -89.3889074323   13.2413919697
+
++==========================================================+
+
+Program finished successfully.
+Bye!

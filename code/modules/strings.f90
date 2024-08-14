@@ -8,11 +8,12 @@ module strings
     
     contains
 
-    subroutine separator(ouf, width)
+    subroutine separator(ouf, str, width)
         implicit none
         integer, intent(in) :: ouf, width
+        character(len=*), intent(in) :: str
 
-        write(ouf,'(*(a))') '+', repeat('-', width-2), '+'
+        write(ouf,'(*(a))') '+', repeat(trim(str), width-2), '+'
 
         return
     end subroutine separator 
@@ -51,7 +52,7 @@ module strings
 
         numsep = (width - len(titlestr))/2 - 1
 
-        write(uf,'(*(a))') '+', repeat('=', width-2), '+'
+        call separator(uf, '=', width)
         if (modulo((width - len(titlestr)),2) .ne. 0) then
             write(uf,'(*(a))') '|'//repeat(' ', numsep)// &
             & titlestr &
@@ -61,7 +62,7 @@ module strings
             & titlestr &
             & //repeat(' ', numsep)//'|'
         end if
-        write(uf,'(*(a))') '+', repeat('=', width-2), '+'
+        call separator(uf, '=', width)
 
         return
     end subroutine title 
@@ -71,9 +72,9 @@ module strings
         integer, intent(in) :: uf, width
         character(len=*), intent(in) :: str, sep
         
-        call separator(uf, width)
+        call separator(uf, '-', width)
         call center(uf, str, sep, width)
-        call separator(uf, width)
+        call separator(uf, '-', width)
 
         return
     end subroutine section 
