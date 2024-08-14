@@ -41,7 +41,7 @@ module LS
           stop 'calc_Eee_LS: inconsistent dimensions'
 
         ! Check that ON is in spin-orbital basis
-        ! call check_SO_ON(ONin)
+        call check_SO_ON(ONin)
 
         ! Check that ON is sorted in descending order
         allocate(ON(n), stat=ierr)
@@ -81,7 +81,7 @@ module LS
             end do
         end do
         !
-        ! Active-active energy
+        ! Active energy
         !
         eact = 0.d0
         do u = 1, nasht

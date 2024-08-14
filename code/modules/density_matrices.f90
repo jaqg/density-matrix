@@ -135,8 +135,6 @@ module density_matrices
         !
         integer(kind=8) :: i, j, k, l, u, nu, v, nv, x, nx, y, ny 
 
-        ! call print_matrix('D2', D2(1,1,1:4,1:4), ouf, dfmt)
-
         ! Inactive energy
         !
         eina = 0.d0
@@ -852,10 +850,10 @@ module density_matrices
                         ASO(2*i-1, 2*j-1, 2*k-1, 2*l-1) = 0.5d0 * AMO(i,j,k,l)
                         ! beta beta beta beta
                         ASO(2*i, 2*j, 2*k, 2*l) = 0.5d0 * AMO(i,j,k,l)
-                        ! alpha alpha beta beta
-                        ASO(2*i-1, 2*j-1, 2*k, 2*l) = 0.5d0 * AMO(i,j,k,l)
-                        ! beta beta alpha alpha
-                        ASO(2*i, 2*j, 2*k-1, 2*l-1) = 0.5d0 * AMO(i,j,k,l)
+                        ! ! alpha alpha beta beta
+                        ! ASO(2*i-1, 2*j-1, 2*k, 2*l) = 0.5d0 * AMO(i,j,k,l)
+                        ! ! beta beta alpha alpha
+                        ! ASO(2*i, 2*j, 2*k-1, 2*l-1) = 0.5d0 * AMO(i,j,k,l)
                     end do
                 end do
             end do
@@ -865,49 +863,91 @@ module density_matrices
         return
     end subroutine MO_to_SO_D2 
 
-    subroutine MO_to_SO_H1(H1MO, H1SO)
+    subroutine MO_to_SO_H1(HMO, HSO)
+    ! subroutine MO_to_SO_H1(HMO, CMO, HSO)
         !
-        ! Subroutine to transform one-electron integrals in spacial orbital
-        ! basis (p|h|q) to spin-orbital basis <p|h|q>
+        ! Subroutine to transform one-electron integrals in molecular orbital
+        ! basis h_ij to spin-orbital basis h_pq
+        !
+        ! considering the the set of 2K spin-orbitals formed from K spatial orbitals
+        ! chi(2i-1) = psi(i) * alpha
+        ! chi(2i) = psi(i) * beta
+        !
+        ! therefore
+        ! h_{p,q} = sum_{i,j} C_{i,p} C_{j,q} h_{i,j} delta_{tau_p, tau_q}
+        ! which simplifies to
+        ! h_{2i-1, 2i-1} = sum_{i} C_{i,2i-1}^2 h_{i,i}  ! alpha-alpha
+        ! h_{2i, 2i} = sum_{i} C_{i,2i}^2 h_{i,i}        ! beta-beta
+        ! h_{2i-1, 2i} = h_{2i, 2i-1} = 0                ! coupled
         !
         implicit none
-        real(kind=8), dimension(:,:), intent(in) :: H1MO
-        real(kind=8), dimension(:,:), allocatable, intent(out) :: H1SO
+        real(kind=8), dimension(:,:), intent(in) :: HMO
+        ! real(kind=8), dimension(:,:), intent(in) :: CMO
+        real(kind=8), dimension(:,:), allocatable, intent(out) :: HSO
         !
-        integer :: p, q, ierr, n 
+        integer :: ierr, i, j, n
+        ! real(kind=8) :: suma1, suma2 
 
-        ! Check for inconsistencies in the dimensions
-        n = size(H1MO, dim=1)
-        if (n.ne.size(H1MO, dim=2)) &
-            & stop 'MO_to_SO_H1: Error: Inconsistent dimensions'
+        ! Get size of the matrix & asure it is square
+        n = size(HMO, dim=1)
+        if (n .ne. size(HMO, dim=2)) &
+            & stop 'MO_to_SO_H1: Error: input matrix not square'
+        if (n .ne. size(CMO, dim=1) .or. n.ne.size(CMO, dim=2)) &
+            & stop 'MO_to_SO_H1: Error: dimension inconsistency'
 
-        allocate(H1SO(2*n, 2*n), stat=ierr)
-        if (ierr .ne. 0) stop 'MO_to_SO_H1: Error in allocation of H1SO'
-        H1SO = 0.d0
+        ! Allocate HSO
+        allocate(HSO(2*n, 2*n), stat=ierr)
+        if (ierr .ne. 0) stop 'MO_to_SO_H1: Error in allocation of HSO'
+        HSO = 0.d0
 
-        do p = 1, n
-            do q = 1, n
-                ! alpha-alpha spin-orbitals
-                H1SO(2*p-1, 2*q-1) = H1MO(p, q)
-                ! beta-beta spin-orbitals
-                H1SO(2*p, 2*q) = H1MO(p, q)
-                ! mixed alpha-beta -> 0
+        ! do p = 1, n
+        !     do q = 1, n
+        !         suma1 = 0.d0 ; suma2 = 0.d0
+        !         do i = 1, n
+        !             suma1 = suma1 + CMO(i, 2*i - 1)**2 * HMO(i,i)
+        !             suma2 = suma2 + CMO(i, 2*i)**2 * HMO(i,i)
+        !         end do
+        !         ! alpha-alpha spin-orbitals
+        !         HSO(2*p-1, 2*q-1) = suma1
+        !         ! beta-beta spin-orbitals
+        !         HSO(2*p, 2*q) = suma2
+        !         ! mixed alpha-beta -> 0
+        !     end do
+        ! end do
+        ! do p = 1, n
+        !     do q = 1, n
+        !         do i = 1, n
+        !             do j = 1, n
+        !                 HSO(2*p-1, 2*q-1) = HSO(2*p-1, 2*q-1) + CMO(i, 2*p-1) * CMO(j, 2*q-1) * HMO(i,j)
+        !                 HSO(2*p, 2*q) = HSO(2*p, 2*q) + CMO(i, 2*p) * CMO(j, 2*q) * HMO(i,j)
+        !             end do
+        !         end do
+        !     end do
+        ! end do
+        do i = 1, n
+            do j = 1, n
+                HSO(2*i-1, 2*j-1) = HMO(i,j)
+                HSO(2*i, 2*j) = HMO(i,j)
             end do
         end do
+
         !
         return
     end subroutine MO_to_SO_H1 
 
     subroutine MO_to_SO_H2(H2MO, H2SO)
+    ! subroutine MO_to_SO_H2(H2MO, CMO, H2SO)
         !
         ! Subroutine to transform two-electron integrals in spacial orbital
         ! basis <pq|rs> to spin-orbital basis <pq|rs>
         !
         implicit none
         real(kind=8), dimension(:,:,:,:), intent(in) :: H2MO
+        ! real(kind=8), dimension(:,:), intent(in) :: CMO
         real(kind=8), dimension(:,:,:,:), allocatable, intent(out) :: H2SO
         !
-        integer :: p, q, r, s, ierr, n 
+        ! integer :: p, pi, pp, q, qi, qp, r, ri, rp, s, si, sp, i, j, k, l, ierr, n 
+        integer :: i, j, k, l, ierr, n 
 
         ! Check for inconsistencies in the dimensions
         n = size(H2MO, dim=1)
@@ -920,21 +960,45 @@ module density_matrices
         if (ierr .ne. 0) stop 'MO_to_SO_H2: Error in allocation of H2SO'
         H2SO = 0.d0
 
-        do p = 1, n
-            do q = 1, n
-                do r = 1, n
-                    do s = 1, n
-
-                        ! alpha alpha alpha alpha
-                        H2SO(2*p-1, 2*q-1, 2*r-1, 2*s-1) = H2MO(p, q, r, s)
-                        ! beta beta beta beta
-                        H2SO(2*p, 2*q, 2*r, 2*s) = H2MO(p, q, r, s)
-                        ! ! alpha alpha beta beta
-                        ! H2SO(2*p-1, 2*q-1, 2*r, 2*s) = H2MO(p, q, r, s)
-                        ! ! beta beta alpha alpha 
-                        ! H2SO(2*p, 2*q, 2*r-1, 2*s-1) = H2MO(p, q, r, s)
-
-                        ! mixed alpha-beta -> 0
+        ! do p = 1, n
+        !     pi = 2*p - 1 ; pp = 2*p
+        !     do q = 1, n
+        !         qi = 2*q - 1 ; qp = 2*q
+        !         do r = 1, n
+        !             ri = 2*r - 1 ; rp = 2*r
+        !             do s = 1, n
+        !                 si = 2*s - 1 ; sp = 2*s
+        !                 do i = 1, n
+        !                     do j = 1, n
+        !                         do k = 1, n
+        !                             do l = 1, n
+        !
+        !                                 ! alpha alpha alpha alpha
+        !                                 H2SO(pi,qi,ri,si) = H2SO(pi,qi,ri,si) +&
+        !                                 & CMO(i,pi) * CMO(j,qi) * CMO(k,ri) * CMO(l,si) * H2MO(i,j,k,l)
+        !                                 ! beta beta beta beta
+        !                                 H2SO(pp,qp,rp,sp) = H2SO(pp,qp,rp,sp) +&
+        !                                 & CMO(i,pp) * CMO(j,qp) * CMO(k,rp) * CMO(l,sp) * H2MO(i,j,k,l)
+        !                                 ! ! alpha alpha beta beta
+        !                                 ! H2SO(2*p-1, 2*q-1, 2*r, 2*s) = H2MO(p, q, r, s)
+        !                                 ! ! beta beta alpha alpha 
+        !                                 ! H2SO(2*p, 2*q, 2*r-1, 2*s-1) = H2MO(p, q, r, s)
+        !
+        !                                 ! mixed alpha-beta -> 0
+        !                             end do
+        !                         end do
+        !                     end do
+        !                 end do
+        !             end do
+        !         end do
+        !     end do
+        ! end do
+        do i = 1, n
+            do j = 1, n
+                do k = 1, n
+                    do l = 1, n
+                        H2SO(2*i-1, 2*j-1, 2*k-1, 2*l-1) = H2MO(i,j,k,l)
+                        H2SO(2*i, 2*j, 2*k, 2*l) = H2MO(i,j,k,l)
                     end do
                 end do
             end do

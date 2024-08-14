@@ -285,57 +285,225 @@ program RDMFT
    ! +-----------------------------------------------------------------------+
    ! |                     TRANSFORM TO SPIN-ORBITALS                        |
    ! +-----------------------------------------------------------------------+
-   ! call section(ouf, 'Change to spin-orbital basis', ' ', termwidth)
+   call section(ouf, 'Change to spin-orbital basis', ' ', termwidth)
    !
-   ! ! Transform D^(1), D^(2), H1, H2 from MO to spin-orbital basis
-   ! call MO_to_SO_D1(D1MO, D1SO)
-   ! call MO_to_SO_D2(D2MO, D2SO)  ! TODO: usar D2 simetrizada
-   ! call MO_to_SO_H1(H1MO, H1SO)
-   ! call MO_to_SO_H2(H2MO, H2SO)
+   ! Transform D^(1), D^(2), H1, H2 from MO to spin-orbital basis
    !
-   ! if (tstdbg) then 
-   !    call print_matrix('H1SO', H1SO(1:2*pmatsize,1:2*pmatsize), ouf, dfmt)
-   !    call print_matrix('D1SO', D1SO(1:2*pmatsize,1:2*pmatsize), ouf, dfmt)
-   !    call print_matrix('H2SO', H2SO(1,1,1:2*pmatsize,1:2*pmatsize), ouf, dfmt)
-   !    call print_matrix('D2SO', D2SO(1,1,1:2*pmatsize,1:2*pmatsize), ouf, dfmt)
-   ! end if
    !
-   ! ! Check normalization
-   ! call checknorm_D1(D1SO, nelec, fthres, ouf)
-   ! call checknorm_D2(D2SO, nelec, fthres, ouf)
-   !
-   ! ! Check SO occupations
-   ! call is_diag(D1SO, fthres, diag)
-   ! if (diag) then
-   !    write(ouf,'(a,/)') 'D1SO is already diagonal. Extracting ONs...'
-   !    call extract_diag(D1SO, NONSO)
-   ! else
-   !    write(ouf,'(a,/)') 'D1SO is not diagonal. Diagonalizing...'
-   !    call diag_2D_mat(D1SO, .true., NONSO)
-   !    write(ouf,'(a,/)') 'Extracting ONs...'
-   !    call extract_diag(D1SO, NONSO)
-   ! end if
-   ! if (tstdbg) then 
-   !    write(ouf,'(a)') 'Occupied SO orbitals:'
-   !    write(ouf,'(a)') '#  i  n_i'
-   !    j = 1
-   !    do i = 1, size(NONSO)
-   !       if (NONSO(i).gt.fthres) then
-   !          write(ouf,'(2(i0,2x),f4.2)') j, i, NONSO(i)
-   !          j = j + 1
-   !       end if
+   call MO_to_SO_D1(D1MO, D1SO)
+   call MO_to_SO_D2(D2MO, D2SO)  ! TODO: usar D2 simetrizada
+   call MO_to_SO_H1(H1MO, H1SO)
+   call MO_to_SO_H2(H2MO, H2SO)
+   ! test = 0.d0
+   ! do i=1, norb
+   !    test = test + D1MO(i,i) * H1MO(i,i)
+   ! end do
+   ! write(*,*) 'test MO: ', test
+   ! test = 0.d0
+   ! do i=1, 2*norb
+   !    test = test + D1SO(i,i) * H1SO(i,i)
+   ! end do
+   ! write(*,*) 'test SO: ', test
+   ! test = 0.d0
+   ! do i=1, norb
+   !    do j=1, norb
+   !       test = test + D2MO(i,j,i,j) * H2MO(i,j,i,j)
    !    end do
-   !    write(ouf,*)
-   ! end if
+   ! end do
+   ! write(*,*) 'test MO: ', test
+   ! test = 0.d0
+   ! do i=1, norb
+   !    do j=1, norb
+   !       test = test + D2SO(i,j,i,j) * H2SO(i,j,i,j)
+   !    end do
+   ! end do
+   ! write(*,*) 'test SO: ', test
    !
-   ! !
-   ! ! Recalculate the energy to check that the conversion is right
-   ! !
-   ! ! TODO
-   ! if (tstdbg) then
-   !    call calc_Eee_SO(D2SO, H2SO, nisht, nasht, Eee_ina, Eee_act, Eee_cross, Eee)
-   !    call print_energy
-   ! end if
+   if (tstdbg) then 
+      call print_matrix('CMO',  CMO(1:pmatsize,1:pmatsize), ouf, dfmt)
+      call print_matrix('H1SO', H1SO(1:2*pmatsize,1:2*pmatsize), ouf, dfmt)
+      call print_matrix('D1SO', D1SO(1:2*pmatsize,1:2*pmatsize), ouf, dfmt)
+      call print_matrix('H2SO', H2SO(1,1,1:2*pmatsize,1:2*pmatsize), ouf, dfmt)
+      call print_matrix('D2SO', D2SO(1,1,1:2*pmatsize,1:2*pmatsize), ouf, dfmt)
+   end if
+   !
+   ! Check normalization
+   call checknorm_D1(D1SO, nelec, fthres, ouf)
+   call checknorm_D2(D2SO, nelec, fthres, ouf)
+   !
+   ! Check SO occupations
+   call is_diag(D1SO, fthres, diag)
+   if (diag) then
+      write(ouf,'(a,/)') 'D1SO is already diagonal. Extracting ONs...'
+      call extract_diag(D1SO, NONSO)
+   else
+      write(ouf,'(a,/)') 'D1SO is not diagonal. Diagonalizing...'
+      call diag_2D_mat(D1SO, .true., NONSO)
+      write(ouf,'(a,/)') 'Extracting ONs...'
+      call extract_diag(D1SO, NONSO)
+   end if
+   if (tstdbg) then 
+      write(ouf,'(a)') 'Occupied SO orbitals:'
+      write(ouf,'(a)') '#  i  n_i'
+      j = 1
+      do i = 1, size(NONSO)
+         if (NONSO(i).gt.fthres) then
+            write(ouf,'(2(i0,2x),f4.2)') j, i, NONSO(i)
+            j = j + 1
+         end if
+      end do
+      write(ouf,*)
+   end if
+
+   !
+   ! Recalculate the energy to check that the conversion is right
+   !
+   ! call calc_Eee_SO(D2SO, H2SO, nisht, nasht, Eee_ina, Eee_act, Eee_cross, Eee)
+   ! call print_energy
+
+   ! +-----------------------------------------------------------------------+
+   ! |                        ENERGY IN SO BASIS                             |
+   ! +-----------------------------------------------------------------------+
+   call section(ouf, 'Energy in SO basis', ' ', termwidth)
+   write(ouf,'(a)') '>> Energy functionals in SO basis for:'
+   !
+   ! LS
+   !
+   write(ouf,'(a)') '-- LS:'
+   call calc_Eee_LS(NONSO, H2SO, 2*nisht, 2*nasht, Eee_ina, Eee_act, Eee_cross, Eee)
+   call print_energy
+   !
+   ! BBC1
+   !
+   write(ouf,'(a)') '-- BBC1:'
+   call calc_Eee_BBC('BBC1', NONSO, H2SO, 2*nisht, 2*nasht, Eee_ina, Eee_act, Eee_cross, Eee)
+   call print_energy
+   !
+   ! BBC2
+   !
+   write(ouf,'(a)') '-- BBC2:'
+   call calc_Eee_BBC('BBC2', NONSO, H2SO, 2*nisht, 2*nasht, Eee_ina, Eee_act, Eee_cross, Eee)
+   call print_energy
+   !
+   ! BBC3
+   !
+   write(ouf,'(a)') '-- BBC3:'
+   call calc_Eee_BBC('BBC3', NONSO, H2SO, 2*nisht, 2*nasht, Eee_ina, Eee_act, Eee_cross, Eee)
+   call print_energy
+   !
+   ! BBC3M
+   !
+   write(ouf,'(a)') '-- BBC3M:'
+   call calc_Eee_BBC('BBC3M', NONSO, H2SO, 2*nisht, 2*nasht, Eee_ina, Eee_act, Eee_cross, Eee)
+   call print_energy
+
+   ! +-----------------------------------------------------------------------+
+   ! |                        APPROXIMATED 2RDMS                             |
+   ! +-----------------------------------------------------------------------+
+   call section(ouf, 'SO Approximated 2-RDms', ' ', termwidth)
+   write(ouf,'(a)') '>> Approximated 2-RDms and normalization check for:'
+   !
+   ! LS
+   !
+   write(ouf,'(a)') '-- LS:'
+   call D2_LS(NONSO, D2LSSO)
+   call checknorm_D2(D2LSSO, nelec, fthres, ouf)
+   !
+   ! BBC1
+   !
+   write(ouf,'(a)') '-- BBC1:'
+   call D2_BBC('BBC1', NONSO, D2BBC1SO)
+   call checknorm_D2(D2BBC1SO, nelec, fthres, ouf)
+   !
+   ! BBC2
+   !
+   write(ouf,'(a)') '-- BBC2:'
+   call D2_BBC('BBC2', NONSO, D2BBC2SO)
+   call checknorm_D2(D2BBC2SO, nelec, fthres, ouf)
+   !
+   ! BBC3
+   !
+   write(ouf,'(a)') '-- BBC3:'
+   call D2_BBC('BBC3', NONSO, D2BBC3SO)
+   call checknorm_D2(D2BBC3SO, nelec, fthres, ouf)
+   !
+   ! BBC3
+   !
+   write(ouf,'(a)') '-- BBC3M:'
+   call D2_BBC('BBC3M', NONSO, D2BBC3MSO)
+   call checknorm_D2(D2BBC3MSO, nelec, fthres, ouf)
+
+   if (tstdbg) then 
+      call print_matrix('D2SO',      D2SO(1,1,1:pmatsize,1:pmatsize), ouf, dfmt)
+      call print_matrix('D2BBC1SO',  D2BBC1SO(1,1,1:pmatsize,1:pmatsize), ouf, dfmt)
+      call print_matrix('D2BBC2SO',  D2BBC2SO(1,1,1:pmatsize,1:pmatsize), ouf, dfmt)
+      call print_matrix('D2BBC3SO',  D2BBC3SO(1,1,1:pmatsize,1:pmatsize), ouf, dfmt)
+      call print_matrix('D2BBC3MSO', D2BBC3MSO(1,1,1:pmatsize,1:pmatsize), ouf, dfmt)
+   end if
+
+   ! +-----------------------------------------------------------------------+
+   ! |                         MINKOWSKI DISTANCE                            |
+   ! +-----------------------------------------------------------------------+
+   call section(ouf, 'Minkowski distance for the approximated SO 2-RDMs', ' ', termwidth)
+
+   write(ouf,'(a,i0,":")') '>> Minkowski metric (distance) of order ',minkord
+
+   if (tstdbg) then 
+      call Minkowski_distance_4D(minkord, D2SO, D2SO, mindis)
+      write(ouf,'(a, f8.4)') 'Exact   :', mindis
+   end if
+
+   call Minkowski_distance_4D(minkord, D2SO, D2LSSO, mindis_LS)
+   write(ouf,'(a, f8.4)') 'LS   :', mindis_LS
+
+   call Minkowski_distance_4D(minkord, D2SO, D2BBC1SO, mindis_BBC1)
+   write(ouf,'(a, f8.4)') 'BBC1 :', mindis_BBC1
+
+   call Minkowski_distance_4D(minkord, D2SO, D2BBC2SO, mindis_BBC2)
+   write(ouf,'(a, f8.4)') 'BBC2 :', mindis_BBC2
+
+   call Minkowski_distance_4D(minkord, D2SO, D2BBC3SO, mindis_BBC3)
+   write(ouf,'(a, f8.4)') 'BBC3 :', mindis_BBC3
+
+   call Minkowski_distance_4D(minkord, D2SO, D2BBC3MSO, mindis_BBC3M)
+   write(ouf,'(a, f8.4)') 'BBC3M:', mindis_BBC3M
+   write(ouf,*)
+
+   ! +-----------------------------------------------------------------------+
+   ! |                      ENERGIES FROM APPROX 2RDMS                       |
+   ! +-----------------------------------------------------------------------+
+   call section(ouf, 'Energies with approximated SO 2-RDMs', ' ', termwidth)
+   write(ouf,'(a)') '>> Energy from the approximated 2-RDM for:'
+   !
+   ! LS
+   !
+   write(ouf,'(a)') '-- LS:'
+   call calc_Eee(D2LSSO, H2SO, 2*nisht, 2*nasht, Eee_ina, Eee_act, Eee_cross, Eee)
+   call print_energy
+   !
+   ! BBC1
+   !
+   write(ouf,'(a)') '-- BBC1:'
+   call calc_Eee(D2BBC1SO, H2SO, 2*nisht, 2*nasht, Eee_ina, Eee_act, Eee_cross, Eee)
+   call print_energy
+   !
+   ! BBC2
+   !
+   write(ouf,'(a)') '-- BBC2:'
+   call calc_Eee(D2BBC2SO, H2SO, 2*nisht, 2*nasht, Eee_ina, Eee_act, Eee_cross, Eee)
+   call print_energy
+   !
+   ! BBC3
+   !
+   write(ouf,'(a)') '-- BBC3:'
+   call calc_Eee(D2BBC3SO, H2SO, 2*nisht, 2*nasht, Eee_ina, Eee_act, Eee_cross, Eee)
+   call print_energy
+   !
+   ! BBC3
+   !
+   write(ouf,'(a)') '-- BBC3M:'
+   call calc_Eee(D2BBC3MSO, H2SO, 2*nisht, 2*nasht, Eee_ina, Eee_act, Eee_cross, Eee)
+   call print_energy
 
    ! +-----------------------------------------------------------------------+
    ! |                        OPTIMIZATION ALGORITHM                         |

@@ -119,74 +119,6 @@ module IO
       return
    end subroutine read_input 
 
-   subroutine read_integrals_alfredo
-      integer :: intlu 
-      !
-      !     Get data
-      !
-      open(newunit=intlu,file='data/H2O-0-MCSCF-integrals',form='formatted')
-      rewind(intlu)
-      !
-      read(intlu,*) numorb
-      read(intlu,*) ninorb
-      read(intlu,*) nacorb
-      read(intlu,*)
-      nseorb = numorb - ninorb - nacorb
-      !
-      write(ouf,'(a,//)') 'Information from input'
-      write(ouf,'(a,i4)') 'Number of molecular orbitals :', numorb
-      write(ouf,'(a,i4)') 'Number of inactive orbitals  :', ninorb
-      write(ouf,'(a,i4)') 'Number of active orbitals    :', nacorb
-      write(ouf,'(a,i4)') 'Number of secondary orbitals :', nseorb
-      call flush(ouf)
-      !
-      !     Initialize arrays
-      !
-      allocate(oneint(numorb,numorb),stat=ierr)
-      if (ierr .ne. 0) stop 'Error allocating oneint' 
-      oneint = 0.d0
-      !
-      allocate(den1(numorb,numorb),stat=ierr)
-      if (ierr .ne. 0) stop 'Error allocating den1' 
-      den1 = 0.d0
-      !
-      allocate(twoint(numorb,numorb,numorb,numorb),stat=ierr)
-      if (ierr .ne. 0) stop 'Error allocating 2.d0int' 
-      twoint = 0.d0
-      !
-      allocate(rdm2(numorb,numorb,numorb,numorb),stat=ierr)
-      if (ierr .ne. 0) stop 'Error allocating rdm2' 
-      rdm2 = 0.d0
-      !
-      !
-      !     Read integrals in MO basis
-      !
-      100 continue
-      read(intlu,*,end=200) xint, i,j,k,l
-      !
-      if (l .ne. 0) then
-         twoint(i,j,k,l) = xint
-         twoint(i,j,l,k) = xint
-         twoint(j,i,k,l) = xint
-         twoint(j,i,l,k) = xint
-         twoint(k,l,i,j) = xint
-         twoint(k,l,j,i) = xint
-         twoint(l,k,i,j) = xint
-         twoint(l,k,j,i) = xint
-      else if (j .ne. 0) then
-         oneint(i,j) = xint
-         oneint(j,i) = xint
-      else
-         repnuc = xint
-      end if
-      !
-      goto 100
-      200 continue
-      !
-      write(ouf,'(//,a,//)') ' >>> Integral arrays built'
-      call flush(ouf)
-   end subroutine read_integrals_alfredo
-
    subroutine read_integrals(intlu, norb, repnuc, H1, H2)
       !
       ! Subroutine to read the integrals
@@ -267,7 +199,7 @@ module IO
 
    subroutine read_sirifc
       !
-      !     Get densities from dalton
+      ! Read SIRIFC file
       !
       rewind(sirilu)
       !
@@ -321,12 +253,32 @@ module IO
       !    stop
       ! end if
 
+      allocate(scr_cmo(ncmot),stat=ierr)
+      if (ierr .ne. 0) stop 'Error allocating scr_cmo'
+      !
       allocate(scr(nnashx),stat=ierr)
       if (ierr .ne. 0) stop 'Error allocating scr.1'
       !
-      read(sirilu)         ! cmo
-      read(sirilu)         ! CI coefficients
-      read(sirilu) scr     ! Active 1e-density
+      read(sirilu) scr_cmo  ! cmo
+      read(sirilu)          ! CI coefficients
+      read(sirilu) scr      ! Active 1e-density
+
+      ! -----------
+      !  CMOs
+      ! -----------
+      allocate(CMO(norb,norb), stat=ierr)
+      if (ierr .ne. 0) stop 'read_sirifc: Error in allocation of CMO'
+      CMO = 0.d0
+
+      ij = 0
+      do i = 1,norb
+         do j = 1,i
+            ij = ij + 1
+            CMO(i,j) = scr(ij)    
+            CMO(j,i) = scr(ij)    
+         end do
+      end do
+
       ! -----------
       !  1-RDM
       ! -----------

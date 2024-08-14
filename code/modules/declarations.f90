@@ -36,14 +36,15 @@ module declarations
    real(kind=8), allocatable, dimension (:,:) :: oneint, den1
    real(kind=8), allocatable, dimension (:,:,:,:) :: twoint, rdm2
    real(kind=8), allocatable, dimension (:,:) :: fockin
-   real(kind=8), allocatable, dimension (:) :: qmat, scr
-   real(kind=8), allocatable, dimension (:,:) :: H1MO, D1MO, H1SO, D1SO
+   real(kind=8), allocatable, dimension (:) :: qmat, scr_cmo, scr
+   real(kind=8), allocatable, dimension (:,:) :: CMO, H1MO, D1MO, H1SO, D1SO
    real(kind=8), allocatable, dimension (:,:,:,:) :: H2MO, D2MO, D2MOsym, &
    & H2SO, D2SO
    real(kind=8), allocatable, dimension (:,:,:,:) :: D2LSMO, D2LSSO
    real(kind=8), allocatable, dimension (:,:,:,:) :: D2BBC1MO, D2BBC1SO, &
    & D2BBC2MO, D2BBC2SO, D2BBC3MO, D2BBC3SO, D2BBC3MMO, D2BBC3MSO
    real(kind=8), allocatable, dimension (:) :: NONMO, NONSO
+   real(kind=8) :: test 
    !
    contains
        subroutine parameters
